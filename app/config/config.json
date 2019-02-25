@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "flyingsquirrel",
+    "password": "hogangnonocodestates",
+    "database": "my_data",
+    "host": "favorablefactorshere.c3jaugd3tr46.us-east-2.rds.amazonaws.com",
+    "port": 30320,
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
