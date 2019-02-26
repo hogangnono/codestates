@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 class App extends Component {
+  componentDidMount() {
+    let naver = window.naver;
+    let mapOptions = {
+      zoomControl: true,
+      zoomControlOptions: {
+        style: naver.maps.ZoomControlStyle.SMALL,
+        position: naver.maps.Position.TOP_RIGHT
+      },
+      logoControl: true,
+      logoControlOptions: {
+        position: naver.maps.Position.BOTTOM_RIGHT
+      },
+      scaleControl: true,
+      scaleControlOptions: {
+        position: naver.maps.Position.BOTTOM_RIGHT
+      },
+      mapDataControl: true,
+      mapDataControlOptions: {
+        position: naver.maps.Position.BOTTOM_LEFT
+      }
+    }
+    let map = new naver.maps.Map('map', mapOptions);
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <div id='map' style={{ height: '100vh' }}></div>
     );
   }
 }
