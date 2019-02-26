@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const users = sequelize.define(
         'users',
         {
-            name: DataTypes.STRING
+            name: DataTypes.STRING(32)
         },
         {
             timestamps: false
