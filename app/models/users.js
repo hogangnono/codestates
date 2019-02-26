@@ -1,12 +1,14 @@
-
+const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     const users = sequelize.define(
         'users',
         {
-            email: DataTypes.STRING,
-            password: DataTypes.STRING,
             name: DataTypes.STRING,
-            vegLevel: DataTypes.STRING
+            id: {
+                type: Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            }
         },
         {
             timestamps: false
@@ -15,5 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     users.associate = function(models) {
         // associations can be defined here
     };
+
     return users;
 };
