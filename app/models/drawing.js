@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     );
     drawings.belongsTo(factorCategories);
     drawings.belongsTo(users);
-    drawings.hasOne(users, { foreignKey: 'usersId' }); // ??
-    drawings.hasOne(factorCategories, { foreignKey: 'factorCategoriesId' }); // ??
+    // drawings.hasOne(users, { foreignKey: 'usersId' }); // ??
+    // drawings.hasOne(factorCategories, { foreignKey: 'factorCategoriesId' }); // ??
     drawings.associate = function(models) {
         // associations can be defined here
     };
