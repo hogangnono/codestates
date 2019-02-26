@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import Toolbox from './Toolbox';
+import './App.css'
 
 class App extends Component {
+  state = {
+    map: undefined
+  }
   componentDidMount() {
     let naver = window.naver;
     let mapOptions = {
@@ -23,6 +28,7 @@ class App extends Component {
       }
     }
     let map = new naver.maps.Map('map', mapOptions);
+    this.setState({ map })
     naver.maps.Event.addListener(map, 'click', function (e) {
       let marker = new naver.maps.Marker({
         position: new naver.maps.LatLng(e.coord.lat(), e.coord.lng()),
@@ -33,7 +39,10 @@ class App extends Component {
   }
   render() {
     return (
-      <div id='map' style={{ height: '100vh' }}></div>
+      <div id='wrapper'>
+        <div id='map' style={{ height: '100vh' }}></div>
+        <Toolbox map={this.state.map}></Toolbox>
+      </div>
     );
   }
 }
