@@ -23,6 +23,13 @@ class App extends Component {
       }
     }
     let map = new naver.maps.Map('map', mapOptions);
+    naver.maps.Event.addListener(map, 'click', function (e) {
+      let marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(e.coord.lat(), e.coord.lng()),
+        map: map
+      });
+      console.log(e.coord.lat() + ', ' + e.coord.lng());
+    });
   }
   render() {
     return (
