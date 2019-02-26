@@ -1,8 +1,13 @@
+const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     const users = sequelize.define(
         'users',
         {
-            name: DataTypes.STRING(32)
+            id: {
+                type: Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            }
         },
         {
             timestamps: false
