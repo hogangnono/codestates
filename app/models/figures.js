@@ -24,9 +24,9 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    figures.associate = function(models) {
+    figures.associate = function (models) {
         figures.belongsTo(models.factorCategories, {
-            foreignKey: 'factorCategoriesId'
+            foreignKey: 'factorCategoryId'
         });
         // associations can be defined here
     };

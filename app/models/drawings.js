@@ -13,16 +13,18 @@ module.exports = (sequelize, DataTypes) => {
             mapCenterLat: DataTypes.STRING,
             mapCenterLng: DataTypes.STRING,
             userId: DataTypes.INTEGER,
-            figureId: DataTypes.INTEGER
+            figureId: DataTypes.INTEGER,
+            createdAt: DataTypes.DATE,
+            updatedAt: DataTypes.DATE
         },
         {
-            timestamps: false
+            timestamps: true
         }
     );
     // drawings.removeAttribute('id');
-    drawings.associate = function(models) {
-        drawings.belongsTo(models.users, { foreignKey: 'usersId' });
-        drawings.belongsTo(models.figures, { foreignKey: 'figuresId' });
+    drawings.associate = function (models) {
+        drawings.belongsTo(models.users, { foreignKey: 'userId' });
+        drawings.belongsTo(models.figures, { foreignKey: 'figureId' });
         // associations can be defined here
     };
     return drawings;

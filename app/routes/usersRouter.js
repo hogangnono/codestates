@@ -4,10 +4,10 @@ var User = require('../models').users;
 var Drawings = require('../models').drawings;
 var FactorCategories = require('../models').factorCategories;
 var Figures = require('../models').figures;
-/* GET users listing. */
 
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
     const { name } = req.body;
+    console.log('name', name);
     User
         .findOrCreate({ where: { name: name } })
         .spread((user, created) => {
@@ -31,51 +31,58 @@ router.post('/', async (req, res) => {
         });
 });
 
-router.post('/drawings', async (req, res) => {
-    console.log(req.body);
-    try {
-        await Drawings.create({
-            // drawingSetNumber: req.body.drawingSetNumber,
-            latitude: req.body.latitude,
-            longitude: req.body.longitude,
-            usersId: req.body.usersId,
-            figuresId: req.body.figuresId
-        });
-        res.status(200).send('성공');
-    } catch (err) {
-        console.log('err msg: ', err);
-        res.status(500).send('fail');
+router.post('/save', (req, res) => {
+    const { name, figureInfo, drawingInfo } = req.body;
+    const { factorCategoryId } = figureInfo;
+    const isValidfactorCategoryId = !!(factorCategoryId >= 1 && factorCategoryId <= 9);
+
+    if (isValidfactorCategoryId) {
+        User
+            .findOne({
+                where: {
+                    name: name
+                }
+            })
+            .then(row => {
+                const userID = row.dataValues.id;
+                Figures
+                    .create(figureInfo)
+                    .then(createdRow => {
+                        console.log('dataValues: ', createdRow.dataValues);
+                        const figureid = createdRow.dataValues.id;
+                        Drawings.create({
+                            mapCenterLat: drawingInfo.mapCenterLat,
+                            mapCenterLng: drawingInfo.mapCenterLng,
+                            userID: userID,
+                            figureId: figureid
+                        });
+                    });
+
+                res.status(201).send('Figures에 데이터를 추가했습니다.');
+            })
+            .catch(err => {
+                res.status(400).send('그런 사람 없습니다 !');
+            });
+    } else {
+        console.log('데이터 등록 실패');
+        res.status(500).send('실패했어요! ㅠㅠ');
     }
 });
 
-router.post('/factorCategories', async (req, res) => {
-    console.log(req.body);
-    try {
-        await FactorCategories.create({
-            name: req.body.name
-        });
-        res.status(200).send('성공');
-    } catch (err) {
-        res.status(500).send('fail');
-    }
-});
-
-router.post('/figures', async (req, res) => {
-    console.log(req.body);
-    try {
-        await Figures.create({
-            shapeType: req.body.shapeType,
-            shapePath: req.body.shapePath,
-            description: req.body.description,
-            priority: req.body.priority,
-            borderWidth: req.body.borderWidth,
-            borderColor: req.body.borderColor,
-            innerColor: req.body.innerColor,
-            factorCategoriesId: req.body.factorCategoriesId
-        });
-        res.status(200).send('성공');
-    } catch (err) {
-        res.status(500).send('fail');
-    }
-});
 module.exports = router;
+
+/*
+{
+	"name": "az",
+	"figureInfo": {
+		"shapeType": "round",
+		"shapePath": "[x,y]",
+		"description": "this is test description",
+		"priority": 1,
+		"borderWidth": 2,
+		"borderColor": "red",
+		"innerColor": "black",
+		"factorCategoryId": 3
+	}
+}
+*/
