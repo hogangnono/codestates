@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     );
     // drawings.removeAttribute('id');
     drawings.associate = function(models) {
-        drawings.belongsTo(models.users, { foreignKey: 'usersId' });
-        drawings.belongsTo(models.figures, { foreignKey: 'figuresId' });
+        drawings.belongsTo(models.users, { foreignKey: 'userId' });
+        drawings.belongsTo(models.figures, { foreignKey: 'figureId' });
         // associations can be defined here
     };
     return drawings;
