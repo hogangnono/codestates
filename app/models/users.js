@@ -1,10 +1,10 @@
-const Sequelize = require('sequelize');
+// const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     const users = sequelize.define(
         'users',
         {
             id: {
-                type: Sequelize.INTEGER,
+                type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false
         }
     );
-    users.associate = function(models) {
+    users.associate = function (models) {
         // associations can be defined here
     };
 

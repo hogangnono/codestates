@@ -7,25 +7,29 @@ var Figures = require('../models').figures;
 /* GET users listing. */
 
 router.post('/', async (req, res) => {
-    try {
-        await User.create({
-            name: req.body.name
+    const { name } = req.body;
+    User
+        .findOrCreate({ where: { name: name } })
+        .spread((user, created) => {
+            if (created) {
+                console.log('========= RESULT ===========');
+                console.log('POST /users/ :: DB에 없는 데이터여서 저장했습니다.');
+                console.log('============================');
+                res.status(201).send('DB에 없는 데이터여서 저장했습니다.');
+            } else {
+                console.log('========= RESULT ===========');
+                console.log('POST /users/ :: user information :\n', user.dataValues);
+                console.log('============================');
+                res.status(200).send('DB에 이미 있는 데이터입니다. 로그인만 했습니다.');
+            }
+        })
+        .catch(err => {
+            console.log('========= RESULT ===========');
+            console.log('POST /users/ :: request was failed beacuse : ', err);
+            console.log('============================');
+            res.status(500).send('POST /users/ request was failed');
         });
-        res.status(200).send('성공');
-    } catch (err) {
-        res.status(500).send('fail');
-    }
 });
-
-// router.get('/', (req, res) => {
-//     User.findAll()
-//         .then(result => {
-//             res.status(200).json(result);
-//         })
-//         .catch(err => {
-//             res.sendStatus(500);
-//         });
-// });
 
 router.post('/drawings', async (req, res) => {
     console.log(req.body);
