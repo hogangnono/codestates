@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Toolbox from './Toolbox';
+import * as d3 from 'd3';
+import Layer from './Layer';
 import './App.css'
 
 class App extends Component {
@@ -42,6 +44,7 @@ class App extends Component {
       <div id='wrapper'>
         <div id='map' style={{ height: '100vh' }}></div>
         <Toolbox map={this.state.map}></Toolbox>
+        <Layer></Layer>
       </div>
     );
   }
