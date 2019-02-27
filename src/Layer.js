@@ -28,20 +28,3 @@ class Layer extends Component {
 }
 
 export default Layer;
-
-
-// var Layer = function (options) {
-//     let svg = d3.select('#map')
-//         .append('svg')
-//         .attr('width', window.innerWidth)
-//         .attr('height', window.innerHeight)
-//     this._element =
-//         this._element = document.createElement("div");
-//     // this._element.setAttribute("id", "rect");
-//     this._element.className = "rect";
-//     // add the text node to the newly created div
-//     // this._element.appendChild(newContent);
-
-//     this.setPosition(options.position);
-//     this.setMap(options.map || null);
-// };

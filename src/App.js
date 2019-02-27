@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Toolbox from './Toolbox';
 import * as d3 from 'd3';
-import Layer from './Layer';
+import CustomOverlay from './CustomOverlay'
 import './App.css'
 
 class App extends Component {
@@ -29,14 +29,15 @@ class App extends Component {
         position: naver.maps.Position.BOTTOM_LEFT
       }
     }
-    let map = new naver.maps.Map('map', mapOptions);
+    let map = new naver.maps.Map(d3.select('#map').node(), mapOptions);
     this.setState({ map })
-    naver.maps.Event.addListener(map, 'click', function (e) {
-      let marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(e.coord.lat(), e.coord.lng()),
-        map: map
+    naver.maps.Event.addListener(map, 'click', function (e) { //클릭한 위치에 오버레이를 추가합니다.
+      console.log('click');
+      var overlay = new CustomOverlay({
+        position: e.coord
       });
-      console.log(e.coord.lat() + ', ' + e.coord.lng());
+
+      overlay.setMap(map);
     });
   }
   render() {
@@ -44,7 +45,6 @@ class App extends Component {
       <div id='wrapper'>
         <div id='map' style={{ height: '100vh' }}></div>
         <Toolbox map={this.state.map}></Toolbox>
-        <Layer></Layer>
       </div>
     );
   }
