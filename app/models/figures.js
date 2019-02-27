@@ -1,12 +1,12 @@
-const Sequelize = require('sequelize');
-const factorCategories = require('./factorCategories');
+// const Sequelize = require('sequelize');
+// const factorCategories = require('./factorCategories');
 
 module.exports = (sequelize, DataTypes) => {
     const figures = sequelize.define(
         'figures',
         {
             id: {
-                type: Sequelize.INTEGER,
+                type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
@@ -17,15 +17,17 @@ module.exports = (sequelize, DataTypes) => {
             borderWidth: DataTypes.INTEGER,
             borderColor: DataTypes.STRING,
             innerColor: DataTypes.STRING,
-            factorCategoriesId: DataTypes.INTEGER
+            factorCategoryId: DataTypes.INTEGER
         },
         {
             timestamps: false
         }
     );
 
-    // factorCategories.belongsTo(figures, { foreignKey: 'factorCategoriesId' });
     figures.associate = function(models) {
+        figures.belongsTo(models.factorCategories, {
+            foreignKey: 'factorCategoriesId'
+        });
         // associations can be defined here
     };
     return figures;
