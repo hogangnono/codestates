@@ -31,13 +31,12 @@ class App extends Component {
     }
     let map = new naver.maps.Map(d3.select('#map').node(), mapOptions);
     this.setState({ map })
+
     naver.maps.Event.addListener(map, 'click', function (e) { //클릭한 위치에 오버레이를 추가합니다.
       console.log('click');
-      var overlay = new CustomOverlay({
+      new CustomOverlay({
         position: e.coord
-      });
-
-      overlay.setMap(map);
+      }).setMap(map);
     });
   }
   render() {

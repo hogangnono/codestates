@@ -13,11 +13,11 @@ var CustomOverlay = function (options) {
 };
 
 CustomOverlay.prototype = new window.naver.maps.OverlayView();
+
 CustomOverlay.prototype.constructor = CustomOverlay;
 
 CustomOverlay.prototype.setPosition = function (position) {
     this._position = position;
-
     this.draw();
 };
 
@@ -43,19 +43,11 @@ CustomOverlay.prototype.draw = function () {
 
     this._element.style.left = `${pixelPosition.x}px`;
     this._element.style.top = `${pixelPosition.y}px`;
-    // this._element.style.width = '100px';
-    // this._element.style.height = '100px';
-
 };
 
 CustomOverlay.prototype.onRemove = function () {
-    var overlayLayer = this.getPanes().overlayLayer;
-
     this._element.remove();
     this._element.off();
 };
 
 export default CustomOverlay;
-
-
-
