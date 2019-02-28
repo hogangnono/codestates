@@ -1,12 +1,13 @@
 import * as d3 from 'd3'
 
 var CustomOverlay = function (options) {
+    //make a div that contain shape
+    let div = document.createElement("div")
+    let svg = d3.create('svg')
+    svg.append('circle').attr('cx', 50).attr('cy', 50).attr("r", 50).attr("stroke", "green").attr("fill", "green").attr("fill-opacity", "0.4")
+    div.appendChild(svg.node())
 
-    this._element = d3.select('#map')
-        .append('svg')
-        .attr('width', window.innerWidth)
-        .attr('height', window.innerHeight);
-
+    this._element = div;
     this.setPosition(options.position);
     this.setMap(options.map || null);
 };
@@ -27,25 +28,24 @@ CustomOverlay.prototype.getPosition = function () {
 CustomOverlay.prototype.onAdd = function () {
     var overlayLayer = this.getPanes().overlayLayer;
 
-    overlayLayer.appendChild(this._element.node());
-    // this._element.appendTo(overlayLayer);
+    overlayLayer.appendChild(this._element);
 };
 
 CustomOverlay.prototype.draw = function () {
     if (!this.getMap()) {
         return;
     }
-
     var projection = this.getProjection(),
         position = this.getPosition(),
         pixelPosition = projection.fromCoordToOffset(position);
-
+    console.log(pixelPosition)
     this._element.style.position = "absolute";
 
-    var line = this._element.append("circle")
-        .attr("cx", pixelPosition.x)
-        .attr("cy", pixelPosition.y)
-        .attr("r", 50);
+    this._element.style.left = `${pixelPosition.x}px`;
+    this._element.style.top = `${pixelPosition.y}px`;
+    // this._element.style.width = '100px';
+    // this._element.style.height = '100px';
+
 };
 
 CustomOverlay.prototype.onRemove = function () {
