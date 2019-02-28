@@ -25,48 +25,42 @@ router.post('/', (req, res) => {
         })
         .catch(err => {
             console.log('========= RESULT ===========');
-            console.log('POST /users/ :: request was failed beacuse : ', err);
+            console.log('POST /users/ :: request was failed beacuse :\n', err);
             console.log('============================');
             res.status(500).send('POST /users/ request was failed');
         });
 });
 
-router.post('/save', (req, res) => {
+router.post('/save', async (req, res) => {
     const { name, figureInfo, drawingInfo } = req.body;
     const { factorCategoryId } = figureInfo;
     const isValidfactorCategoryId = !!(factorCategoryId >= 1 && factorCategoryId <= 9);
 
-    if (isValidfactorCategoryId) {
-        User
-            .findOne({
-                where: {
-                    name: name
-                }
-            })
-            .then(row => {
-                const userID = row.dataValues.id;
-                Figures
-                    .create(figureInfo)
-                    .then(createdRow => {
-                        console.log('dataValues: ', createdRow.dataValues);
-                        const figureid = createdRow.dataValues.id;
-                        Drawings.create({
-                            mapCenterLat: drawingInfo.mapCenterLat,
-                            mapCenterLng: drawingInfo.mapCenterLng,
-                            userID: userID,
-                            figureId: figureid
-                        });
-                    });
+    try {
+        if (isValidfactorCategoryId) {
+            const findUser = await User.findOne({ where: { name: name } });
+            const userID = await findUser.dataValues.id;
+            const createdRowInFigures = await Figures.create(figureInfo);
+            const figureId = await createdRowInFigures.dataValues.id;
 
-                res.status(201).send('Figures에 데이터를 추가했습니다.');
-            })
-            .catch(err => {
-                res.status(400).send('그런 사람 없습니다 !');
+            Drawings.create({
+                mapCenterLat: drawingInfo.mapCenterLat,
+                mapCenterLng: drawingInfo.mapCenterLng,
+                userID: userID,
+                figureId: figureId
             });
-    } else {
-        console.log('데이터 등록 실패');
-        res.status(500).send('실패했어요! ㅠㅠ');
+            console.log('========= RESULT ===========');
+            console.log('POST /save/ :: 저장을 완료했습니다');
+            console.log('============================');
+            res.status(201).send('Figures에 데이터를 추가했습니다.');
+        }
+    } catch (err) {
+        console.log('========= RESULT ===========');
+        console.log('POST /save/ :: request was failed beacuse : \n', err);
+        console.log('============================');
+        res.status(400).send('데이터 등록 실패! 이유는 console을 확인해야해요!');
     }
+
 });
 
 module.exports = router;
