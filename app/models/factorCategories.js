@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
             collate: 'utf8_unicode_ci',
             timestamps: false
         }
-    );
-    for (let index = 0; index < factors.length; index++) {
+    ).then(() => {
+      for (let index = 0; index < factors.length; index++) {
         factorCategories
             .findOrCreate({
                 where: {
@@ -39,9 +39,10 @@ module.exports = (sequelize, DataTypes) => {
             .spread((category, created) => {
                 console.log(`Created a new category named ${factors[index]}`);
             });
-    }
+        }
+    });
 
-    factorCategories.associate = function (models) {
+    factorCategories.associate = models => {
         // associations can be defined here
     };
     return factorCategories;

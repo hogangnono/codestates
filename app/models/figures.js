@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    figures.associate = function (models) {
+    figures.associate = models => {
         figures.belongsTo(models.factorCategories, {
             foreignKey: 'factorCategoryId'
         });
