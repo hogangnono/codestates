@@ -50,22 +50,26 @@ router.get('/load', async (req, res) => {
 });
 
 router.delete('/deleteAll', async (req, res) => {
-    const { id } = req.body;
+    const { name } = req.body;
     try {
-        const findUserId = await User.findOne({ where: { id } });
-        const findUserIdInDrawings = await Drawings.findOne({
-            where: { userId: findUserId.dataValues.id }
-        });
+        const findUserName = await User.findOne({ where: { name } });
+        console.log(findUserName);
+        if (findUserName !== null) {
+            const findUserIdInDrawings = await Drawings.findOne({
+                where: { userId: findUserName.dataValues.id }
+            });
 
-        await Drawings.destroy({
-            where: { userId: findUserId.dataValues.id }
-        });
-        await Figures.destroy({
-            where: { id: findUserIdInDrawings.dataValues.figureId }
-        });
-        await User.destroy({ where: { id } });
-
-        res.status(200).send('유저 호재 정보 삭제 완료.');
+            await Drawings.destroy({
+                where: { userId: findUserName.dataValues.id }
+            });
+            await Figures.destroy({
+                where: { id: findUserIdInDrawings.dataValues.figureId }
+            });
+            res.status(200).send('유저 호재 정보 삭제 완료.');
+        } else {
+            res.status(404).send('유저 호재 정보 없음');
+        }
+        // await User.destroy({ where: { name } });
     } catch (err) {
         res.status(500).send('유저 호재 정보 삭제 실패.');
     }
