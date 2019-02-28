@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false
         }
     );
-    factorCategories.associate = function(models) {
+    factorCategories.associate = models => {
         // associations can be defined here
     };
     return factorCategories;
