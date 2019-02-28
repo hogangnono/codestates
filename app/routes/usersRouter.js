@@ -8,6 +8,7 @@ var Figures = require('../models').figures;
 router.post('/', (req, res) => {
     const { name } = req.body;
     User.findOrCreate({ where: { name: name } })
+
         .spread((user, created) => {
             if (created) {
                 console.log('========= RESULT ===========');
@@ -30,11 +31,12 @@ router.post('/', (req, res) => {
         })
         .catch(err => {
             console.log('========= RESULT ===========');
-            console.log('POST /users/ :: request was failed beacuse : ', err);
+            console.log('POST /users/ :: request was failed beacuse :\n', err);
             console.log('============================');
             res.status(500).send('POST /users/ request was failed');
         });
 });
+
 
 router.get('/load', async (req, res) => {
     try {
@@ -75,36 +77,52 @@ router.delete('/deleteAll', async (req, res) => {
     }
 });
 
-router.post('/drawings', async (req, res) => {
+router.post('/save', async (req, res) => {
+    const { name, figureInfo, drawingInfo } = req.body;
+    const { factorCategoryId } = figureInfo;
+    const isValidfactorCategoryId = !!(factorCategoryId >= 1 && factorCategoryId <= 9);
+
     try {
-        await Drawings.create({
-            latitude: req.body.latitude,
-            longitude: req.body.longitude,
-            usersId: req.body.usersId,
-            figuresId: req.body.figuresId
-        });
-        res.status(200).send('성공');
+        if (isValidfactorCategoryId) {
+            const findUser = await User.findOne({ where: { name: name } });
+            const userID = await findUser.dataValues.id;
+            const createdRowInFigures = await Figures.create(figureInfo);
+            const figureId = await createdRowInFigures.dataValues.id;
+
+            Drawings.create({
+                mapCenterLat: drawingInfo.mapCenterLat,
+                mapCenterLng: drawingInfo.mapCenterLng,
+                userID: userID,
+                figureId: figureId
+            });
+            console.log('========= RESULT ===========');
+            console.log('POST /save/ :: 저장을 완료했습니다');
+            console.log('============================');
+            res.status(201).send('Figures에 데이터를 추가했습니다.');
+        }
     } catch (err) {
-        console.log('err msg: ', err);
-        res.status(500).send('fail');
+        console.log('========= RESULT ===========');
+        console.log('POST /save/ :: request was failed beacuse : \n', err);
+        console.log('============================');
+        res.status(400).send('데이터 등록 실패! 이유는 console을 확인해야해요!');
     }
+
 });
 
-router.post('/figures', async (req, res) => {
-    try {
-        await Figures.create({
-            shapeType: req.body.shapeType,
-            shapePath: req.body.shapePath,
-            description: req.body.description,
-            priority: req.body.priority,
-            borderWidth: req.body.borderWidth,
-            borderColor: req.body.borderColor,
-            innerColor: req.body.innerColor,
-            factorCategoriesId: req.body.factorCategoriesId
-        });
-        res.status(200).send('성공');
-    } catch (err) {
-        res.status(500).send('fail');
-    }
-});
 module.exports = router;
+
+/*
+{
+	"name": "az",
+	"figureInfo": {
+		"shapeType": "round",
+		"shapePath": "[x,y]",
+		"description": "this is test description",
+		"priority": 1,
+		"borderWidth": 2,
+		"borderColor": "red",
+		"innerColor": "black",
+		"factorCategoryId": 3
+	}
+}
+*/
