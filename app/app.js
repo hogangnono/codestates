@@ -5,23 +5,20 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const indexRouter = require('./routes/indexRouter');
-const usersRouter = require('./routes/usersRouter');
+const userRouter = require('./routes/userRouter');
 const searchRouter = require('./routes/searchRouter');
-
+const category = require('../app/categories');
 
 const app = express();
 const port = 3001;
-// view engine setup
-// app.set("views", path.join(__dirname, "views"));
-// app.set("view engine", "pug");
 const models = require('./models/index');
-
 
 // Check DB-Server Connetion
 models.sequelize
     .sync()
     .then(() => {
         console.log(' DB 연결 성공');
+        models.factor.bulkCreate(category, { ignoreDuplicates: true });
     })
     .catch(err => {
         console.log(err, '연결 실패');
@@ -36,7 +33,7 @@ app.use(cors());
 
 // Routing
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', userRouter);
 app.use('/search', searchRouter);
 
 // Do we need set CORS() and header ?
@@ -48,12 +45,12 @@ app.use('/search', searchRouter);
 // });
 
 // Catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     next(createError(404));
 });
 
 // Error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};

@@ -1,10 +1,11 @@
-// const Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-    const users = sequelize.define(
-        'users',
+    const factor = sequelize.define(
+        'factor',
         {
             id: {
-                type: DataTypes.INTEGER,
+                type: Sequelize.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
@@ -13,12 +14,13 @@ module.exports = (sequelize, DataTypes) => {
         {
             charset: 'utf8',
             collate: 'utf8_unicode_ci',
+            freezeTableName: true,
             timestamps: false
         }
     );
-    users.associate = models => {
+
+    factor.associate = models => {
         // associations can be defined here
     };
-
-    return users;
+    return factor;
 };
