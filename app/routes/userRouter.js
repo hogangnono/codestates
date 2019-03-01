@@ -2,9 +2,18 @@ const express = require('express');
 const router = express.Router();
 const { user, drawing, factor } = require('../models');
 
-router.get('/', (req, res, next) => {
-    res.status(200);
-    res.send('Welcome to hojae hojae!\nthis is a user page');
+router.get('/', async (req, res, next) => {
+    const { name } = req.body;
+    let transaction;
+    try {
+        transaction = await user.sequelize.transaction();
+        await user.findOrCreate({ where: { name } });
+        await transaction.commit();
+        res.status(200).send('유저 이름을 Row로 저장했습니다! :)');
+    } catch (err) {
+        await transaction.rollback();
+        res.status(500).send('이름 저장에 실패했습니다.');
+    }
 });
 
 router.post('/load', async (req, res) => {
@@ -18,7 +27,8 @@ router.post('/load', async (req, res) => {
         });
         if (findUserTable !== null) {
             const findUserDrawingTable = await drawing.findOne({
-                where: { user_id: findUserTable.dataValues.id }
+                where: { user_id: findUserTable.dataValues.id },
+                transaction
             });
             const findUserFactorTable = await factor.findOne({
                 where: { id: findUserDrawingTable.dataValues.factor_id },
@@ -31,13 +41,32 @@ router.post('/load', async (req, res) => {
             res.status(200).send(result);
         } else {
             await transaction.commit();
-            res.status(204).send('유저 데이터 정보 없음');
+            res.status(204).json('유저 데이터 정보 없음');
         }
     } catch (err) {
         console.log(err);
-        if (transaction) await transaction.rollback();
+        await transaction.rollback();
         res.status(500).send('User 데이터 조회 실패.');
     }
+});
+
+router.post('/save', async (req, res, next) => {
+    const factorId = req.body.factor_id;
+    const isValidFactorId = !!(factorId >= 1 || factorId <= 6);
+    let transaction;
+    try {
+        if (isValidFactorId) {
+            transaction = await drawing.sequelize.transaction();
+            await drawing.create(req.body, { transaction });
+            await transaction.commit();
+            res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
+        }
+    } catch (err) {
+        await transaction.rollback();
+        console.log('에러가 난 이유는요!! \n', err);
+        res.status(400).send('데이터 저장에 실패했습니다.');
+    }
+
 });
 
 router.delete('/deleteAll', async (req, res) => {
@@ -45,10 +74,11 @@ router.delete('/deleteAll', async (req, res) => {
     let transaction;
     try {
         transaction = await user.sequelize.transaction();
-        const findUserName = await user.findOne({ where: { name } });
+        const findUserName = await user.findOne({ where: { name }, transaction });
         if (findUserName !== null) {
             await drawing.destroy({
-                where: { user_id: findUserName.dataValues.id }
+                where: { user_id: findUserName.dataValues.id },
+                transaction
             });
             await transaction.commit();
             res.status(200).send('유저 호재 정보 삭제 완료.');
@@ -57,7 +87,7 @@ router.delete('/deleteAll', async (req, res) => {
             res.status(404).send('유저 호재 정보 없음');
         }
     } catch (err) {
-        if (transaction) await transaction.rollback();
+        await transaction.rollback();
         res.status(500).send('유저 호재 정보 삭제 실패.');
     }
 });

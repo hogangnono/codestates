@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             freezeTableName: true
         }
     );
-
+    // drawing.removeAttribute('updatedAt');
     drawing.associate = models => {
         drawing.belongsTo(models.user, { foreignKey: 'user_id' });
         drawing.belongsTo(models.factor, { foreignKey: 'factor_id' });
