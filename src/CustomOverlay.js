@@ -4,8 +4,8 @@ import * as d3 from 'd3';
 var CustomOverlay = function (options) {
     // make a div that contain shape
     const div = document.createElement('div');
-    this._svg = d3.create('svg').attr('width', window.innerWidth).attr('height', window.innerHeight);
-    this._circle = this._svg.append('circle').attr('stroke', 'green').attr('fill', 'green').attr('fill-opacity', '0.4');
+    this._svg = d3.create('svg');
+    this._ellipse = this._svg.append('ellipse').attr('fill', 'black').attr('fill-opacity', '0.4');
     div.appendChild(this._svg.node());
     this._element = div;
 
@@ -22,12 +22,13 @@ CustomOverlay.prototype = new window.naver.maps.OverlayView();
 CustomOverlay.prototype.constructor = CustomOverlay;
 
 CustomOverlay.prototype.setPosition = function (position) {
-    this._position = position;
+    this._startPos = position.startPos;
+    this._endPos = position.endPos;
     this.draw();
 };
 
 CustomOverlay.prototype.getPosition = function () {
-    return this._position;
+    return this._startPos.coord;
 };
 
 CustomOverlay.prototype.onAdd = function () {
@@ -45,10 +46,27 @@ CustomOverlay.prototype.draw = function () {
     const pixelPosition = projection.fromCoordToOffset(position);
     this._element.style.position = 'absolute';
 
+    // place thd div where user click
+    this._element.style.top = `${pixelPosition.y}px`;
+    this._element.style.left = `${pixelPosition.x}px`;
+
+    // set the ratio
     const ratio = this._map.getZoom() - this._zoom;
-    // place the circle where user click and resize
-    this._circle.attr('cx', pixelPosition.x).attr('cy', pixelPosition.y);
-    this._circle.attr('r', 50 * (2 ** ratio));
+
+    // match the div size with user created
+    const width = this._endPos.offset.x - this._startPos.offset.x;
+    const height = this._endPos.offset.y - this._startPos.offset.y;
+    this._element.style.width = `${width * (2 ** ratio)}px`;
+    this._element.style.height = `${height * (2 ** ratio)}px`;
+    // this._element.style.backgroundColor = 'orange';
+    // this._element.style.opacity = '0.5';
+    this._svg.attr('width', width * (2 ** ratio)).attr('height', height * (2 ** ratio));
+
+    // // place the circle where user click and resize
+    this._ellipse.attr('cx', (width * (2 ** ratio)) / 2).attr('cy', (height * (2 ** ratio)) / 2);
+    this._ellipse.attr('rx', (width / 2) * (2 ** ratio));
+    this._ellipse.attr('ry', (height / 2) * (2 ** ratio));
+
 };
 
 CustomOverlay.prototype.onRemove = function () {

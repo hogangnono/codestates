@@ -12,6 +12,7 @@ class App extends Component {
 
     componentDidMount() {
         const naver = window.naver;
+        let startPos;
         const mapOptions = {
             zoomControl: true,
             zoomControlOptions: {
@@ -36,8 +37,18 @@ class App extends Component {
 
         naver.maps.Event.addListener(map, 'click', function (e) {
             console.log('click');
+            // coord: lat, lng of map
+            // offset: x, y of screen
+            const { coord, offset } = e;
+            startPos = { coord, offset };
+        });
+
+        naver.maps.Event.addListener(map, 'rightclick', function (e) {
+            console.log('right click');
+            const { coord, offset } = e;
+            const endPos = { coord, offset };
             new CustomOverlay({
-                position: e.coord,
+                position: { startPos, endPos },
                 naverMap: map
             }).setMap(map);
         });
