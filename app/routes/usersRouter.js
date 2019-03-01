@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models').users;
-var Drawings = require('../models').drawings;
-var FactorCategories = require('../models').factorCategories;
-var Figures = require('../models').figures;
+var sequelize = require('sequelize');
+
+const { users, drawings, factorCategories, figures } = require('../models');
 
 router.post('/', (req, res) => {
     const { name } = req.body;
-    User.findOrCreate({ where: { name: name } })
+    users
+        .findOrCreate({ where: { name: name } })
 
         .spread((user, created) => {
             if (created) {
@@ -37,14 +37,13 @@ router.post('/', (req, res) => {
         });
 });
 
-
 router.get('/load', async (req, res) => {
     try {
-        const user = await User.findAll();
-        const drawings = await Drawings.findAll();
-        const factorCategories = await FactorCategories.findAll();
-        const figures = await Figures.findAll();
-        const data = [user, drawings, factorCategories, figures];
+        const User = await users.findAll();
+        const Drawings = await drawings.findAll();
+        const FactorCategories = await factorCategories.findAll();
+        const Figures = await figures.findAll();
+        const data = [User, Drawings, FactorCategories, Figures];
         res.status(200).send(data);
     } catch (err) {
         res.status(500).send('User 전체 조회 실패.');
@@ -53,26 +52,29 @@ router.get('/load', async (req, res) => {
 
 router.delete('/deleteAll', async (req, res) => {
     const { name } = req.body;
+    let transaction;
     try {
-        const findUserName = await User.findOne({ where: { name } });
-        console.log(findUserName);
+        transaction = await sequelize.transaction();
+        const findUserName = await users.findOne({ where: { name } });
         if (findUserName !== null) {
-            const findUserIdInDrawings = await Drawings.findOne({
+            const findUserIdInDrawings = await drawings.findOne({
                 where: { userId: findUserName.dataValues.id }
             });
 
-            await Drawings.destroy({
+            await drawings.destroy({
                 where: { userId: findUserName.dataValues.id }
             });
-            await Figures.destroy({
+            await figures.destroy({
                 where: { id: findUserIdInDrawings.dataValues.figureId }
             });
+            await transaction.commit();
             res.status(200).send('유저 호재 정보 삭제 완료.');
         } else {
             res.status(404).send('유저 호재 정보 없음');
         }
         // await User.destroy({ where: { name } });
     } catch (err) {
+        if (transaction) await transaction.rollback();
         res.status(500).send('유저 호재 정보 삭제 실패.');
     }
 });
@@ -80,20 +82,22 @@ router.delete('/deleteAll', async (req, res) => {
 router.post('/save', async (req, res) => {
     const { name, figureInfo, drawingInfo } = req.body;
     const { factorCategoryId } = figureInfo;
-    const isValidfactorCategoryId = !!(factorCategoryId >= 1 && factorCategoryId <= 9);
+    const isValidfactorCategoryId = !!(
+        factorCategoryId >= 1 && factorCategoryId <= 9
+    );
 
     try {
         if (isValidfactorCategoryId) {
-            const findUser = await User.findOne({ where: { name: name } });
+            const findUser = await users.findOne({ where: { name } });
             const userID = await findUser.dataValues.id;
-            const createdRowInFigures = await Figures.create(figureInfo);
+            const createdRowInFigures = await figures.create(figureInfo);
             const figureId = await createdRowInFigures.dataValues.id;
 
-            Drawings.create({
+            drawings.create({
                 mapCenterLat: drawingInfo.mapCenterLat,
                 mapCenterLng: drawingInfo.mapCenterLng,
-                userID: userID,
-                figureId: figureId
+                userID,
+                figureId
             });
             console.log('========= RESULT ===========');
             console.log('POST /save/ :: 저장을 완료했습니다');
@@ -104,9 +108,10 @@ router.post('/save', async (req, res) => {
         console.log('========= RESULT ===========');
         console.log('POST /save/ :: request was failed beacuse : \n', err);
         console.log('============================');
-        res.status(400).send('데이터 등록 실패! 이유는 console을 확인해야해요!');
+        res.status(400).send(
+            '데이터 등록 실패! 이유는 console을 확인해야해요!'
+        );
     }
-
 });
 
 module.exports = router;
