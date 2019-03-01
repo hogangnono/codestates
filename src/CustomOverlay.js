@@ -53,17 +53,19 @@ CustomOverlay.prototype.draw = function () {
     // set the ratio
     const ratio = this._map.getZoom() - this._zoom;
 
-    // match the div size with user created
+    // calculate the div width and height (Subtraction of two coordinates) with zoom ratio
     const width = this._endPos.offset.x - this._startPos.offset.x;
     const height = this._endPos.offset.y - this._startPos.offset.y;
-    this._element.style.width = `${width * (2 ** ratio)}px`;
-    this._element.style.height = `${height * (2 ** ratio)}px`;
-    // this._element.style.backgroundColor = 'orange';
-    // this._element.style.opacity = '0.5';
-    this._svg.attr('width', width * (2 ** ratio)).attr('height', height * (2 ** ratio));
+    const widthRatio = width * (2 ** ratio);
+    const heightRatio = height * (2 ** ratio);
 
-    // // place the circle where user click and resize
-    this._ellipse.attr('cx', (width * (2 ** ratio)) / 2).attr('cy', (height * (2 ** ratio)) / 2);
+    // match the div and svg size
+    this._element.style.width = `${widthRatio}px`;
+    this._element.style.height = `${heightRatio}px`;
+    this._svg.attr('width', widthRatio).attr('height', heightRatio);
+
+    // place the ellipse's center point and resize
+    this._ellipse.attr('cx', widthRatio / 2).attr('cy', heightRatio / 2);
     this._ellipse.attr('rx', (width / 2) * (2 ** ratio));
     this._ellipse.attr('ry', (height / 2) * (2 ** ratio));
 
