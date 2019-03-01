@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const indexRouter = require('./routes/indexRouter');
-const usersRouter = require('./routes/usersRouter');
+const userRouter = require('./routes/userRouter');
 const searchRouter = require('./routes/searchRouter');
 
 const app = express();
@@ -31,7 +31,7 @@ app.use(cors());
 
 // Routing
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', userRouter);
 app.use('/search', searchRouter);
 
 // Do we need set CORS() and header ?

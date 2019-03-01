@@ -1,7 +1,7 @@
 // const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    const users = sequelize.define(
-        'users',
+    const user = sequelize.define(
+        'user',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -13,12 +13,13 @@ module.exports = (sequelize, DataTypes) => {
         {
             charset: 'utf8',
             collate: 'utf8_unicode_ci',
-            timestamps: false
+            timestamps: false,
+            freezeTableName: true
         }
     );
-    users.associate = models => {
+    user.associate = models => {
         // associations can be defined here
     };
 
-    return users;
+    return user;
 };
