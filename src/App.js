@@ -37,7 +37,8 @@ class App extends Component {
         naver.maps.Event.addListener(map, 'click', function (e) { // 클릭한 위치에 오버레이를 추가합니다.
             console.log('click');
             new CustomOverlay({
-                position: e.coord
+                position: e.coord,
+                mm: map
             }).setMap(map);
         });
     }
