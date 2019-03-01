@@ -3,13 +3,16 @@ import * as d3 from 'd3';
 
 var CustomOverlay = function (options) {
     // make a div that contain shape
-    this._zoom = options.mm.getZoom();
-    this._map = options.mm;
     const div = document.createElement('div');
-    const svg = d3.create('svg');
-    this._circle = svg.append('circle').attr('cx', 50).attr('cy', 50).attr('stroke', 'green').attr('fill', 'green').attr('fill-opacity', '0.4');
-    div.appendChild(svg.node());
+    this._svg = d3.create('svg').attr('width', window.innerWidth).attr('height', window.innerHeight);
+    this._circle = this._svg.append('circle').attr('stroke', 'green').attr('fill', 'green').attr('fill-opacity', '0.4');
+    div.appendChild(this._svg.node());
     this._element = div;
+
+    // current map ratio
+    this._zoom = options.naverMap.getZoom();
+    this._map = options.naverMap;
+
     this.setPosition(options.position);
     this.setMap(options.map || null);
 };
@@ -41,11 +44,11 @@ CustomOverlay.prototype.draw = function () {
     const position = this.getPosition();
     const pixelPosition = projection.fromCoordToOffset(position);
     this._element.style.position = 'absolute';
-    this._element.style.left = `${pixelPosition.x}px`;
-    this._element.style.top = `${pixelPosition.y}px`;
-    // console.log(this._zoom);
+
     const ratio = this._map.getZoom() - this._zoom;
-    this._circle.attr('r', 50 * Math.pow(2, ratio));
+    // place the circle where user click and resize
+    this._circle.attr('cx', pixelPosition.x).attr('cy', pixelPosition.y);
+    this._circle.attr('r', 50 * (2 ** ratio));
 };
 
 CustomOverlay.prototype.onRemove = function () {

@@ -34,11 +34,11 @@ class App extends Component {
         const map = new naver.maps.Map(d3.select('#map').node(), mapOptions);
         this.setState({ map });
 
-        naver.maps.Event.addListener(map, 'click', function (e) { // 클릭한 위치에 오버레이를 추가합니다.
+        naver.maps.Event.addListener(map, 'click', function (e) {
             console.log('click');
             new CustomOverlay({
                 position: e.coord,
-                mm: map
+                naverMap: map
             }).setMap(map);
         });
     }
