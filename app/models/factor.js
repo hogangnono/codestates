@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    factor.associate = function (models) {
+    factor.associate = models => {
         // associations can be defined here
     };
     return factor;

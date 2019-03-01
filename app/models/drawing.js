@@ -1,6 +1,4 @@
 const Sequelize = require('sequelize');
-// const users = require('../models').users;
-// const figures = require('./figures');
 module.exports = (sequelize, DataTypes) => {
     const drawing = sequelize.define(
         'drawing',
@@ -13,17 +11,18 @@ module.exports = (sequelize, DataTypes) => {
             map_center_lat: DataTypes.DECIMAL,
             map_center_lng: DataTypes.DECIMAL,
             figures: DataTypes.STRING,
-            createdAt: DataTypes.DATE,
             user_id: DataTypes.INTEGER,
-            factor_id: DataTypes.INTEGER
+            factor_id: DataTypes.INTEGER,
+            createdAt: DataTypes.DATE,
+            updatedAt: DataTypes.DATE
         },
         {
             timestamps: true,
             freezeTableName: true
         }
     );
-    drawing.removeAttribute('updatedAt');
-    drawing.associate = function (models) {
+    // drawing.removeAttribute('updatedAt');
+    drawing.associate = models => {
         drawing.belongsTo(models.user, { foreignKey: 'user_id' });
         drawing.belongsTo(models.factor, { foreignKey: 'factor_id' });
         // associations can be defined here

@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             freezeTableName: true
         }
     );
-    user.associate = function (models) {
+    user.associate = models => {
         // associations can be defined here
     };
 
