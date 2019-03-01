@@ -1,70 +1,65 @@
-var express = require('express');
-var router = express.Router();
-// var User = require('../models').user;
-// var Drawings = require('../models').drawing;
-// var FactorCategories = require('../models').factor;
+const express = require('express');
+const router = express.Router();
+const { user, drawing, factor } = require('../models');
 
 router.get('/', (req, res, next) => {
     res.status(200);
     res.send('Welcome to hojae hojae!\nthis is a user page');
 });
 
-// router.post('/', (req, res) => {
-//     const { name } = req.body;
-//     console.log('name', name);
-//     User
-//         .findOrCreate({ where: { name: name } })
-//         .spread((user, created) => {
-//             if (created) {
-//                 console.log('========= RESULT ===========');
-//                 console.log('POST /users/ :: DB에 없는 데이터여서 저장했습니다.');
-//                 console.log('============================');
-//                 res.status(201).send('DB에 없는 데이터여서 저장했습니다.');
-//             } else {
-//                 console.log('========= RESULT ===========');
-//                 console.log('POST /users/ :: user information :\n', user.dataValues);
-//                 console.log('============================');
-//                 res.status(200).send('DB에 이미 있는 데이터입니다. 로그인만 했습니다.');
-//             }
-//         })
-//         .catch(err => {
-//             console.log('========= RESULT ===========');
-//             console.log('POST /users/ :: request was failed beacuse :\n', err);
-//             console.log('============================');
-//             res.status(500).send('POST /users/ request was failed');
-//         });
-// });
+router.post('/load', async (req, res) => {
+    const { name } = req.body;
+    let transaction;
+    try {
+        transaction = await user.sequelize.transaction();
+        const findUserTable = await user.findOne({
+            where: { name },
+            transaction
+        });
+        if (findUserTable !== null) {
+            const findUserDrawingTable = await drawing.findOne({
+                where: { user_id: findUserTable.dataValues.id }
+            });
+            const findUserFactorTable = await factor.findOne({
+                where: { id: findUserDrawingTable.dataValues.factor_id },
+                transaction
+            });
 
-// router.post('/save', async (req, res) => {
-//     const { name, figureInfo, drawingInfo } = req.body;
-//     const { factorCategoryId } = figureInfo;
-//     const isValidfactorCategoryId = !!(factorCategoryId >= 1 && factorCategoryId <= 9);
+            const result = [findUserDrawingTable, findUserFactorTable];
 
-//     try {
-//         if (isValidfactorCategoryId) {
-//             const findUser = await User.findOne({ where: { name: name } });
-//             const userID = await findUser.dataValues.id;
-//             const createdRowInFigures = await Figures.create(figureInfo);
-//             const figureId = await createdRowInFigures.dataValues.id;
+            await transaction.commit();
+            res.status(200).send(result);
+        } else {
+            await transaction.commit();
+            res.status(204).send('유저 데이터 정보 없음');
+        }
+    } catch (err) {
+        console.log(err);
+        if (transaction) await transaction.rollback();
+        res.status(500).send('User 데이터 조회 실패.');
+    }
+});
 
-//             Drawings.create({
-//                 mapCenterLat: drawingInfo.mapCenterLat,
-//                 mapCenterLng: drawingInfo.mapCenterLng,
-//                 userID: userID,
-//                 figureId: figureId
-//             });
-//             console.log('========= RESULT ===========');
-//             console.log('POST /save/ :: 저장을 완료했습니다');
-//             console.log('============================');
-//             res.status(201).send('Figures에 데이터를 추가했습니다.');
-//         }
-//     } catch (err) {
-//         console.log('========= RESULT ===========');
-//         console.log('POST /save/ :: request was failed beacuse : \n', err);
-//         console.log('============================');
-//         res.status(400).send('데이터 등록 실패! 이유는 console을 확인해야해요!');
-//     }
-
-// });
+router.delete('/deleteAll', async (req, res) => {
+    const { name } = req.body;
+    let transaction;
+    try {
+        transaction = await user.sequelize.transaction();
+        const findUserName = await user.findOne({ where: { name } });
+        if (findUserName !== null) {
+            await drawing.destroy({
+                where: { user_id: findUserName.dataValues.id }
+            });
+            await transaction.commit();
+            res.status(200).send('유저 호재 정보 삭제 완료.');
+        } else {
+            await transaction.commit();
+            res.status(404).send('유저 호재 정보 없음');
+        }
+    } catch (err) {
+        if (transaction) await transaction.rollback();
+        res.status(500).send('유저 호재 정보 삭제 실패.');
+    }
+});
 
 module.exports = router;
