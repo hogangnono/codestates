@@ -7,6 +7,7 @@ const cors = require('cors');
 const indexRouter = require('./routes/indexRouter');
 const userRouter = require('./routes/userRouter');
 const searchRouter = require('./routes/searchRouter');
+const category = require('../app/categories');
 
 const app = express();
 const port = 3001;
@@ -17,6 +18,7 @@ models.sequelize
     .sync()
     .then(() => {
         console.log(' DB 연결 성공');
+        models.factor.bulkCreate(category, { ignoreDuplicates: true });
     })
     .catch(err => {
         console.log(err, '연결 실패');
