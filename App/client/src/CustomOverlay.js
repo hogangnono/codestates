@@ -4,9 +4,17 @@ import * as d3 from 'd3';
 var CustomOverlay = function (options) {
     // make a div that contain shape
     const div = document.createElement('div');
+    // make deletebutton
+    const deleteButton = document.createElement('div');
+    deleteButton.className = 'deleteButton';
+    deleteButton.addEventListener('click', (e) => {
+        this.onRemove();
+    });
+
     this._svg = d3.create('svg');
-    this._ellipse = this._svg.append('ellipse').attr('fill', 'black').attr('fill-opacity', '0.4');
+    this._ellipse = this._svg.append('ellipse');
     div.appendChild(this._svg.node());
+    div.appendChild(deleteButton);
     this._element = div;
 
     // current map ratio
@@ -65,7 +73,6 @@ CustomOverlay.prototype.draw = function () {
     // match the div and svg size
     this._element.style.width = `${widthRatio}px`;
     this._element.style.height = `${heightRatio}px`;
-    this._element.style.backgroundColor = 'orange';
     this._svg.attr('width', widthRatio).attr('height', heightRatio);
 
     // place the ellipse's center point and resize
@@ -76,8 +83,7 @@ CustomOverlay.prototype.draw = function () {
 };
 
 CustomOverlay.prototype.onRemove = function () {
-    this._element.remove();
-    this._element.off();
+    this._element.parentNode.removeChild(this._element);
 };
 
 export default CustomOverlay;
