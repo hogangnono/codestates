@@ -11,9 +11,9 @@ var CustomOverlay = function (options) {
         this.onRemove();
     });
 
-    this._svg = d3.create('svg');
-    this._ellipse = this._svg.append('ellipse');
-    div.appendChild(this._svg.node());
+    const svg = d3.create('svg');
+    svg.append('ellipse');
+    div.appendChild(svg.node());
     div.appendChild(deleteButton);
     this._element = div;
 
@@ -73,12 +73,17 @@ CustomOverlay.prototype.draw = function () {
     // match the div and svg size
     this._element.style.width = `${widthRatio}px`;
     this._element.style.height = `${heightRatio}px`;
-    this._svg.attr('width', widthRatio).attr('height', heightRatio);
+
+    const svg = this._element.childNodes[0];
+    svg.style.width = widthRatio;
+    svg.style.height = heightRatio;
 
     // place the ellipse's center point and resize
-    this._ellipse.attr('cx', widthRatio / 2).attr('cy', heightRatio / 2);
-    this._ellipse.attr('rx', (width / 2) * (2 ** ratio));
-    this._ellipse.attr('ry', (height / 2) * (2 ** ratio));
+    const ellipse = svg.childNodes[0];
+    ellipse.style.cx = widthRatio / 2;
+    ellipse.style.cy = heightRatio / 2;
+    ellipse.style.rx = (width / 2) * (2 ** ratio);
+    ellipse.style.ry = (height / 2) * (2 ** ratio);
 
 };
 
