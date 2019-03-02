@@ -8,22 +8,23 @@ import "./App.css";
 
 class App extends Component {
   state = {
-    map: undefined,
+    mapLoad: undefined,
     name: "jihun",
     factor: ""
   };
 
   componentDidMount() {
-    this.drawingComponent();
-    this.mainPageLoad();
-  }
-
-  drawingComponent = () => {
-    let startPos;
     const naver = window.naver;
     const map = new naver.maps.Map(d3.select("#map").node(), this.mapOption());
-    this.setState({ map });
+    this.setState({ mapLoad: map });
+    this.drawingComponent(naver, map);
+    this.mainPageLoad(map);
+  }
 
+  drawingComponent = (naverPos, mapPos) => {
+    let startPos;
+    let naver = naverPos;
+    const map = mapPos;
     naver.maps.Event.addListener(map, "click", e => {
       console.log("click");
       // coord: lat, lng of map
@@ -67,11 +68,9 @@ class App extends Component {
     return mapOptions;
   };
 
-  mainPageLoad = () => {
+  mainPageLoad = mapPos => {
     const { name, factor } = this.state;
-    const naver = window.naver;
-    const map = new naver.maps.Map(d3.select("#map").node(), this.mapOption());
-
+    const map = mapPos;
     axios
       .post("http://127.0.0.1:3001/user/load", {
         name,
@@ -104,11 +103,11 @@ class App extends Component {
   };
 
   render() {
-    const { map } = this.state;
+    const { mapLoad } = this.state;
     return (
       <div id="wrapper">
         <div id="map" style={{ height: "100vh" }} />
-        <Toolbox map={map} />
+        <Toolbox mapLoad={mapLoad} />
       </div>
     );
   }
