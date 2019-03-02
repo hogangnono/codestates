@@ -12,7 +12,7 @@ class Toolbox extends Component {
         // map is created when render is over
         const { map } = this.props;
         if (!map) {
-            this.toolbox = (<div>hello</div>);
+            this.toolbox = <div>hello</div>;
         } else {
             this.toolbox = (
                 <div id="toolbox">
@@ -29,9 +29,7 @@ class Toolbox extends Component {
                 </div>
             );
         }
-        return (
-            <div>{this.toolbox}</div>
-        );
+        return <div>{this.toolbox}</div>;
     }
 }
 
