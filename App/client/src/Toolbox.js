@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
-import './Toolbox.css';
 class Toolbox extends Component {
     constructor(props) {
         super(props);
