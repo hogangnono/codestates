@@ -28,7 +28,10 @@ CustomOverlay.prototype.setPosition = function (position) {
 };
 
 CustomOverlay.prototype.getPosition = function () {
-    return this._startPos.coord;
+    const start = {};
+    start.x = Math.min(this._startPos.coord.x, this._endPos.coord.x);
+    start.y = Math.max(this._startPos.coord.y, this._endPos.coord.y);
+    return start;
 };
 
 CustomOverlay.prototype.onAdd = function () {
@@ -54,14 +57,15 @@ CustomOverlay.prototype.draw = function () {
     const ratio = this._map.getZoom() - this._zoom;
 
     // calculate the div width and height (Subtraction of two coordinates) with zoom ratio
-    const width = this._endPos.offset.x - this._startPos.offset.x;
-    const height = this._endPos.offset.y - this._startPos.offset.y;
+    const width = Math.abs(this._endPos.offset.x - this._startPos.offset.x);
+    const height = Math.abs(this._endPos.offset.y - this._startPos.offset.y);
     const widthRatio = width * (2 ** ratio);
     const heightRatio = height * (2 ** ratio);
 
     // match the div and svg size
     this._element.style.width = `${widthRatio}px`;
     this._element.style.height = `${heightRatio}px`;
+    this._element.style.backgroundColor = 'orange';
     this._svg.attr('width', widthRatio).attr('height', heightRatio);
 
     // place the ellipse's center point and resize
