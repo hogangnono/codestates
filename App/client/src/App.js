@@ -45,12 +45,18 @@ class App extends Component {
 
         naver.maps.Event.addListener(map, 'rightclick', function (e) {
             console.log('right click');
-            const { coord, offset } = e;
-            const endPos = { coord, offset };
-            new CustomOverlay({
-                position: { startPos, endPos },
-                naverMap: map
-            }).setMap(map);
+            // only there is a start point
+            if (startPos) {
+                const { coord, offset } = e;
+                const endPos = { coord, offset };
+                new CustomOverlay({
+                    position: { startPos, endPos },
+                    naverMap: map
+                }).setMap(map);
+                // delete start postion prevent for multiple right click
+                // makes multipile figures
+                startPos = undefined;
+            }
         });
     }
 
