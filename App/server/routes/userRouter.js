@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { user, drawing, factor } = require('../models');
+const { user, drawing } = require('../models');
 
 router.get('/', async (req, res, next) => {
     const { name } = req.body;
@@ -25,6 +25,7 @@ router.post('/load', async (req, res) => {
             if (factor === '') {
                 transaction = await user.sequelize.transaction();
                 const findFactorTable = await drawing.findAll({
+                    order: [['updatedAt', 'DESC']],
                     transaction
                 });
                 if (findFactorTable !== null) {
@@ -39,6 +40,7 @@ router.post('/load', async (req, res) => {
                 transaction = await user.sequelize.transaction();
                 const findFactorTable = await drawing.findAll({
                     where: { factor_id: factor },
+                    order: [['updatedAt', 'DESC']],
                     transaction
                 });
                 if (findFactorTable !== null) {
@@ -66,6 +68,7 @@ router.post('/load', async (req, res) => {
             if (findUserTable !== null) {
                 const findUserDrawingTable = await drawing.findAll({
                     where: { user_id: findUserTable.dataValues.id },
+                    order: [['updatedAt', 'DESC']],
                     transaction
                 });
                 // const findUserFactorTable = await factor.findAll({
