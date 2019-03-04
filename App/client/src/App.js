@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
@@ -9,7 +8,7 @@ import './App.less';
 class App extends Component {
     state = {
         mapLoad: undefined,
-        name: 'jihun',
+        name: '',
         factor: ''
     };
 
@@ -42,7 +41,8 @@ class App extends Component {
             const endPos = { coord, offset };
             new CustomOverlay({
                 position: { startPos, endPos },
-                naverMap: map
+                naverMap: map,
+                zoom: ''
             }).setMap(map);
         });
     };
@@ -83,12 +83,13 @@ class App extends Component {
                 const resultData = await result.data;
                 if (result.status === 200 || result.status === 201) {
                     resultData.map(el => {
-                        const parseFigures = JSON.parse(el.figures);
-                        const startPos = parseFigures.startPos;
-                        const endPos = parseFigures.endPos;
+                        const { startPos, endPos, zoomLevel } = JSON.parse(
+                            el.figures
+                        );
                         return new CustomOverlay({
                             position: { startPos, endPos },
-                            naverMap: map
+                            naverMap: map,
+                            zoom: zoomLevel
                         }).setMap(map);
                     });
                 } else if (result.status === 204) {
@@ -100,6 +101,7 @@ class App extends Component {
                     console.log(error);
                     alert('load fail');
                 } else {
+                    console.log(error);
                     alert('error!');
                 }
             });
