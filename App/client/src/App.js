@@ -6,7 +6,6 @@ import CustomOverlay from './CustomOverlay';
 import './App.less';
 
 class App extends Component {
-<<<<<<< HEAD
     constructor(props) {
         super(props);
         this.state = {
@@ -28,13 +27,6 @@ class App extends Component {
 
         this.mainPageLoad = this.mainPageLoad.bind(this);
     }
-=======
-    state = {
-        mapLoad: undefined,
-        name: '',
-        factor: ''
-    };
->>>>>>> 86b23d05d3bc7d4cd28ab83f15b73bb3890b63d5
 
     componentDidMount() {
         const naver = window.naver;
@@ -52,7 +44,6 @@ class App extends Component {
 
     drawingComponent = () => {
         let startPos;
-<<<<<<< HEAD
         const naver = window.naver;
         console.log('naver ', naver);
         const { map } = this.state;
@@ -76,7 +67,8 @@ class App extends Component {
                 const endPos = { coord, offset };
                 new CustomOverlay({
                     position: { startPos, endPos },
-                    naverMap: map
+                    naverMap: map,
+                    zoom: ''
                 }).setMap(map);
 
                 naver.maps.Event.removeListener(rightClick);
@@ -86,28 +78,6 @@ class App extends Component {
             this.setState({ leftClick: leftClick });
         }
         this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
-=======
-        const naver = naverPos;
-        const map = mapPos;
-        naver.maps.Event.addListener(map, 'click', e => {
-            console.log('click');
-            // coord: lat, lng of map
-            // offset: x, y of screen
-            const { coord, offset } = e;
-            startPos = { coord, offset };
-        });
-
-        naver.maps.Event.addListener(map, 'rightclick', e => {
-            console.log('right click');
-            const { coord, offset } = e;
-            const endPos = { coord, offset };
-            new CustomOverlay({
-                position: { startPos, endPos },
-                naverMap: map,
-                zoom: ''
-            }).setMap(map);
-        });
->>>>>>> 86b23d05d3bc7d4cd28ab83f15b73bb3890b63d5
     };
 
     ellipseState() {
