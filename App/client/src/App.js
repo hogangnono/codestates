@@ -25,7 +25,7 @@ class App extends Component {
             // mouseEvent: undefined, // Will set mouse event here from listener
         };
 
-        this.mainPageLoad = this.mainPageLoad.bind(this);
+        // this.mainPageLoad = this.mainPageLoad.bind(this);
     }
 
     componentDidMount() {
@@ -37,9 +37,9 @@ class App extends Component {
         // this.drawingComponent();
 
         this.setState({ map: map });
-        // this.setState({ naver: naver });
+        this.setState({ naver: naver });
 
-        this.mainPageLoad(map);
+        // this.mainPageLoad(map);
     }
 
     drawingComponent = () => {
