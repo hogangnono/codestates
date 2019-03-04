@@ -1,13 +1,12 @@
 /* eslint-disable linebreak-style */
 import * as d3 from 'd3';
-
+import './CustomOverlay.less';
 var CustomOverlay = function (options) {
-    // make a div that contain shape
-
+    // make a div that contain shape and whole info
     const div = document.createElement('div');
+    // make a input that contaion description of shape
     var input = document.createElement('div');
     input.innerHTML = '<input type="text" placeholder="호재를 입력해주세요"></input>';
-
     input.addEventListener('click', (e) => {
         e.target.focus();
     });
@@ -19,18 +18,19 @@ var CustomOverlay = function (options) {
         this.onRemove();
     });
 
+    // make svg that contain shape
     const svg = d3.create('svg');
     svg.append('ellipse');
+
     div.appendChild(svg.node());
     div.appendChild(deleteButton);
     div.appendChild(input);
+
     this._element = div;
 
     // current map ratio
-    this._zoom = options.naverMap.getZoom();
+    this._zoom = options.zoom || options.naverMap.getZoom();
     this._map = options.naverMap;
-    this._mapZoom = options.zoom;
-    this._zoomOrMapZoom = this._mapZoom === '' ? this._zoom : this._mapZoom;
     this.setPosition(options.position);
     this.setMap(options.map || null);
 };
@@ -72,17 +72,13 @@ CustomOverlay.prototype.draw = function () {
     this._element.style.left = `${pixelPosition.x}px`;
 
     // set the ratio
-    const ratio = this._map.getZoom() - this._zoomOrMapZoom;
-    // console.log(ratio);
+    const ratio = this._map.getZoom() - this._zoom;
 
-    // calculate the div width and height (Subtraction of two coordinates) with zoom ratio
-
+    // calculate the div width and height(Subtraction of two coordinates) with zoom ratio
     const width = Math.abs(this._endPos.offset.x - this._startPos.offset.x);
     const height = Math.abs(this._endPos.offset.y - this._startPos.offset.y);
-    const widthRatio = width * 2 ** ratio;
-    const heightRatio = height * 2 ** ratio;
-    this.width = width;
-    this.height = height;
+    const widthRatio = width * (2 ** ratio);
+    const heightRatio = height * (2 ** ratio);
 
     // match the div and svg size
     this._element.style.width = `${widthRatio}px`;
