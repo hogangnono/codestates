@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import axios from 'axios';
 import Toolbox from './Toolbox';
 import CustomOverlay from './CustomOverlay';
@@ -110,7 +109,7 @@ class App extends Component {
         const { mapLoad } = this.state;
         return (
             <div id="wrapper">
-                <div id="map" style={{ height: '100vh' }} />
+                <div id="map" />
                 <Toolbox mapLoad={mapLoad} />
             </div>
         );
