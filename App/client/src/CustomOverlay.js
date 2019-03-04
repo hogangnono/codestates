@@ -1,11 +1,14 @@
 /* eslint-disable linebreak-style */
 import * as d3 from 'd3';
 
-var CustomOverlay = function (options) {
+var CustomOverlay = function(options) {
     // make a div that contain shape
     const div = document.createElement('div');
     this._svg = d3.create('svg');
-    this._ellipse = this._svg.append('ellipse').attr('fill', 'black').attr('fill-opacity', '0.4');
+    this._ellipse = this._svg
+        .append('ellipse')
+        .attr('fill', 'black')
+        .attr('fill-opacity', '0.4');
     div.appendChild(this._svg.node());
     this._element = div;
 
@@ -21,26 +24,28 @@ CustomOverlay.prototype = new window.naver.maps.OverlayView();
 
 CustomOverlay.prototype.constructor = CustomOverlay;
 
-CustomOverlay.prototype.setPosition = function (position) {
+CustomOverlay.prototype.setPosition = function(position) {
     this._startPos = position.startPos;
     this._endPos = position.endPos;
     this.draw();
 };
+
 
 CustomOverlay.prototype.getPosition = function () {
     const start = {};
     start.x = Math.min(this._startPos.coord.x, this._endPos.coord.x);
     start.y = Math.max(this._startPos.coord.y, this._endPos.coord.y);
     return start;
+
 };
 
-CustomOverlay.prototype.onAdd = function () {
+CustomOverlay.prototype.onAdd = function() {
     var overlayLayer = this.getPanes().overlayLayer;
 
     overlayLayer.appendChild(this._element);
 };
 
-CustomOverlay.prototype.draw = function () {
+CustomOverlay.prototype.draw = function() {
     if (!this.getMap()) {
         return;
     }
@@ -57,6 +62,7 @@ CustomOverlay.prototype.draw = function () {
     const ratio = this._map.getZoom() - this._zoom;
 
     // calculate the div width and height (Subtraction of two coordinates) with zoom ratio
+
     const width = Math.abs(this._endPos.offset.x - this._startPos.offset.x);
     const height = Math.abs(this._endPos.offset.y - this._startPos.offset.y);
     const widthRatio = width * (2 ** ratio);
@@ -70,12 +76,11 @@ CustomOverlay.prototype.draw = function () {
 
     // place the ellipse's center point and resize
     this._ellipse.attr('cx', widthRatio / 2).attr('cy', heightRatio / 2);
-    this._ellipse.attr('rx', (width / 2) * (2 ** ratio));
-    this._ellipse.attr('ry', (height / 2) * (2 ** ratio));
-
+    this._ellipse.attr('rx', (width / 2) * 2 ** ratio);
+    this._ellipse.attr('ry', (height / 2) * 2 ** ratio);
 };
 
-CustomOverlay.prototype.onRemove = function () {
+CustomOverlay.prototype.onRemove = function() {
     this._element.remove();
     this._element.off();
 };

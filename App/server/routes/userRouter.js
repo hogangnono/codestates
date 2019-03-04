@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/load', async (req, res) => {
     const { name, factor } = req.body;
-    console.log(name);
+    console.log(name, factor);
     let transaction;
     if (name === '') {
         try {
@@ -54,14 +54,10 @@ router.post('/load', async (req, res) => {
                     transaction
                 });
                 // const findUserFactorTable = await factor.findAll({
-                //     where: { id: findUserDrawingTable.dataValues.factor_id },
                 //     transaction
                 // });
-                const findUserFactorTable = await factor.findAll({
-                    transaction
-                });
 
-                const result = [findUserDrawingTable, findUserFactorTable];
+                const result = findUserDrawingTable;
 
                 await transaction.commit();
                 res.status(200).send(result);

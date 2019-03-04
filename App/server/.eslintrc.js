@@ -1,3 +1,6 @@
 module.exports = {
-    extends: 'hogangnono'
+    extends: 'hogangnono',
+    rules: {
+        'linebreak-style': 0
+    }
 };

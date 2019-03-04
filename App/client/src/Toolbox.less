@@ -1,15 +1,53 @@
-#toolbox{
+// #toolbox {
+//   position: absolute;
+//   background: pink;
+//   top: 120px;
+//   right: 10px;
+//   z-index: 1;
+//   width: 15%;
+//   height: 70vh;
+// }
+
+// button {
+//   width: 100px;
+//   padding: 10px;
+//   margin: 5px;
+// }
+@toolboxColor: #ffffff;
+
+#toolbox {
   position: absolute;
-  background: pink;
+  background: @toolboxColor;
   top: 120px;
   right: 10px;
-  z-index:1;
+  z-index: 1;
   width: 15%;
   height: 70vh;
-}
 
-button{
-  width:100px;
-  padding: 10px;
-  margin: 5px;
+  #tabMenu {
+    font-size: 15px;
+    font-weight: bold;
+    padding: 5px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+  button {
+    width: 100px;
+    padding: 10px;
+    margin: 5px;
+  }
+  #drawing {
+    text-align: center;
+    display: inline-block;
+    margin: auto;
+    padding: 10px;
+    background-color: yellow;
+  }
+  #filter {
+    text-align: center;
+    display: inline-block;
+    margin: auto;
+    padding: 10px;
+    background-color: red;
+  }
 }
