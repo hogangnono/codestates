@@ -1,14 +1,12 @@
 {
-    "extends": "hogangnono/react",
-    "rules": {
-        "react/jsx-filename-extension": [
-            1,
-            {
-                "extensions": [
-                    ".js",
-                    ".jsx"
-                ]
-            }
-        ]
-    }
+  "extends": "hogangnono/react",
+  "rules": {
+    "linebreak-style": 0,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ]
+  }
 }

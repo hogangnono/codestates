@@ -29,7 +29,8 @@ var CustomOverlay = function (options) {
     // current map ratio
     this._zoom = options.naverMap.getZoom();
     this._map = options.naverMap;
-
+    this._mapZoom = options.zoom;
+    this._zoomOrMapZoom = this._mapZoom === '' ? this._zoom : this._mapZoom;
     this.setPosition(options.position);
     this.setMap(options.map || null);
 };
@@ -71,13 +72,17 @@ CustomOverlay.prototype.draw = function () {
     this._element.style.left = `${pixelPosition.x}px`;
 
     // set the ratio
-    const ratio = this._map.getZoom() - this._zoom;
+    const ratio = this._map.getZoom() - this._zoomOrMapZoom;
+    // console.log(ratio);
 
     // calculate the div width and height (Subtraction of two coordinates) with zoom ratio
+
     const width = Math.abs(this._endPos.offset.x - this._startPos.offset.x);
     const height = Math.abs(this._endPos.offset.y - this._startPos.offset.y);
-    const widthRatio = width * (2 ** ratio);
-    const heightRatio = height * (2 ** ratio);
+    const widthRatio = width * 2 ** ratio;
+    const heightRatio = height * 2 ** ratio;
+    this.width = width;
+    this.height = height;
 
     // match the div and svg size
     this._element.style.width = `${widthRatio}px`;

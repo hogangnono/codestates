@@ -18,22 +18,37 @@ router.get('/', async (req, res, next) => {
 
 router.post('/load', async (req, res) => {
     const { name, factor } = req.body;
-    console.log(name);
+    console.log(name, factor);
     let transaction;
     if (name === '') {
         try {
-            transaction = await user.sequelize.transaction();
-            const findFactorTable = await drawing.findAll({
-                where: { factor_id: factor },
-                transaction
-            });
-            if (findFactorTable !== null) {
-                const result = findFactorTable;
-                await transaction.commit();
-                res.status(200).send(result);
+            if (factor === '') {
+                transaction = await user.sequelize.transaction();
+                const findFactorTable = await drawing.findAll({
+                    transaction
+                });
+                if (findFactorTable !== null) {
+                    const result = findFactorTable;
+                    await transaction.commit();
+                    res.status(200).send(result);
+                } else {
+                    await transaction.commit();
+                    res.status(204).json('호재 데이터 정보 없음');
+                }
             } else {
-                await transaction.commit();
-                res.status(204).json('호재 데이터 정보 없음');
+                transaction = await user.sequelize.transaction();
+                const findFactorTable = await drawing.findAll({
+                    where: { factor_id: factor },
+                    transaction
+                });
+                if (findFactorTable !== null) {
+                    const result = findFactorTable;
+                    await transaction.commit();
+                    res.status(200).send(result);
+                } else {
+                    await transaction.commit();
+                    res.status(204).json('호재 데이터 정보 없음');
+                }
             }
         } catch (err) {
             console.log(err);
@@ -54,14 +69,10 @@ router.post('/load', async (req, res) => {
                     transaction
                 });
                 // const findUserFactorTable = await factor.findAll({
-                //     where: { id: findUserDrawingTable.dataValues.factor_id },
                 //     transaction
                 // });
-                const findUserFactorTable = await factor.findAll({
-                    transaction
-                });
 
-                const result = [findUserDrawingTable, findUserFactorTable];
+                const result = findUserDrawingTable;
 
                 await transaction.commit();
                 res.status(200).send(result);
