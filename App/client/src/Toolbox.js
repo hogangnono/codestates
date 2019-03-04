@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
-import './Toolbox.css';
+import './Toolbox.less';
 class Toolbox extends Component {
     constructor(props) {
         super(props);
@@ -10,9 +10,9 @@ class Toolbox extends Component {
 
     render() {
         // map is created when render is over
-        const { map } = this.props;
-        if (!map) {
-            this.toolbox = (<div>hello</div>);
+        const { mapLoad } = this.props;
+        if (!mapLoad) {
+            this.toolbox = <div>hello</div>;
         } else {
             this.toolbox = (
                 <div id="toolbox">
@@ -24,14 +24,13 @@ class Toolbox extends Component {
                         <button>사각형</button>
                         <button>원</button>
                         <button>다각형</button>
+                        <button>로드</button>
                     </div>
                     <input type="textarea" placeholder="description" />
                 </div>
             );
         }
-        return (
-            <div>{this.toolbox}</div>
-        );
+        return <div>{this.toolbox}</div>;
     }
 }
 
