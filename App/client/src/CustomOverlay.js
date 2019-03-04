@@ -3,7 +3,15 @@ import * as d3 from 'd3';
 
 var CustomOverlay = function (options) {
     // make a div that contain shape
+
     const div = document.createElement('div');
+    var input = document.createElement('div');
+    input.innerHTML = '<input type="text" placeholder="호재를 입력해주세요"></input>';
+
+    input.addEventListener('click', (e) => {
+        e.target.focus();
+    });
+
     // make deletebutton
     const deleteButton = document.createElement('div');
     deleteButton.className = 'deleteButton';
@@ -15,6 +23,7 @@ var CustomOverlay = function (options) {
     svg.append('ellipse');
     div.appendChild(svg.node());
     div.appendChild(deleteButton);
+    div.appendChild(input);
     this._element = div;
 
     // current map ratio
@@ -75,8 +84,8 @@ CustomOverlay.prototype.draw = function () {
     this._element.style.height = `${heightRatio}px`;
 
     const svg = this._element.childNodes[0];
-    svg.style.width = widthRatio;
-    svg.style.height = heightRatio;
+    svg.style.width = `${widthRatio}px`;
+    svg.style.height = `${heightRatio}px`;
 
     // place the ellipse's center point and resize
     const ellipse = svg.childNodes[0];
