@@ -22,18 +22,33 @@ router.post('/load', async (req, res) => {
     let transaction;
     if (name === '') {
         try {
-            transaction = await user.sequelize.transaction();
-            const findFactorTable = await drawing.findAll({
-                where: { factor_id: factor },
-                transaction
-            });
-            if (findFactorTable !== null) {
-                const result = findFactorTable;
-                await transaction.commit();
-                res.status(200).send(result);
+            if (factor === '') {
+                transaction = await user.sequelize.transaction();
+                const findFactorTable = await drawing.findAll({
+                    transaction
+                });
+                if (findFactorTable !== null) {
+                    const result = findFactorTable;
+                    await transaction.commit();
+                    res.status(200).send(result);
+                } else {
+                    await transaction.commit();
+                    res.status(204).json('호재 데이터 정보 없음');
+                }
             } else {
-                await transaction.commit();
-                res.status(204).json('호재 데이터 정보 없음');
+                transaction = await user.sequelize.transaction();
+                const findFactorTable = await drawing.findAll({
+                    where: { factor_id: factor },
+                    transaction
+                });
+                if (findFactorTable !== null) {
+                    const result = findFactorTable;
+                    await transaction.commit();
+                    res.status(200).send(result);
+                } else {
+                    await transaction.commit();
+                    res.status(204).json('호재 데이터 정보 없음');
+                }
             }
         } catch (err) {
             console.log(err);
