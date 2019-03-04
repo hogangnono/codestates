@@ -38,7 +38,7 @@ class App extends Component {
         this.setState({ map: map });
         this.setState({ naver: naver });
 
-        // this.mainPageLoad(map);
+        this.mainPageLoad(map);
     }
 
     drawingComponent = () => {
@@ -49,7 +49,6 @@ class App extends Component {
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-                // console.log('click');
                 // coord: lat, lng of map
                 // offset: x, y of screen
                 const { coord, offset } = e;
@@ -59,7 +58,6 @@ class App extends Component {
             });
 
             const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
-                // console.log('right click');
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
                 new CustomOverlay({
@@ -80,7 +78,6 @@ class App extends Component {
     ellipseState() {
         const { circleToggle } = this.state;
         this.setState({ circleToggle: !circleToggle });
-        console.log('circleToggle state: ', circleToggle);
     }
 
     removeListener() {
@@ -165,11 +162,8 @@ class App extends Component {
     mouseClick = (e) => {
         const { circleToggle } = this.state;
         const { toggleColor } = this.state;
-        console.log('circleToggle in mouseClick: ', circleToggle);
-        console.log('toggleColor in mouseClick: ', toggleColor);
         if (e.type === 'contextmenu' && circleToggle !== true) {
-            console.log('circleToggle inside condition: ', circleToggle);
-            console.log('Is this real?');
+
             this.setState({ toggleColor: !toggleColor });
             this.setState({ circleToggle: !circleToggle });
         }
