@@ -8,7 +8,9 @@ var CustomOverlay = function(options) {
     this._ellipse = this._svg
         .append('ellipse')
         .attr('fill', 'black')
-        .attr('fill-opacity', '0.4');
+        .attr('fill-opacity', '0.4')
+        .attr('stroke-width', 2)
+        .attr('stroke', 'black');
     div.appendChild(this._svg.node());
     this._element = div;
 

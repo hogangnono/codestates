@@ -5,6 +5,7 @@ import Toolbox from './Toolbox';
 import CustomOverlay from './CustomOverlay';
 // import CustomPolygon from './CustomPolygon';
 // import CustomRect from './CustomRect';
+// import CustomArrow from './CustomArrow';
 import './App.less';
 
 class App extends Component {
@@ -99,13 +100,15 @@ class App extends Component {
                 }
             })
             .catch(error => {
-                if (error.response.status === 500) {
-                    console.log(error);
-                    alert('load fail');
-                } else {
-                    console.log(error);
-                    alert('error!');
-                }
+                console.log(error);
+                alert('error');
+                // if (error.response.status === 500) {
+                //     console.log(error);
+                //     alert('load fail');
+                // } else {
+                //     console.log(error);
+                //     alert('error!');
+                // }
             });
     };
 

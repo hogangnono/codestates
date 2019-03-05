@@ -1,11 +1,11 @@
 /* eslint-disable linebreak-style */
 import * as d3 from 'd3';
 
-var CustomRect = function(options) {
+var CustomArrow = function(options) {
     // make a div that contain shape
     const div = document.createElement('div');
     this._svg = d3.create('svg');
-    this._rect = this._svg
+    this._arrow = this._svg
         .append('rect')
         .attr('fill', 'black')
         .attr('fill-opacity', '0.4')
@@ -13,6 +13,8 @@ var CustomRect = function(options) {
         .attr('stroke', 'black');
     div.appendChild(this._svg.node());
     this._element = div;
+    // var arrow =  s.path("M-1 0 L0 -2 L1 0 z")
+    //           .attr({fill:'#FFF', stroke:'none'});
 
     // current map ratio
     this._zoom = options.naverMap.getZoom();
@@ -23,30 +25,30 @@ var CustomRect = function(options) {
     this.setMap(options.map || null);
 };
 
-CustomRect.prototype = new window.naver.maps.OverlayView();
+CustomArrow.prototype = new window.naver.maps.OverlayView();
 
-CustomRect.prototype.constructor = CustomRect;
+CustomArrow.prototype.constructor = CustomArrow;
 
-CustomRect.prototype.setPosition = function(position) {
+CustomArrow.prototype.setPosition = function(position) {
     this._startPos = position.startPos;
     this._endPos = position.endPos;
     this.draw();
 };
 
-CustomRect.prototype.getPosition = function() {
+CustomArrow.prototype.getPosition = function() {
     const start = {};
     start.x = Math.min(this._startPos.coord.x, this._endPos.coord.x);
     start.y = Math.max(this._startPos.coord.y, this._endPos.coord.y);
     return start;
 };
 
-CustomRect.prototype.onAdd = function() {
+CustomArrow.prototype.onAdd = function() {
     var overlayLayer = this.getPanes().overlayLayer;
 
     overlayLayer.appendChild(this._element);
 };
 
-CustomRect.prototype.draw = function() {
+CustomArrow.prototype.draw = function() {
     if (!this.getMap()) {
         return;
     }
@@ -77,12 +79,12 @@ CustomRect.prototype.draw = function() {
     this._svg.attr('width', widthRatio).attr('height', heightRatio);
 
     // place the ellipse's center point and resize
-    this._rect.attr('width', widthRatio).attr('height', heightRatio);
+    this._arrow.attr('width', widthRatio).attr('height', heightRatio);
 };
 
-CustomRect.prototype.onRemove = function() {
+CustomArrow.prototype.onRemove = function() {
     this._element.remove();
     this._element.off();
 };
 
-export default CustomRect;
+export default CustomArrow;
