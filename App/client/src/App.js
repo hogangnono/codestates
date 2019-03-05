@@ -100,15 +100,13 @@ class App extends Component {
                 }
             })
             .catch(error => {
-                console.log(error);
-                alert('error');
-                // if (error.response.status === 500) {
-                //     console.log(error);
-                //     alert('load fail');
-                // } else {
-                //     console.log(error);
-                //     alert('error!');
-                // }
+                if (error.response.status === 500) {
+                    console.log(error);
+                    alert('load fail');
+                } else {
+                    console.log(error);
+                    alert('error!');
+                }
             });
     };
 

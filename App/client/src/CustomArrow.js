@@ -13,7 +13,7 @@ var CustomArrow = function(options) {
         .attr('stroke', 'black');
     div.appendChild(this._svg.node());
     this._element = div;
-    // var arrow =  s.path("M-1 0 L0 -2 L1 0 z")
+    // var arrow =  Snap(256,256).path("M-1 0 L0 -2 L1 0 z")
     //           .attr({fill:'#FFF', stroke:'none'});
 
     // current map ratio
