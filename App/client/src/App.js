@@ -44,14 +44,12 @@ class App extends Component {
 
     drawingComponent = () => {
         let startPos;
-        let endPo;
-        let zoomLv;
         const naver = window.naver;
         console.log('naver ', naver);
         const { map, drawingData } = this.state;
         console.log('map ', map);
         const { circleToggle } = this.state;
-        const drawingDataSet = [];
+        const shapeData = {};
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
@@ -60,6 +58,7 @@ class App extends Component {
                 // offset: x, y of screen
                 const { coord, offset } = e;
                 startPos = { coord, offset };
+                shapeData.startPos = startPos;
                 naver.maps.Event.removeListener(leftClick);
             });
 
@@ -67,9 +66,8 @@ class App extends Component {
                 console.log('right click');
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
-                endPo = endPos;
                 this.setState({ endPos });
-                console.log('endPos', endPos);
+                // console.log('endPos', endPos);
 
                 const getZoomLevel = new CustomOverlay({
                     position: { startPos, endPos },
@@ -77,19 +75,15 @@ class App extends Component {
                     zoom: ''
                 });
                 getZoomLevel.setMap(map);
-                zoomLv = getZoomLevel._zoom;
+                shapeData.endPos = endPos;
+                shapeData.zoomLevel = getZoomLevel._zoom;
+                this.setState({ drawingData: [...drawingData, shapeData] });
                 naver.maps.Event.removeListener(rightClick);
             });
 
             this.setState({ rightClick: rightClick });
             this.setState({ leftClick: leftClick });
-            drawingDataSet.push({
-                startPos,
-                endPos: endPo,
-                zoomLevel: zoomLv
-            });
         }
-        this.setState({ drawingData: [...drawingData, drawingDataSet] });
         this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
     };
 

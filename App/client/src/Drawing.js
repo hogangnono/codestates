@@ -20,7 +20,7 @@ class Toolbox extends Component {
     handleAxios = (parseURL, body) => {
         const basicURL = 'http://localhost:3001/';
         axios.post(basicURL + parseURL, body)
-            .then((result) => { console.log('result: ', result); })
+            .then((result) => { console.log('저장성공!'); })
             .catch(err => { console.log('err: ', err); });
     }
 
@@ -66,7 +66,7 @@ class Toolbox extends Component {
                 ) : null}
                 <div id="saveCloseBtns">
                     <button className="saveCloseBtn" onClick={() => {
-                        console.log('Axios.post body : ', drawingdata);
+                        console.log('Axios.post body : ', JSON.stringify(drawingdata));
                         this.handleAxios('user/save', drawingdata);
                     }}>
                         저장
