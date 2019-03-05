@@ -13,24 +13,60 @@
 //   padding: 10px;
 //   margin: 5px;
 // }
-@toolboxColor: #0ff;
+@toolboxColor: #ffffff;
 
 #toolbox {
   position: absolute;
   background: @toolboxColor;
-  top: 120px;
+  top: 240px;
   right: 10px;
   z-index: 1;
-  width: 15%;
+  width: 20%;
   height: 70vh;
 
-  h2 {
-    font-size: 25px;
+  #tabMenu {
+    font-size: 15px;
     font-weight: bold;
+    display: flex;
+
+    .eachTabMenu {
+      margin: 0;
+      width: 50%;
+      text-align: center;
+    }
   }
-  button {
-    width: 100px;
+
+  #saveCloseBtns {
+    position: relative;
+
+    .saveCloseBtn {
+      position: static;
+      width: 100px;
+      padding: 10px;
+      margin: 5px;
+      background-color: #ffffff;
+      text-align: center;
+      border-color: #c0c0c061;
+      border-radius: 3px; 
+      box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
+    }
+    .saveCloseBtn:hover {
+      background-color: #4d55b2;
+      color: white;
+    }
+  }
+
+  #drawing {
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
     padding: 10px;
-    margin: 5px;
+  }
+  
+  #filter {
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
   }
 }
