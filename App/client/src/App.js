@@ -28,9 +28,11 @@ class App extends Component {
             drawingData: [],
             showFilterDrawingTool: false,
             showModal: false
+
+            mouseEvent: undefined // Will set mouse event here from listener
+
         };
 
-        // this.mainPageLoad = this.mainPageLoad.bind(this);
     }
 
     componentDidMount = async () => {
@@ -48,16 +50,15 @@ class App extends Component {
 
     drawingComponent = () => {
         let startPos;
+
         const naver = window.naver;
-        console.log('naver ', naver);
         const { map, drawingData } = this.state;
-        console.log('map ', map);
+
         const { circleToggle } = this.state;
         const shapeData = {};
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-                console.log('click');
                 // coord: lat, lng of map
                 // offset: x, y of screen
                 const { coord, offset } = e;
@@ -67,7 +68,7 @@ class App extends Component {
             });
 
             const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
-                console.log('right click');
+
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
                 this.setState({ endPos });
@@ -142,9 +143,6 @@ class App extends Component {
 
     mainPageLoad = (map) => {
         const { name, factor } = this.state;
-        // const { map } = this.state;
-        console.log(this.state);
-        console.log('inside mainPageLoad: ', map);
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
@@ -177,6 +175,7 @@ class App extends Component {
                 }
             });
     };
+
 
     showFilterDrawingTool = () => {
         const { showFilterDrawingTool } = this.state;
