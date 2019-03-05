@@ -27,7 +27,7 @@ class App extends Component {
             // mouseEvent: undefined, // Will set mouse event here from listener
             drawingData: [],
             showFilterDrawingTool: false,
-            showModal: false
+            showModal: false,
 
             mouseEvent: undefined // Will set mouse event here from listener
 
@@ -71,7 +71,7 @@ class App extends Component {
 
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
-                this.setState({ endPos });
+                // this.setState({ endPos });
                 // console.log('endPos', endPos);
 
                 const getZoomLevel = new CustomOverlay({
