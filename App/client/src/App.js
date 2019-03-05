@@ -20,12 +20,11 @@ class App extends Component {
             leftClick: undefined, // Will set state to leftClick listener
             rightClick: undefined, // Will set state to rightClick listener
 
-            toggleColor: true
+            toggleColor: true,
 
-            // mouseEvent: undefined, // Will set mouse event here from listener
+            mouseEvent: undefined // Will set mouse event here from listener
         };
 
-        // this.mainPageLoad = this.mainPageLoad.bind(this);
     }
 
     componentDidMount() {
@@ -39,20 +38,17 @@ class App extends Component {
         this.setState({ map: map });
         this.setState({ naver: naver });
 
-        // this.mainPageLoad(map);
+        this.mainPageLoad(map);
     }
 
     drawingComponent = () => {
         let startPos;
         const naver = window.naver;
-        console.log('naver ', naver);
         const { map } = this.state;
-        console.log('map ', map);
         const { circleToggle } = this.state;
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-                console.log('click');
                 // coord: lat, lng of map
                 // offset: x, y of screen
                 const { coord, offset } = e;
@@ -62,7 +58,6 @@ class App extends Component {
             });
 
             const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
-                console.log('right click');
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
                 new CustomOverlay({
@@ -131,9 +126,6 @@ class App extends Component {
 
     mainPageLoad = (map) => {
         const { name, factor } = this.state;
-        // const { map } = this.state;
-        console.log(this.state);
-        console.log('inside mainPageLoad: ', map);
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
@@ -167,15 +159,22 @@ class App extends Component {
             });
     };
 
+    mouseClick = (e) => {
+        const { circleToggle } = this.state;
+        const { toggleColor } = this.state;
+        if (e.type === 'contextmenu' && circleToggle !== true) {
+
+            this.setState({ toggleColor: !toggleColor });
+            this.setState({ circleToggle: !circleToggle });
+        }
+    }
+
     render() {
-        const { map } = this.state;
-        console.log(map);
-        // const { mapLoad } = this.state;
         const { toggleColor } = this.state;
         const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
         return (
             <div id="wrapper">
-                <div id="map">
+                <div id="map" onClick={this.mouseClick} onContextMenu={this.mouseClick} onKeyDown={this.mouseClick}>
                     {/* <Toolbox mapLoad={mapLoad} /> */}
                 </div>
                 <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor}>Circle</button>
