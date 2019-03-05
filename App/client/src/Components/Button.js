@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Circle from '../CustomOverlay/Circle';
 
 
-class CircleButton extends Component {
+class Button extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -88,7 +88,7 @@ class CircleButton extends Component {
         this.setState({ toggleColor: !toggleColor });
     }
 
-    circleToggleAndEllipseAndChangeColor = () => {
+    createShape = () => {
         const { map } = this.state;
         this.changeColor();
         this.drawingComponent(map);
@@ -101,15 +101,15 @@ class CircleButton extends Component {
         const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
 
         return (
-            <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor} ref={this.setWrapperRef}>
+            <button type="button" className={btnClass} onClick={this.createShape} ref={this.setWrapperRef}>
                 Circle
             </button>
         );
     }
 }
 
-CircleButton.propTypes = {
+Button.propTypes = {
     children: PropTypes.element.isRequired
 };
 
-export default CircleButton;
+export default Button;

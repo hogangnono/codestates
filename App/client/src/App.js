@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
 // import Toolbox from './Toolbox';
-import CircleButton from './Components/CircleButton';
+import Button from './Components/Button';
 import './App.less';
 import Circle from './CustomOverlay/Circle';
 
@@ -108,7 +108,7 @@ class App extends Component {
             <div id="wrapper">
                 <div id="map" onClick={this.mouseClick} onContextMenu={this.mouseClick} onKeyDown={this.mouseClick}>
                 </div>
-                <CircleButton map={map} circleToggle={circleToggle} toggleColor={toggleColor} />
+                <Button map={map} circleToggle={circleToggle} toggleColor={toggleColor} />
             </div>
         );
     }
