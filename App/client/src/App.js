@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
-// import Toolbox from './Toolbox';
+import Toolbox from './Toolbox';
 import CustomOverlay from './CustomOverlay';
 import './App.less';
 
@@ -20,9 +20,10 @@ class App extends Component {
             leftClick: undefined, // Will set state to leftClick listener
             rightClick: undefined, // Will set state to rightClick listener
 
-            toggleColor: true
+            toggleColor: true,
 
             // mouseEvent: undefined, // Will set mouse event here from listener
+            drawingData: []
         };
 
         // this.mainPageLoad = this.mainPageLoad.bind(this);
@@ -35,20 +36,22 @@ class App extends Component {
             this.mapOption()
         );
         // this.drawingComponent();
-
         this.setState({ map: map });
         this.setState({ naver: naver });
 
-        // this.mainPageLoad(map);
+        this.mainPageLoad(map);
     }
 
     drawingComponent = () => {
         let startPos;
+        let endPo;
+        let zoomLv;
         const naver = window.naver;
         console.log('naver ', naver);
-        const { map } = this.state;
+        const { map, drawingData } = this.state;
         console.log('map ', map);
         const { circleToggle } = this.state;
+        const drawingDataSet = [];
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
@@ -57,7 +60,6 @@ class App extends Component {
                 // offset: x, y of screen
                 const { coord, offset } = e;
                 startPos = { coord, offset };
-
                 naver.maps.Event.removeListener(leftClick);
             });
 
@@ -65,18 +67,29 @@ class App extends Component {
                 console.log('right click');
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
-                new CustomOverlay({
+                endPo = endPos;
+                this.setState({ endPos });
+                console.log('endPos', endPos);
+
+                const getZoomLevel = new CustomOverlay({
                     position: { startPos, endPos },
                     naverMap: map,
                     zoom: ''
-                }).setMap(map);
-
+                });
+                getZoomLevel.setMap(map);
+                zoomLv = getZoomLevel._zoom;
                 naver.maps.Event.removeListener(rightClick);
             });
 
             this.setState({ rightClick: rightClick });
             this.setState({ leftClick: leftClick });
+            drawingDataSet.push({
+                startPos,
+                endPos: endPo,
+                zoomLevel: zoomLv
+            });
         }
+        this.setState({ drawingData: [...drawingData, drawingDataSet] });
         this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
     };
 
@@ -168,15 +181,12 @@ class App extends Component {
     };
 
     render() {
-        const { map } = this.state;
-        console.log(map);
-        // const { mapLoad } = this.state;
-        const { toggleColor } = this.state;
+        const { map, toggleColor, drawingData } = this.state;
         const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
         return (
             <div id="wrapper">
                 <div id="map">
-                    {/* <Toolbox mapLoad={mapLoad} /> */}
+                    <Toolbox mapLoad={map} drawingdata={drawingData} />
                 </div>
                 <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor}>Circle</button>
             </div>

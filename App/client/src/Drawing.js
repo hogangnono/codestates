@@ -9,12 +9,7 @@ import downwardsPointer from './img/downwards-pointer.png';
 
 class Toolbox extends Component {
     state = {
-        myDrawingsVisible: true,
-        map_center_lat: 37.545537,
-        map_center_lgn: 127.051068,
-        figures: '{"startPos":{"coord":{"y":37.56806,"_lat":37.56806,"x":126.97090,"_lng":126.97090},"offset":{"x":142,"y":285}},"endPos":{"coord":{"y":37.56255,"_lat":37.56255,"x":126.9794809,"_lng":126.9794809},"offset":{"x":520,"y":590}},"zoomLevel":11}',
-        user_id: 1,
-        factor_id: 2
+        myDrawingsVisible: true
     }
 
     _foldMyDrawings = () => {
@@ -43,17 +38,16 @@ class Toolbox extends Component {
                 <img className="drawingPointer" src={downwardsPointer} alt="▼" />
             </div>
         );
-        const { map_center_lat, map_center_lgn, figures, user_id, factor_id } = this.state;
-        const body = { map_center_lat, map_center_lgn, figures, user_id, factor_id };
+        const { drawingdata } = this.props;
         return (
-            <div id="drawingToolContainer">
-                <div>
-                    <button className="tools">점</button>
-                    <button className="tools">선</button>
-                    <button className="tools">화살표</button>
-                    <button className="tools">사각형</button>
-                    <button className="tools">원</button>
-                    <button className="tools">다각형</button>
+            <div id="drawingComponentContainer">
+                <div id="drawingToolsContainer">
+                    <span className="drawingTools">점</span>
+                    <span className="drawingTools">선</span>
+                    <span className="drawingTools">화살표</span>
+                    <span className="drawingTools">사각형</span>
+                    <span className="drawingTools">원</span>
+                    <span className="drawingTools">다각형</span>
                 </div>
                 <div>
                     <div id="myDrawingsContainer">
@@ -71,13 +65,13 @@ class Toolbox extends Component {
                     </div>
                 ) : null}
                 <div id="saveCloseBtns">
-                    <button id="saveBtn" onClick={() => {
-                        console.log('body : ', body);
-                        this.handleAxios('user/save', body);
+                    <button className="saveCloseBtn" onClick={() => {
+                        console.log('Axios.post body : ', drawingdata);
+                        this.handleAxios('user/save', drawingdata);
                     }}>
                         저장
                     </button>
-                    <button id="saveBtn">닫기</button>
+                    <button className="saveCloseBtn">닫기</button>
                 </div>
             </div>
         );

@@ -1,6 +1,11 @@
-#drawingToolContainer{
+#drawingComponentContainer{
   position: absolute;
   background: white;  
+}
+
+#drawingToolsContainer {
+  display: inline-block;
+  margin-left: 10px;
 }
 
 #myDrawingsContainer {
@@ -36,19 +41,22 @@
   margin-left: 3px;
 }
 
-.tools{
+.drawingTools{
+  float: left;
+  list-style:none;
   background-color: #ffffff;
-  width: 20px;
+  width: 40px;
+  height: 20px;
   padding: 10px;
-  margin: 5px;
-  font-weight: bold;
+  font-size: 13px;
+  text-align: center;
   border-color: #c0c0c061;
   border-radius: 3px; 
   box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
   cursor: pointer;
 }
 
-.tools:hover{
+.drawingTools:hover{
   background-color: #4d55b2;
   color: white;
 }
