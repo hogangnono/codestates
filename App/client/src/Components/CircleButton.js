@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 // import * as d3 from 'd3';
 // import axios from 'axios';
 import '../App.less';
+import PropTypes from 'prop-types';
 import Circle from '../CustomOverlay/Circle';
+
 
 class CircleButton extends Component {
     constructor(props) {
@@ -14,7 +16,9 @@ class CircleButton extends Component {
             leftClick: undefined,
             rightClick: undefined
         };
-        // this.circleToggleAndEllipseAndChangeColor = this.circleToggleAndEllipseAndChangeColor.bind(this);
+
+        this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
     }
 
     componentDidMount() {
@@ -23,13 +27,33 @@ class CircleButton extends Component {
         // const { nmap } = this.props;
         // console.log(nmap);
         // this.setState({ map: map });
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+
+    handleClickOutside(event) {
+        const { toggleColor } = this.state;
+        const { circleToggle } = this.state;
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            // console.log(event);
+            if (event.button === 2 && circleToggle !== true) {
+                console.log('context menu');
+                this.setState({ toggleColor: !toggleColor });
+                this.setState({ circleToggle: !circleToggle });
+            }
+        }
     }
 
     drawingComponent = () => {
         let startPos;
         const naver = window.naver;
-        const { map } = this.state;
+        const { map } = this.props;
         const { circleToggle } = this.state;
+
+        console.log('in drawingComponent() map: ', map);
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
@@ -78,8 +102,9 @@ class CircleButton extends Component {
     }
 
     circleToggleAndEllipseAndChangeColor = () => {
+        const { map } = this.state;
         this.changeColor();
-        this.drawingComponent();
+        this.drawingComponent(map);
         this.ellipseState();
         this.removeListener();
     }
@@ -96,14 +121,21 @@ class CircleButton extends Component {
 
     render() {
         const { toggleColor } = this.state;
+        // const { map } = this.props;
         const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
-        console.log('in CircleButton.js props: ', this.props);
+        // console.log('in CircleButton.js props: ', this.props);
+        // console.log('in CircleButton: ', map);
+
         return (
-            <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor}>
+            <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor} ref={this.setWrapperRef}>
                 Circle
             </button>
         );
     }
 }
+
+CircleButton.propTypes = {
+    children: PropTypes.element.isRequired
+};
 
 export default CircleButton;
