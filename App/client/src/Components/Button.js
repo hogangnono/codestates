@@ -70,7 +70,7 @@ class Button extends Component {
         this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
     };
 
-    ellipseState() {
+    toggleState() {
         const { circleToggle } = this.state;
         this.setState({ circleToggle: !circleToggle });
     }
@@ -92,7 +92,7 @@ class Button extends Component {
         const { map } = this.state;
         this.changeColor();
         this.drawingComponent(map);
-        this.ellipseState();
+        this.toggleState();
         this.removeListener();
     }
 
