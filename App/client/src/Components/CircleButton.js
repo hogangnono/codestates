@@ -32,7 +32,6 @@ class CircleButton extends Component {
         const { circleToggle } = this.state;
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             if (event.button === 2 && circleToggle !== true) {
-                console.log('context menu');
                 this.setState({ toggleColor: !toggleColor });
                 this.setState({ circleToggle: !circleToggle });
             }
@@ -44,8 +43,6 @@ class CircleButton extends Component {
         const naver = window.naver;
         const { map } = this.props;
         const { circleToggle } = this.state;
-
-        console.log('in drawingComponent() map: ', map);
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {

@@ -92,9 +92,7 @@ class App extends Component {
 
     mouseClick = (e) => {
         const { circleToggle } = this.state;
-        console.log('circleToggle ', circleToggle);
         const { toggleColor } = this.state;
-        console.log('toggleColor ', toggleColor);
         if (e.type === 'contextmenu' && circleToggle !== true) {
 
             this.setState({ toggleColor: !toggleColor });
@@ -106,7 +104,6 @@ class App extends Component {
         const { map } = this.state;
         const { circleToggle } = this.state;
         const { toggleColor } = this.state;
-        console.log('in App.js states: ', this.state);
         return (
             <div id="wrapper">
                 <div id="map" onClick={this.mouseClick} onContextMenu={this.mouseClick} onKeyDown={this.mouseClick}>
