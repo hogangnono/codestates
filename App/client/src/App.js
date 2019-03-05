@@ -85,8 +85,8 @@ class App extends Component {
                 }
             );
 
-            this.setState({ rightClick });
-            this.setState({ leftClick });
+            this.setState({ rightClick: rightClick });
+            this.setState({ leftClick: leftClick });
         }
         this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
     };
@@ -165,13 +165,14 @@ class App extends Component {
                 }
             })
             .catch(error => {
-                if (error.response.status === 500) {
-                    console.log(error);
-                    alert('load fail');
-                } else {
-                    console.log(error);
-                    alert('error!');
-                }
+                // if (error.response.status === 500) {
+                //     console.log(error);
+                //     alert('load fail');
+                // } else {
+                //     console.log(error);
+                //     alert('error!');
+                // }
+                alert(error);
             });
     };
 
@@ -188,12 +189,10 @@ class App extends Component {
     render() {
         const {
             map,
-            toggleColor,
             drawingData,
             showFilterDrawingTool,
             showModal
         } = this.state;
-        const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
         return (
             <div id="wrapper">
                 <div id="map">
@@ -218,13 +217,6 @@ class App extends Component {
                         <Toolbox mapLoad={map} drawingdata={drawingData} />
                     ) : null}
                 </div>
-                <button
-                    type="button"
-                    className={btnClass}
-                    onClick={this.circleToggleAndEllipseAndChangeColor}
-                >
-                    {`Circle`}
-                </button>
             </div>
         );
     }

@@ -1,84 +1,75 @@
+body {
+  font-family: Apple SD Gothic Neo, sans-serif;
+  color: #333;
+}
 #drawingComponentContainer {
   position: absolute;
-  background: white;
-}
-
-#drawingToolsContainer {
-  display: inline-block;
-  margin-left: 10px;
+  width: 100%;
+  height: 520px;
+  bottom: 0;
 }
 
 #myDrawingsContainer {
+  width: 100%;
   display: flex;
   justify-content: space-between;
+  padding: 40px 15px;
   align-items: center;
-  margin-right: 10px;
-}
-
-.subTitle {
-  text-align: left;
-  margin-top: 5px;
-  margin-left: 10px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.folding_myDrawings {
-  font-size: 13px;
-  font-weight: 400;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 .drawingList {
   font-size: 12px;
-  margin-top: 0px;
-  margin-bottom: 1px;
-  margin-left: 20px;
+  margin: 5px 20px;
 }
 
 .drawingPointer {
-  width: 10px;
+  width: 20px;
   height: auto;
-  margin-left: 3px;
 }
 
 .drawingTools {
   float: left;
   list-style: none;
   background-color: #ffffff;
-  width: 40px;
+  width: 16%;
   height: 20px;
-  padding: 10px;
+  padding: 10px 0;
+  margin: 0 2%;
   font-size: 13px;
   text-align: center;
   border-color: #c0c0c061;
   border-radius: 3px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  transition-duration: 0.3s;
   cursor: pointer;
-}
-
-.drawingTools:hover {
-  background-color: #4d55b2;
-  color: white;
 }
 
 #saveCloseBtns {
-  display: flex;
-  justify-content: space-evenly;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  padding: 3px;
+  box-sizing: border-box;
 }
-
-#saveBtn {
-  background-color: #ffffff;
-  width: 30px;
-  padding: 10px;
-  margin: 5px;
-  font-weight: bold;
+.saveCloseBtn {
+  width: 110px;
+  top: 0;
+  right: 20px;
+  text-align: center;
+  border-radius: 5px;
   border-color: #c0c0c061;
-  border-radius: 3px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+  font-size: 15px;
+  color: #333;
+  transition-duration: 0.3s;
 }
-
-#saveBtn:hover {
+.saveCloseBtn:first-child {
+  left: 20px;
+}
+.drawingTools:hover,
+.saveCloseBtn:hover {
   background-color: #4d55b2;
   color: white;
 }

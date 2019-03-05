@@ -30,13 +30,11 @@ class Toolbox extends Component {
         const { myDrawingsVisible } = this.state;
         const visible = (
             <div onClick={this._foldMyDrawings} onKeyPress={() => {}}>
-                <span className="subTitle">닫기</span>
                 <img className="drawingPointer" src={upwardsPointer} alt="▴" />
             </div>
         );
         const invisible = (
             <div onClick={this._foldMyDrawings} onKeyPress={() => {}}>
-                <span className="subTitle">펼치기</span>
                 <img
                     className="drawingPointer"
                     src={downwardsPointer}
@@ -47,19 +45,14 @@ class Toolbox extends Component {
         const { drawingdata } = this.props;
         return (
             <div id="drawingComponentContainer">
-                <div id="drawingToolsContainer">
-                    <span className="drawingTools">점</span>
-                    <span className="drawingTools">선</span>
-                    <span className="drawingTools">화살표</span>
-                    <span className="drawingTools">사각형</span>
-                    <span className="drawingTools">원</span>
-                    <span className="drawingTools">다각형</span>
-                </div>
-                <div>
-                    <div id="myDrawingsContainer">
-                        <span className="subTitle">저장된 호재 그림</span>
-                        {myDrawingsVisible ? visible : invisible}
-                    </div>
+                <span className="drawingTools">선</span>
+                <span className="drawingTools">화살표</span>
+                <span className="drawingTools">사각형</span>
+                <span className="drawingTools">원</span>
+                <span className="drawingTools">다각형</span>
+                <div id="myDrawingsContainer">
+                    <span className="subTitle">저장된 호재 그림</span>
+                    {myDrawingsVisible ? visible : invisible}
                 </div>
                 {myDrawingsVisible ? (
                     <div>
@@ -81,7 +74,7 @@ class Toolbox extends Component {
                         {`저장`}
                     </button>
                     <button type="button" className="saveCloseBtn">
-                        닫기
+                        {`닫기`}
                     </button>
                 </div>
             </div>
