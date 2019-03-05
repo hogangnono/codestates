@@ -7,22 +7,23 @@ import Circle from '../CustomOverlay/Circle';
 class CircleButton extends Component {
     constructor(props) {
         super(props);
-        const { nmap } = this.props;
         this.state = {
-            map: nmap, // Set this up as props
-            toggleColor: true,
-            circleToggle: true,
+            map: props.map, // Set this up as props
+            toggleColor: props.toggleColor,
+            circleToggle: props.circleToggle,
             leftClick: undefined,
             rightClick: undefined
         };
-        this.circleToggleAndEllipseAndChangeColor = this.circleToggleAndEllipseAndChangeColor.bind(this);
+        // this.circleToggleAndEllipseAndChangeColor = this.circleToggleAndEllipseAndChangeColor.bind(this);
     }
 
-    // componentDidMount() {
-    //     const { map } = this.props;
-    //     console.log(map);
-    //     this.setState({ map: map });
-    // }
+    componentDidMount() {
+        // const { map } = this.props;
+        // console.log(map);
+        // const { nmap } = this.props;
+        // console.log(nmap);
+        // this.setState({ map: map });
+    }
 
     drawingComponent = () => {
         let startPos;
@@ -83,11 +84,20 @@ class CircleButton extends Component {
         this.removeListener();
     }
 
+    // mouseClick = (e) => {
+    //     const { circleToggle } = this.state;
+    //     const { toggleColor } = this.state;
+    //     if (e.type === 'contextmenu' && circleToggle !== true) {
+
+    //         this.setState({ toggleColor: !toggleColor });
+    //         this.setState({ circleToggle: !circleToggle });
+    //     }
+    // }
+
     render() {
         const { toggleColor } = this.state;
         const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
-        const { map } = this.state;
-        console.log('inside render: ', map);
+        console.log('in CircleButton.js props: ', this.props);
         return (
             <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor}>
                 Circle

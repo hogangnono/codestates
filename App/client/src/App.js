@@ -16,10 +16,10 @@ class App extends Component {
 
             map: undefined, // Will set state to naver map instance
             circleToggle: true, // Indicates whether to create circle
-            naver: undefined, // Will set state to window.naver
+            // naver: undefined, // Will set state to window.naver
 
-            leftClick: undefined, // Will set state to leftClick listener
-            rightClick: undefined, // Will set state to rightClick listener
+            // leftClick: undefined, // Will set state to leftClick listener
+            // rightClick: undefined, // Will set state to rightClick listener
 
             toggleColor: true
         };
@@ -35,7 +35,7 @@ class App extends Component {
         // this.drawingComponent();
 
         this.setState({ map: map });
-        this.setState({ naver: naver });
+        // this.setState({ naver: naver });
 
         this.mainPageLoad(map);
     }
@@ -160,7 +160,9 @@ class App extends Component {
 
     mouseClick = (e) => {
         const { circleToggle } = this.state;
+        console.log('circleToggle ', circleToggle);
         const { toggleColor } = this.state;
+        console.log('toggleColor ', toggleColor);
         if (e.type === 'contextmenu' && circleToggle !== true) {
 
             this.setState({ toggleColor: !toggleColor });
@@ -170,6 +172,9 @@ class App extends Component {
 
     render() {
         const { map } = this.state;
+        const { circleToggle } = this.state;
+        const { toggleColor } = this.state;
+        console.log('in App.js states: ', this.state);
         // const { toggleColor } = this.state;
         // const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
         return (
@@ -178,7 +183,7 @@ class App extends Component {
                     {/* <Toolbox mapLoad={mapLoad} /> */}
                 </div>
                 {/* <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor}>Circle</button> */}
-                <CircleButton nmap={map} />
+                <CircleButton map={map} circleToggle={circleToggle} toggleColor={toggleColor} />
             </div>
         );
     }
