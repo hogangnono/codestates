@@ -104,6 +104,31 @@ class App extends Component {
         this.removeListener();
     };
 
+    ellipseState() {
+        const { circleToggle } = this.state;
+        this.setState({ circleToggle: !circleToggle });
+    }
+
+    removeListener() {
+        const naver = window.naver;
+        const { leftClick } = this.state;
+        const { rightClick } = this.state;
+        naver.maps.Event.removeListener(leftClick);
+        naver.maps.Event.removeListener(rightClick);
+    }
+
+    changeColor() {
+        const { toggleColor } = this.state;
+        this.setState({ toggleColor: !toggleColor });
+    }
+
+    circleToggleAndEllipseAndChangeColor = () => {
+        this.changeColor();
+        this.drawingComponent();
+        this.ellipseState();
+        this.removeListener();
+    };
+
     mapOption = () => {
         const naver = window.naver;
         const mapOptions = {
