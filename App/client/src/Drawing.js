@@ -66,7 +66,6 @@ class Toolbox extends Component {
                 ) : null}
                 <div id="saveCloseBtns">
                     <button className="saveCloseBtn" onClick={() => {
-                        console.log('Axios.post body : ', JSON.stringify(drawingdata));
                         this.handleAxios('user/save', drawingdata);
                     }}>
                         저장

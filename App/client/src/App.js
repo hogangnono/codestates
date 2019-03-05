@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
 import Toolbox from './Toolbox';
 import CustomOverlay from './CustomOverlay';
+import LoginModal from './LoginModal';
 import './App.less';
 
 class App extends Component {
@@ -23,7 +25,9 @@ class App extends Component {
             toggleColor: true,
 
             // mouseEvent: undefined, // Will set mouse event here from listener
-            drawingData: []
+            drawingData: [],
+            showFilterDrawingTool: false,
+            showModal: false
         };
 
         // this.mainPageLoad = this.mainPageLoad.bind(this);
@@ -174,13 +178,32 @@ class App extends Component {
             });
     };
 
+    showFilterDrawingTool = () => {
+        const { showFilterDrawingTool } = this.state;
+        this.setState({ showFilterDrawingTool: !showFilterDrawingTool });
+    }
+
+    showModal = () => {
+        console.log('my버튼을 눌렀다!');
+        this.setState({ showModal: true });
+    }
+
     render() {
-        const { map, toggleColor, drawingData } = this.state;
+        const { map, toggleColor, drawingData, showFilterDrawingTool, showModal } = this.state;
         const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
         return (
             <div id="wrapper">
                 <div id="map">
-                    <Toolbox mapLoad={map} drawingdata={drawingData} />
+                    <ul id="loginFavorContainer">
+                        <li className="loginFavorBtn" onClick={this.showModal} onKeyPress={() => { }}>My</li>
+                        <li className="loginFavorBtn" onClick={this.showFilterDrawingTool} onKeyPress={() => { }}>호재</li>
+                    </ul>
+                    {showModal ? (
+                        <LoginModal />
+                    ) : null}
+                    {showFilterDrawingTool ? (
+                        <Toolbox mapLoad={map} drawingdata={drawingData} />
+                    ) : null}
                 </div>
                 <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor}>Circle</button>
             </div>
