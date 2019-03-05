@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
@@ -6,48 +7,113 @@ import CustomOverlay from './CustomOverlay';
 // import CustomPolygon from './CustomPolygon';
 // import CustomRect from './CustomRect';
 // import CustomArrow from './CustomArrow';
+import LoginModal from './LoginModal';
 import './App.less';
 
 class App extends Component {
-    state = {
-        mapLoad: undefined,
-        name: '',
-        factor: ''
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+            factor: '',
 
-    componentDidMount() {
+            map: undefined, // Will set state to naver map instance
+            circleToggle: true, // Indicates whether to create circle
+            naver: undefined, // Will set state to window.naver
+
+            leftClick: undefined, // Will set state to leftClick listener
+            rightClick: undefined, // Will set state to rightClick listener
+            toggleColor: true,
+
+            // mouseEvent: undefined, // Will set mouse event here from listener
+            drawingData: [],
+            showFilterDrawingTool: false,
+            showModal: false,
+            mouseEvent: undefined // Will set mouse event here from listener
+        };
+    }
+
+    componentDidMount = async () => {
         const naver = window.naver;
-        const map = new naver.maps.Map(
+        const map = await new naver.maps.Map(
             d3.select('#map').node(),
             this.mapOption()
         );
-        this.setState({ mapLoad: map });
-        this.drawingComponent(naver, map);
+        this.setState({ map, naver });
+
         this.mainPageLoad(map);
+    };
+
+    drawingComponent = () => {
+        let startPos;
+
+        const naver = window.naver;
+        const { map, drawingData } = this.state;
+
+        const { circleToggle } = this.state;
+        const shapeData = {};
+
+        if (circleToggle === true) {
+            const leftClick = naver.maps.Event.addListener(map, 'click', e => {
+                // coord: lat, lng of map
+                // offset: x, y of screen
+                const { coord, offset } = e;
+                startPos = { coord, offset };
+                shapeData.startPos = startPos;
+                naver.maps.Event.removeListener(leftClick);
+            });
+
+            const rightClick = naver.maps.Event.addListener(
+                map,
+                'rightclick',
+                e => {
+                    const { coord, offset } = e;
+                    const endPos = { coord, offset };
+                    // this.setState({ endPos });
+                    // console.log('endPos', endPos);
+
+                    const getZoomLevel = new CustomOverlay({
+                        position: { startPos, endPos },
+                        naverMap: map,
+                        zoom: ''
+                    });
+                    getZoomLevel.setMap(map);
+                    shapeData.endPos = endPos;
+                    shapeData.zoomLevel = getZoomLevel._zoom;
+                    this.setState({ drawingData: [...drawingData, shapeData] });
+                    naver.maps.Event.removeListener(rightClick);
+                }
+            );
+
+            this.setState({ rightClick });
+            this.setState({ leftClick });
+        }
+        this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
+    };
+
+    ellipseState() {
+        const { circleToggle } = this.state;
+        this.setState({ circleToggle: !circleToggle });
     }
 
-    drawingComponent = (naverPos, mapPos) => {
-        let startPos;
-        const naver = naverPos;
-        const map = mapPos;
-        naver.maps.Event.addListener(map, 'click', e => {
-            console.log('click');
-            // coord: lat, lng of map
-            // offset: x, y of screen
-            const { coord, offset } = e;
-            startPos = { coord, offset };
-        });
+    removeListener() {
+        const naver = window.naver;
+        const { leftClick } = this.state;
+        const { rightClick } = this.state;
+        naver.maps.Event.removeListener(leftClick);
+        naver.maps.Event.removeListener(rightClick);
+    }
 
-        naver.maps.Event.addListener(map, 'rightclick', e => {
-            console.log('right click');
-            const { coord, offset } = e;
-            const endPos = { coord, offset };
-            new CustomOverlay({
-                position: { startPos, endPos },
-                naverMap: map,
-                zoom: ''
-            }).setMap(map);
-        });
+    changeColor() {
+        const { toggleColor } = this.state;
+        this.setState({ toggleColor: !toggleColor });
+    }
+
+    circleToggleAndEllipseAndChangeColor = () => {
+        this.changeColor();
+        this.drawingComponent();
+        this.ellipseState();
+        this.removeListener();
     };
 
     mapOption = () => {
@@ -74,9 +140,8 @@ class App extends Component {
         return mapOptions;
     };
 
-    mainPageLoad = mapPos => {
+    mainPageLoad = map => {
         const { name, factor } = this.state;
-        const map = mapPos;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
@@ -100,24 +165,66 @@ class App extends Component {
                 }
             })
             .catch(error => {
-                console.log(error);
-                alert('error');
-                // if (error.response.status === 500) {
-                //     console.log(error);
-                //     alert('load fail');
-                // } else {
-                //     console.log(error);
-                //     alert('error!');
-                // }
+                if (error.response.status === 500) {
+                    console.log(error);
+                    alert('load fail');
+                } else {
+                    console.log(error);
+                    alert('error!');
+                }
             });
     };
 
+    showFilterDrawingTool = () => {
+        const { showFilterDrawingTool } = this.state;
+        this.setState({ showFilterDrawingTool: !showFilterDrawingTool });
+    };
+
+    showModal = () => {
+        console.log('my버튼을 눌렀다!');
+        this.setState({ showModal: true });
+    };
+
     render() {
-        const { mapLoad } = this.state;
+        const {
+            map,
+            toggleColor,
+            drawingData,
+            showFilterDrawingTool,
+            showModal
+        } = this.state;
+        const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
         return (
             <div id="wrapper">
-                <div id="map" />
-                <Toolbox mapLoad={mapLoad} />
+                <div id="map">
+                    <ul id="loginFavorContainer">
+                        <li
+                            className="loginFavorBtn"
+                            onClick={this.showModal}
+                            onKeyPress={() => {}}
+                        >
+                            {`My`}
+                        </li>
+                        <li
+                            className="loginFavorBtn"
+                            onClick={this.showFilterDrawingTool}
+                            onKeyPress={() => {}}
+                        >
+                            {`호재`}
+                        </li>
+                    </ul>
+                    {showModal ? <LoginModal /> : null}
+                    {showFilterDrawingTool ? (
+                        <Toolbox mapLoad={map} drawingdata={drawingData} />
+                    ) : null}
+                </div>
+                <button
+                    type="button"
+                    className={btnClass}
+                    onClick={this.circleToggleAndEllipseAndChangeColor}
+                >
+                    {`Circle`}
+                </button>
             </div>
         );
     }

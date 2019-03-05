@@ -92,16 +92,18 @@ router.post('/load', async (req, res) => {
 });
 
 router.post('/save', async (req, res, next) => {
-    const factorId = req.body.factor_id;
-    const isValidFactorId = !!(factorId >= 1 || factorId <= 6);
+    // const factorId = req.body.factor_id;
+    // const isValidFactorId = !!(factorId >= 1 || factorId <= 6);
     let transaction;
+    console.log('저장요청이들어왔어요!', req.body);
     try {
-        if (isValidFactorId) {
-            transaction = await drawing.sequelize.transaction();
-            await drawing.create(req.body, { transaction });
-            await transaction.commit();
-            res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
-        }
+        console.log('시도는 하고 있당!');
+        // if (isValidFactorId) {
+        transaction = await drawing.sequelize.transaction();
+        await drawing.create(req.body, { transaction });
+        await transaction.commit();
+        res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
+        // }
     } catch (err) {
         await transaction.rollback();
         console.log('에러가 난 이유는요!! \n', err);
