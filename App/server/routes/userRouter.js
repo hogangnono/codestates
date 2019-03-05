@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { user, drawing, factor } = require('../models');
+const { user, drawing, figure, factor } = require('../models');
 
 router.get('/', async (req, res, next) => {
     const { name } = req.body;
@@ -51,7 +51,7 @@ router.post('/load', async (req, res) => {
                 }
             }
         } catch (err) {
-            console.log(err);
+            console.log('에러코드', err);
             await transaction.rollback();
             res.status(500).send('호재 데이터 조회 실패.');
         }
@@ -81,7 +81,7 @@ router.post('/load', async (req, res) => {
                 res.status(204).json('유저 데이터 정보 없음');
             }
         } catch (err) {
-            console.log(err);
+            console.log('에러코드 :', err);
             await transaction.rollback();
             res.status(500).send('User 데이터 조회 실패.');
         }
@@ -89,18 +89,30 @@ router.post('/load', async (req, res) => {
 });
 
 router.post('/save', async (req, res, next) => {
-    // const factorId = req.body.factor_id;
-    // const isValidFactorId = !!(factorId >= 1 || factorId <= 6);
     let transaction;
     console.log('저장요청이들어왔어요!', req.body);
+    const { name, data } = req.body;
     try {
         console.log('시도는 하고 있당!');
-        // if (isValidFactorId) {
         transaction = await drawing.sequelize.transaction();
-        await drawing.create(req.body, { transaction });
-        await transaction.commit();
-        res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
-        // }
+        if (Array.isArray(data)) {
+            const findAnUser = await user.findOne({ where: { name } });
+            const userId = await findAnUser.get('id');
+            const createdRowInDrawingTable = await drawing.create({ user_id: userId }, transaction);
+            const drawingId = await createdRowInDrawingTable.get('id');
+
+            const dataWithDrawingId = data.map(figure => {
+                const returnFigure = {
+                    ...figure,
+                    drawing_id: drawingId
+                };
+                return returnFigure;
+            });
+
+            await figure.bulkCreate(dataWithDrawingId);
+            await transaction.commit();
+            res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
+        }
     } catch (err) {
         await transaction.rollback();
         console.log('에러가 난 이유는요!! \n', err);
