@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 import * as d3 from 'd3';
-import './CustomOverlay.less';
+import '../CustomOverlay.less';
 var CustomOverlay = function (options) {
     // make a div that contain shape and whole info
     const div = document.createElement('div');
