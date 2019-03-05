@@ -43,6 +43,7 @@ class App extends Component {
 
     drawingComponent = () => {
         let startPos;
+
         const naver = window.naver;
         const { map } = this.state;
         const { circleToggle } = this.state;
@@ -58,6 +59,7 @@ class App extends Component {
             });
 
             const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
+
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
                 new CustomOverlay({
