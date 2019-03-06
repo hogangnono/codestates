@@ -18,7 +18,7 @@ class LoginModal extends Component {
         const { showModal } = this.props;
         const { name } = this.state;
         axios
-            .get('http://127.0.0.1:3001/user/', {
+            .post('http://127.0.0.1:3001/user/', {
                 name
             })
             .then(async result => {

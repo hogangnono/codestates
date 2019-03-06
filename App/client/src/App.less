@@ -13,10 +13,16 @@ body {
 
     #loginFavorContainer {
       position: absolute;
-      z-index: 1;
-      top: 120px;
-      right: 12px;
+      z-index: 1000;
       text-align: center;
+      @media (min-width: 767px) {
+        top: 120px;
+        right: 12px;
+      }
+      @media (max-width: 768px) {
+        bottom: 100px;
+        left: 10px;
+      }
     }
 
     .loginFavorBtn {

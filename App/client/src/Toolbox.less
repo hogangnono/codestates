@@ -3,13 +3,21 @@
 #toolbox {
   position: absolute;
   background: @toolboxColor;
-  top: 240px;
-  right: 15px;
   z-index: 1;
-  width: 300px;
-  height: 600px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  @media (max-width: 768px) {
+    top: 20px;
+    right: 0px;
+    width: 80%;
+    height: 100%;
+  }
+  @media (min-width: 767px) {
+    top: 240px;
+    right: 15px;
+    width: 300px;
+    height: 600px;
+  }
 
   #tabMenu {
     font-size: 15px;
@@ -27,6 +35,11 @@
     font-family: Apple SD Gothic Neo, sans-serif;
   }
   .drawing {
-    border-radius: 0 10px 0 0;
+    @media (max-width: 768px) {
+      border-radius: 0;
+    }
+    @media (min-width: 767px) {
+      border-radius: 0 10px 0 0;
+    }
   }
 }

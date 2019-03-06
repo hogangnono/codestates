@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Drawing.less';
 import axios from 'axios';
+import {
+    FaSlash,
+    FaCircle,
+    FaSquareFull,
+    FaDrawPolygon,
+    FaArrowLeft
+} from 'react-icons/fa';
 import upwardsPointer from './img/upwards-pointer.png';
 import downwardsPointer from './img/downwards-pointer.png';
 
@@ -60,11 +67,21 @@ class Toolbox extends Component {
         const { drawingData } = this.props;
         return (
             <div id="drawingComponentContainer">
-                <span className="drawingTools">선</span>
-                <span className="drawingTools">화살표</span>
-                <span className="drawingTools">사각형</span>
-                <span className="drawingTools">원</span>
-                <span className="drawingTools">다각형</span>
+                <span className="drawingTools">
+                    <FaSlash className="rotateIcon1" />
+                </span>
+                <span className="drawingTools">
+                    <FaArrowLeft className="rotateIcon2" />
+                </span>
+                <span className="drawingTools">
+                    <FaSquareFull />
+                </span>
+                <span className="drawingTools">
+                    <FaCircle />
+                </span>
+                <span className="drawingTools">
+                    <FaDrawPolygon />
+                </span>
                 <div id="myDrawingsContainer">
                     <span className="subTitle">저장된 호재 그림</span>
                     {myDrawingsVisible ? visible : invisible}

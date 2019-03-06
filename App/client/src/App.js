@@ -4,9 +4,6 @@ import * as d3 from 'd3';
 import axios from 'axios';
 import Toolbox from './Toolbox';
 import CustomOverlay from './CustomOverlay';
-// import CustomPolygon from './CustomPolygon';
-// import CustomRect from './CustomRect';
-// import CustomArrow from './CustomArrow';
 import LoginModal from './LoginModal';
 import './App.less';
 
@@ -117,7 +114,7 @@ class App extends Component {
             zoomControl: true,
             zoomControlOptions: {
                 style: naver.maps.ZoomControlStyle.SMALL,
-                position: naver.maps.Position.TOP_RIGHT
+                position: naver.maps.Position.LEFT_BOTTOM
             },
             logoControl: true,
             logoControlOptions: {
@@ -129,7 +126,7 @@ class App extends Component {
             },
             mapDataControl: true,
             mapDataControlOptions: {
-                position: naver.maps.Position.BOTTOM_LEFT
+                position: naver.maps.Position.BOTTOM_RIGHT
             }
         };
         return mapOptions;
@@ -191,22 +188,22 @@ class App extends Component {
         return (
             <div id="wrapper">
                 <div id="map">
-                    <ul id="loginFavorContainer">
-                        <li
+                    <div id="loginFavorContainer">
+                        <div
                             className="loginFavorBtn"
                             onClick={this.showModal}
                             onKeyPress={() => {}}
                         >
                             {`My`}
-                        </li>
-                        <li
+                        </div>
+                        <div
                             className="loginFavorBtn"
                             onClick={this.showFilterDrawingTool}
                             onKeyPress={() => {}}
                         >
                             {`호재`}
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                     {showModal ? (
                         <LoginModal showModal={this.showModal} />
                     ) : null}

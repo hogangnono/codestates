@@ -41,11 +41,18 @@ body {
   text-align: center;
   border-color: #c0c0c061;
   border-radius: 3px;
+  color: #4d55b2;
+  font-size: 18px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
   transition-duration: 0.3s;
   cursor: pointer;
 }
-
+.rotateIcon1 {
+  transform: rotate(90deg);
+}
+.rotateIcon2 {
+  transform: rotate(-45deg);
+}
 #saveCloseBtns {
   position: absolute;
   bottom: 0;
@@ -55,7 +62,6 @@ body {
 }
 .saveCloseBtn {
   position: absolute;
-  width: 120px;
   top: 0;
   right: 20px;
   text-align: center;
@@ -67,6 +73,12 @@ body {
   font-size: 15px;
   color: #333;
   transition-duration: 0.2s;
+  @media (max-width: 768px) {
+    width: 45%;
+  }
+  @media (min-width: 767px) {
+    width: 120px;
+  }
 }
 .saveCloseBtn:first-child {
   left: 20px;
