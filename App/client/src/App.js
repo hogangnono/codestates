@@ -14,7 +14,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.bound = '';
-        this.drawList = [];
+        this.drawList = {};
         this.state = {
             name: 'jihun',
             factor: '',
@@ -46,8 +46,10 @@ class App extends Component {
         this.mainPageLoad(map);
         this.drawingComponent();
         naver.maps.Event.addListener(map, 'idle', e => {
+            console.log('변화');
             this.bound = map.getBounds();
             this.mainPageLoad(map);
+            this.DataDelete();
         });
     };
 
@@ -66,7 +68,6 @@ class App extends Component {
                 // offset: x, y of screen
                 const { coord, offset } = e;
                 startPos = { coord, offset };
-                console.log('시작점: ', startPos);
                 shapeData.startPos = startPos;
                 naver.maps.Event.removeListener(leftClick);
             });
@@ -77,8 +78,6 @@ class App extends Component {
                 e => {
                     const { coord, offset } = e;
                     const endPos = { coord, offset };
-                    console.log('중간점: ', (startPos.coord._lat + endPos.coord._lat) / 2, (startPos.coord._lng + endPos.coord._lng) / 2);
-                    console.log('끝점: ', endPos);
                     // this.setState({ endPos });
                     // console.log('endPos', endPos);
 
@@ -166,13 +165,14 @@ class App extends Component {
                         const { startPos, endPos, zoomLevel } = JSON.parse(
                             el.figures
                         );
-                        if (!this.drawList.includes(el.id)) {
-                            this.drawList.push(el.id);
-                            return new CustomOverlay({
+                        if (!(el.id in this.drawList)) {
+                            const overlay = new CustomOverlay({
                                 position: { startPos, endPos },
                                 naverMap: map,
                                 zoom: zoomLevel
-                            }).setMap(map);
+                            });
+                            overlay.setMap(map);
+                            this.drawList[el.id] = overlay;
                         }
                     });
                 } else if (result.status === 204) {
@@ -190,6 +190,22 @@ class App extends Component {
                 alert(error);
             });
     };
+
+    DataDelete = () => {
+        Object.entries(this.drawList).forEach(el => {
+            const key = el[0];
+            const value = el[1];
+            const position = {};
+            position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
+            position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
+
+            if (!this.bound.hasLatLng(position)) {
+                this.drawList[key].setMap(null);
+                delete this.drawList[key];
+            }
+        });
+
+    }
 
     showFilterDrawingTool = () => {
         const { showFilterDrawingTool } = this.state;
