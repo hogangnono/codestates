@@ -89,11 +89,12 @@ class App extends Component {
 
     render() {
         const { map } = this.state;
+
         return (
             <div id="wrapper">
                 <div id="map">
                 </div>
-                <Button map={map} />
+                <Button map={map} Shape={Circle} />
             </div>
         );
     }

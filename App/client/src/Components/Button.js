@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../App.less';
 import PropTypes from 'prop-types';
-import Circle from '../CustomOverlay/Circle';
 
 
 class Button extends Component {
@@ -39,6 +38,7 @@ class Button extends Component {
         let startPos;
         const naver = window.naver;
         const { map } = this.props;
+        const { Shape } = this.props;
         const { toggle } = this.state;
 
         if (toggle === true) {
@@ -52,7 +52,7 @@ class Button extends Component {
             const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
-                new Circle({
+                new Shape({
                     position: { startPos, endPos },
                     naverMap: map,
                     zoom: ''
