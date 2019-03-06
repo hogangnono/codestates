@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
@@ -192,14 +191,14 @@ class App extends Component {
                         <div
                             className="loginFavorBtn"
                             onClick={this.showModal}
-                            onKeyPress={() => {}}
+                            onKeyPress={this.showModal}
                         >
                             {`My`}
                         </div>
                         <div
                             className="loginFavorBtn"
                             onClick={this.showFilterDrawingTool}
-                            onKeyPress={() => {}}
+                            onKeyPress={this.showFilterDrawingTool}
                         >
                             {`호재`}
                         </div>
