@@ -8,6 +8,7 @@ import CustomOverlay from './CustomOverlay';
 // import CustomRect from './CustomRect';
 // import CustomArrow from './CustomArrow';
 import LoginModal from './LoginModal';
+import NearbyList from './NearbyList';
 import './App.less';
 
 class App extends Component {
@@ -196,6 +197,7 @@ class App extends Component {
         return (
             <div id="wrapper">
                 <div id="map">
+                    <NearbyList />
                     <ul id="loginFavorContainer">
                         <li
                             className="loginFavorBtn"
