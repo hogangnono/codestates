@@ -9,8 +9,7 @@ class Button extends Component {
         super(props);
         this.state = {
             map: props.map, // Set this up as props
-            toggleColor: props.toggleColor,
-            circleToggle: props.circleToggle,
+            toggle: true,
             leftClick: undefined,
             rightClick: undefined
         };
@@ -20,7 +19,7 @@ class Button extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener('mousedown', this.handleClickOutside);
+        document.addEventListener('mouseup', this.handleClickOutside);
     }
 
     setWrapperRef(node) {
@@ -28,12 +27,10 @@ class Button extends Component {
     }
 
     handleClickOutside(event) {
-        const { toggleColor } = this.state;
-        const { circleToggle } = this.state;
+        const { toggle } = this.state;
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            if (event.button === 2 && circleToggle !== true) {
-                this.setState({ toggleColor: !toggleColor });
-                this.setState({ circleToggle: !circleToggle });
+            if (event.button === 2 && toggle !== true) {
+                this.setState({ toggle: !toggle });
             }
         }
     }
@@ -42,9 +39,9 @@ class Button extends Component {
         let startPos;
         const naver = window.naver;
         const { map } = this.props;
-        const { circleToggle } = this.state;
+        const { toggle } = this.state;
 
-        if (circleToggle === true) {
+        if (toggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
                 const { coord, offset } = e;
                 startPos = { coord, offset };
@@ -67,12 +64,12 @@ class Button extends Component {
             this.setState({ rightClick: rightClick });
             this.setState({ leftClick: leftClick });
         }
-        this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
+        this.setState({ toggle: !toggle }); // Complete shape and turn off toggle
     };
 
     toggleState() {
-        const { circleToggle } = this.state;
-        this.setState({ circleToggle: !circleToggle });
+        const { toggle } = this.state;
+        this.setState({ toggle: !toggle });
     }
 
     removeListener() {
@@ -83,22 +80,18 @@ class Button extends Component {
         naver.maps.Event.removeListener(rightClick);
     }
 
-    changeColor() {
-        const { toggleColor } = this.state;
-        this.setState({ toggleColor: !toggleColor });
-    }
 
     createShape = () => {
         const { map } = this.state;
-        this.changeColor();
+        // this.changeColor();
         this.drawingComponent(map);
         this.toggleState();
         this.removeListener();
     }
 
     render() {
-        const { toggleColor } = this.state;
-        const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
+        const { toggle } = this.state;
+        const btnClass = toggle ? 'lightPurple' : 'darkPurple';
 
         return (
             <button type="button" className={btnClass} onClick={this.createShape} ref={this.setWrapperRef}>

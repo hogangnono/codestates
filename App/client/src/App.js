@@ -13,8 +13,8 @@ class App extends Component {
             name: 'jihun',
             factor: '',
             map: undefined, // Will set state to naver map instance
-            circleToggle: true, // Indicates whether to create circle
-            toggleColor: true
+            toggle: false // Indicates whether to create circle
+            // toggleColor: true
         };
 
     }
@@ -27,7 +27,6 @@ class App extends Component {
         );
 
         this.setState({ map: map });
-
         this.mainPageLoad(map);
     }
 
@@ -90,25 +89,25 @@ class App extends Component {
             });
     };
 
-    mouseClick = (e) => {
-        const { circleToggle } = this.state;
-        const { toggleColor } = this.state;
-        if (e.type === 'contextmenu' && circleToggle !== true) {
+    // mouseClick = (e) => {
+    //     const { toggle } = this.state;
+    //     // const { toggleColor } = this.state;
+    //     if (e.type === 'contextmenu' && toggle !== true) {
 
-            this.setState({ toggleColor: !toggleColor });
-            this.setState({ circleToggle: !circleToggle });
-        }
-    }
+    //         this.setState({ toggle: !toggle });
+    //         // this.setState({ circleToggle: !circleToggle });
+    //     }
+    // }
 
     render() {
         const { map } = this.state;
-        const { circleToggle } = this.state;
-        const { toggleColor } = this.state;
+        // const { toggle } = this.state;
+        // const { toggleColor } = this.state;
         return (
             <div id="wrapper">
-                <div id="map" onClick={this.mouseClick} onContextMenu={this.mouseClick} onKeyDown={this.mouseClick}>
+                <div id="map">
                 </div>
-                <Button map={map} circleToggle={circleToggle} toggleColor={toggleColor} />
+                <Button map={map} />
             </div>
         );
     }
