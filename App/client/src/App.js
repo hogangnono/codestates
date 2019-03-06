@@ -11,27 +11,24 @@ import LoginModal from './LoginModal';
 import './App.less';
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-            factor: '',
+    state = {
+        name: '',
+        factor: '',
 
-            map: undefined, // Will set state to naver map instance
-            circleToggle: true, // Indicates whether to create circle
-            naver: undefined, // Will set state to window.naver
+        map: undefined, // Will set state to naver map instance
+        circleToggle: true, // Indicates whether to create circle
+        naver: undefined, // Will set state to window.naver
 
-            leftClick: undefined, // Will set state to leftClick listener
-            rightClick: undefined, // Will set state to rightClick listener
-            toggleColor: true,
+        leftClick: undefined, // Will set state to leftClick listener
+        rightClick: undefined, // Will set state to rightClick listener
+        toggleColor: true,
 
-            // mouseEvent: undefined, // Will set mouse event here from listener
-            drawingData: [],
-            showFilterDrawingTool: false,
-            showModal: false,
-            mouseEvent: undefined // Will set mouse event here from listener
-        };
-    }
+        // mouseEvent: undefined, // Will set mouse event here from listener
+        drawingData: [],
+        showFilterDrawingTool: false,
+        showModal: false,
+        mouseEvent: undefined // Will set mouse event here from listener
+    };
 
     componentDidMount = async () => {
         const naver = window.naver;
@@ -40,16 +37,13 @@ class App extends Component {
             this.mapOption()
         );
         this.setState({ map, naver });
-
         this.mainPageLoad(map);
     };
 
     drawingComponent = () => {
         let startPos;
-
         const naver = window.naver;
         const { map, drawingData } = this.state;
-
         const { circleToggle } = this.state;
         const shapeData = {};
 
@@ -182,8 +176,8 @@ class App extends Component {
     };
 
     showModal = () => {
-        console.log('my버튼을 눌렀다!');
-        this.setState({ showModal: true });
+        const { showModal } = this.state;
+        this.setState({ showModal: !showModal });
     };
 
     render() {
@@ -212,9 +206,11 @@ class App extends Component {
                             {`호재`}
                         </li>
                     </ul>
-                    {showModal ? <LoginModal /> : null}
+                    {showModal ? (
+                        <LoginModal showModal={this.showModal} />
+                    ) : null}
                     {showFilterDrawingTool ? (
-                        <Toolbox mapLoad={map} drawingdata={drawingData} />
+                        <Toolbox mapLoad={map} drawingData={drawingData} />
                     ) : null}
                 </div>
             </div>
