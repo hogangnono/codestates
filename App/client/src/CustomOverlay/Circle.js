@@ -7,14 +7,14 @@ var CustomOverlay = function (options) {
     // make a input that contaion description of shape
     var input = document.createElement('div');
     input.innerHTML = '<input type="text" placeholder="호재를 입력해주세요"></input>';
-    input.addEventListener('click', (e) => {
+    input.addEventListener('click', e => {
         e.target.focus();
     });
 
     // make deletebutton
     const deleteButton = document.createElement('div');
     deleteButton.className = 'deleteButton';
-    deleteButton.addEventListener('click', (e) => {
+    deleteButton.addEventListener('click', e => {
         this.onRemove();
     });
 
@@ -77,8 +77,8 @@ CustomOverlay.prototype.draw = function () {
     // calculate the div width and height(Subtraction of two coordinates) with zoom ratio
     const width = Math.abs(this._endPos.offset.x - this._startPos.offset.x);
     const height = Math.abs(this._endPos.offset.y - this._startPos.offset.y);
-    const widthRatio = width * (2 ** ratio);
-    const heightRatio = height * (2 ** ratio);
+    const widthRatio = width * 2 ** ratio;
+    const heightRatio = height * 2 ** ratio;
 
     // match the div and svg size
     this._element.style.width = `${widthRatio}px`;
@@ -92,9 +92,8 @@ CustomOverlay.prototype.draw = function () {
     const ellipse = svg.childNodes[0];
     ellipse.style.cx = widthRatio / 2;
     ellipse.style.cy = heightRatio / 2;
-    ellipse.style.rx = (width / 2) * (2 ** ratio);
-    ellipse.style.ry = (height / 2) * (2 ** ratio);
-
+    ellipse.style.rx = (width / 2) * 2 ** ratio;
+    ellipse.style.ry = (height / 2) * 2 ** ratio;
 };
 
 CustomOverlay.prototype.onRemove = function () {
