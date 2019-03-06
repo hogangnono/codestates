@@ -83,7 +83,6 @@ class Button extends Component {
 
 
     createShape = () => {
-        console.log('We are reaching all the way here.');
         const { map } = this.state;
         this.drawingComponent(map);
         this.toggleState();
