@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Drawing.less';
 import axios from 'axios';
 import upwardsPointer from './img/upwards-pointer.png';
@@ -7,6 +8,10 @@ import Button from './Components/Button';
 import Circle from './CustomOverlay/Circle';
 
 class Toolbox extends Component {
+    static propTypes = {
+        drawingData: PropTypes.array.isRequired
+    };
+
     state = {
         myDrawingsVisible: true
     };
@@ -31,12 +36,30 @@ class Toolbox extends Component {
     render() {
         const { myDrawingsVisible } = this.state;
         const visible = (
+<<<<<<< HEAD
             <div onClick={this._foldMyDrawings} onKeyPress={() => { }}>
+=======
+            <div
+                onClick={this._foldMyDrawings}
+                onKeyPress={this._foldMyDrawings}
+                role="button"
+                tabIndex="0"
+            >
+>>>>>>> 6aae41c71e0ebda072a1a15730e9e5b26bd88199
                 <img className="drawingPointer" src={upwardsPointer} alt="▴" />
             </div>
         );
         const invisible = (
+<<<<<<< HEAD
             <div onClick={this._foldMyDrawings} onKeyPress={() => { }}>
+=======
+            <div
+                onClick={this._foldMyDrawings}
+                onKeyPress={this._foldMyDrawings}
+                role="button"
+                tabIndex="0"
+            >
+>>>>>>> 6aae41c71e0ebda072a1a15730e9e5b26bd88199
                 <img
                     className="drawingPointer"
                     src={downwardsPointer}
@@ -44,7 +67,11 @@ class Toolbox extends Component {
                 />
             </div>
         );
+<<<<<<< HEAD
         const { drawingdata, map } = this.props;
+=======
+        const { drawingData } = this.props;
+>>>>>>> 6aae41c71e0ebda072a1a15730e9e5b26bd88199
         return (
             <div id="drawingComponentContainer">
                 <Button map={map} Shape={Circle} title="선" />
@@ -57,12 +84,8 @@ class Toolbox extends Component {
                     {myDrawingsVisible ? visible : invisible}
                 </div>
                 {myDrawingsVisible ? (
-                    <div>
+                    <div className="userFactorList">
                         <p className="drawingList">drawing1</p>
-                        <p className="drawingList">drawing2</p>
-                        <p className="drawingList">drawing3</p>
-                        <p className="drawingList">drawing4</p>
-                        <p className="drawingList">drawing5</p>
                     </div>
                 ) : null}
                 <div id="saveCloseBtns">
@@ -70,7 +93,7 @@ class Toolbox extends Component {
                         type="button"
                         className="saveCloseBtn"
                         onClick={() => {
-                            this.handleAxios('user/save', drawingdata);
+                            this.handleAxios('user/save', drawingData);
                         }}
                     >
                         {`저장`}

@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Filter from './Filter';
 import Drawing from './Drawing';
 import './Toolbox.less';
 
 class Toolbox extends Component {
+    static propTypes = {
+        drawingData: PropTypes.array.isRequired
+    };
+
     state = {
         onFilter: true,
         onDrawing: false,
@@ -58,6 +63,8 @@ class Toolbox extends Component {
                             this.handleOnFilter(true);
                         }}
                         onKeyPress={() => { }}
+                        role="button"
+                        tabIndex="0"
                     >
                         {`필터`}
                     </div>
@@ -71,6 +78,8 @@ class Toolbox extends Component {
                             this.handleOnDrawing(true);
                         }}
                         onKeyPress={() => { }}
+                        role="button"
+                        tabIndex="0"
                     >
                         {`그리기`}
                     </div>
