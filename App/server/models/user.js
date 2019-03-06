@@ -1,7 +1,7 @@
 // const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    const user = sequelize.define(
-        'user',
+    const User = sequelize.define(
+        'User',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -17,9 +17,9 @@ module.exports = (sequelize, DataTypes) => {
             freezeTableName: true
         }
     );
-    user.associate = models => {
+    User.associate = models => {
         // associations can be defined here
     };
 
-    return user;
+    return User;
 };
