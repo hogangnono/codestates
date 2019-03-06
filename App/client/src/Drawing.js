@@ -36,30 +36,22 @@ class Toolbox extends Component {
     render() {
         const { myDrawingsVisible } = this.state;
         const visible = (
-<<<<<<< HEAD
-            <div onClick={this._foldMyDrawings} onKeyPress={() => { }}>
-=======
             <div
                 onClick={this._foldMyDrawings}
                 onKeyPress={this._foldMyDrawings}
                 role="button"
                 tabIndex="0"
             >
->>>>>>> 6aae41c71e0ebda072a1a15730e9e5b26bd88199
                 <img className="drawingPointer" src={upwardsPointer} alt="▴" />
             </div>
         );
         const invisible = (
-<<<<<<< HEAD
-            <div onClick={this._foldMyDrawings} onKeyPress={() => { }}>
-=======
             <div
                 onClick={this._foldMyDrawings}
                 onKeyPress={this._foldMyDrawings}
                 role="button"
                 tabIndex="0"
             >
->>>>>>> 6aae41c71e0ebda072a1a15730e9e5b26bd88199
                 <img
                     className="drawingPointer"
                     src={downwardsPointer}
@@ -67,11 +59,7 @@ class Toolbox extends Component {
                 />
             </div>
         );
-<<<<<<< HEAD
-        const { drawingdata, map } = this.props;
-=======
-        const { drawingData } = this.props;
->>>>>>> 6aae41c71e0ebda072a1a15730e9e5b26bd88199
+        const { drawingData, map } = this.props;
         return (
             <div id="drawingComponentContainer">
                 <Button map={map} Shape={Circle} title="선" />

@@ -13,7 +13,6 @@ import Circle from './CustomOverlay/Circle';
 // import Button from './Components/Button'
 
 class App extends Component {
-<<<<<<< HEAD
     constructor(props) {
         super(props);
         this.state = {
@@ -24,27 +23,6 @@ class App extends Component {
             showModal: false
         };
     }
-=======
-    state = {
-        name: '',
-        factor: '',
-        bound: '',
-
-        map: undefined, // Will set state to naver map instance
-        circleToggle: true, // Indicates whether to create circle
-        naver: undefined, // Will set state to window.naver
-
-        leftClick: undefined, // Will set state to leftClick listener
-        rightClick: undefined, // Will set state to rightClick listener
-        toggleColor: true,
-
-        // mouseEvent: undefined, // Will set mouse event here from listener
-        drawingData: [],
-        showFilterDrawingTool: false,
-        showModal: false,
-        mouseEvent: undefined // Will set mouse event here from listener
-    };
->>>>>>> 6aae41c71e0ebda072a1a15730e9e5b26bd88199
 
     componentDidMount = async () => {
         const naver = window.naver;
@@ -52,88 +30,11 @@ class App extends Component {
             d3.select('#map').node(),
             this.mapOption()
         );
-<<<<<<< HEAD
 
         this.setState({ map: map });
         this.mainPageLoad(map);
     };
 
-=======
-        this.setState({ map, naver });
-        this.mainPageLoad(map);
-    };
-
-    drawingComponent = () => {
-        let startPos;
-        const naver = window.naver;
-        const { map, drawingData } = this.state;
-        const { circleToggle } = this.state;
-        const shapeData = {};
-
-        if (circleToggle === true) {
-            const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-                // coord: lat, lng of map
-                // offset: x, y of screen
-                const { coord, offset } = e;
-                startPos = { coord, offset };
-                shapeData.startPos = startPos;
-                naver.maps.Event.removeListener(leftClick);
-            });
-
-            const rightClick = naver.maps.Event.addListener(
-                map,
-                'rightclick',
-                e => {
-                    const { coord, offset } = e;
-                    const endPos = { coord, offset };
-                    // this.setState({ endPos });
-                    // console.log('endPos', endPos);
-
-                    const getZoomLevel = new CustomOverlay({
-                        position: { startPos, endPos },
-                        naverMap: map,
-                        zoom: ''
-                    });
-                    getZoomLevel.setMap(map);
-                    shapeData.endPos = endPos;
-                    shapeData.zoomLevel = getZoomLevel._zoom;
-                    this.setState({ drawingData: [...drawingData, shapeData] });
-                    naver.maps.Event.removeListener(rightClick);
-                }
-            );
-
-            this.setState({ rightClick: rightClick });
-            this.setState({ leftClick: leftClick });
-        }
-        this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
-    };
-
-    ellipseState() {
-        const { circleToggle } = this.state;
-        this.setState({ circleToggle: !circleToggle });
-    }
-
-    removeListener() {
-        const naver = window.naver;
-        const { leftClick } = this.state;
-        const { rightClick } = this.state;
-        naver.maps.Event.removeListener(leftClick);
-        naver.maps.Event.removeListener(rightClick);
-    }
-
-    changeColor() {
-        const { toggleColor } = this.state;
-        this.setState({ toggleColor: !toggleColor });
-    }
-
-    circleToggleAndEllipseAndChangeColor = () => {
-        this.changeColor();
-        this.drawingComponent();
-        this.ellipseState();
-        this.removeListener();
-    };
-
->>>>>>> 6aae41c71e0ebda072a1a15730e9e5b26bd88199
     mapOption = () => {
         const naver = window.naver;
         const mapOptions = {

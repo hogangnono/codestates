@@ -41,7 +41,7 @@ class Toolbox extends Component {
     };
 
     render() {
-        const { drawingdata, mapLoad } = this.props;
+        const { drawingData, mapLoad } = this.props;
         const {
             backgroundBlueForFilterTab,
             backgroundBlueForDrawingTab,
@@ -86,7 +86,7 @@ class Toolbox extends Component {
                 </div>
                 <div>
                     {onFilter ? <Filter /> : null}
-                    {onDrawing ? <Drawing map={mapLoad} drawingdata={drawingdata} /> : null}
+                    {onDrawing ? <Drawing map={mapLoad} drawingdata={drawingData} /> : null}
                 </div>
             </div>
         );
