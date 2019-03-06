@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
 import Toolbox from './Toolbox';
-import CustomOverlay from './CustomOverlay';
+// import CustomOverlay from './CustomOverlay';
 // import CustomPolygon from './CustomPolygon';
 // import CustomRect from './CustomRect';
 // import CustomArrow from './CustomArrow';
 import LoginModal from './LoginModal';
 import './App.less';
+import Circle from './CustomOverlay/Circle';
+// import Button from './Components/Button'
 
 class App extends Component {
     constructor(props) {
@@ -18,19 +20,9 @@ class App extends Component {
         this.state = {
             name: 'jihun',
             factor: '',
-            map: undefined, // Will set state to naver map instance
-            circleToggle: true, // Indicates whether to create circle
-            naver: undefined, // Will set state to window.naver
-
-            leftClick: undefined, // Will set state to leftClick listener
-            rightClick: undefined, // Will set state to rightClick listener
-            toggleColor: true,
-
-            // mouseEvent: undefined, // Will set mouse event here from listener
             drawingData: [],
             showFilterDrawingTool: false,
-            showModal: false,
-            mouseEvent: undefined // Will set mouse event here from listener
+            showModal: false
         };
     }
 
@@ -48,78 +40,6 @@ class App extends Component {
             this.mainPageLoad(map);
             this.DataDelete();
         });
-    };
-
-    drawingComponent = () => {
-        let startPos;
-
-        const naver = window.naver;
-        const { map, drawingData } = this.state;
-
-        const { circleToggle } = this.state;
-        const shapeData = {};
-
-        if (circleToggle === true) {
-            const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-                // coord: lat, lng of map
-                // offset: x, y of screen
-                const { coord, offset } = e;
-                startPos = { coord, offset };
-                shapeData.startPos = startPos;
-                naver.maps.Event.removeListener(leftClick);
-            });
-
-            const rightClick = naver.maps.Event.addListener(
-                map,
-                'rightclick',
-                e => {
-                    const { coord, offset } = e;
-                    const endPos = { coord, offset };
-                    // this.setState({ endPos });
-                    // console.log('endPos', endPos);
-
-                    const getZoomLevel = new CustomOverlay({
-                        position: { startPos, endPos },
-                        naverMap: map,
-                        zoom: ''
-                    });
-                    getZoomLevel.setMap(map);
-                    shapeData.endPos = endPos;
-                    shapeData.zoomLevel = getZoomLevel._zoom;
-                    this.setState({ drawingData: [...drawingData, shapeData] });
-                    naver.maps.Event.removeListener(rightClick);
-                }
-            );
-
-            this.setState({ rightClick: rightClick });
-            this.setState({ leftClick: leftClick });
-        }
-        this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
-    };
-
-    ellipseState() {
-        const { circleToggle } = this.state;
-        this.setState({ circleToggle: !circleToggle });
-    }
-
-    removeListener() {
-        const naver = window.naver;
-        const { leftClick } = this.state;
-        const { rightClick } = this.state;
-        naver.maps.Event.removeListener(leftClick);
-        naver.maps.Event.removeListener(rightClick);
-    }
-
-    changeColor() {
-        const { toggleColor } = this.state;
-        this.setState({ toggleColor: !toggleColor });
-    }
-
-    circleToggleAndEllipseAndChangeColor = () => {
-        this.changeColor();
-        this.drawingComponent();
-        this.ellipseState();
-        this.removeListener();
     };
 
     mapOption = () => {
@@ -212,8 +132,8 @@ class App extends Component {
     };
 
     showModal = () => {
-        console.log('my버튼을 눌렀다!');
-        this.setState({ showModal: true });
+        const { showModal } = this.state;
+        this.setState({ showModal: !showModal });
     };
 
     render() {
@@ -242,9 +162,11 @@ class App extends Component {
                             {`호재`}
                         </li>
                     </ul>
-                    {showModal ? <LoginModal /> : null}
+                    {showModal ? (
+                        <LoginModal showModal={this.showModal} />
+                    ) : null}
                     {showFilterDrawingTool ? (
-                        <Toolbox mapLoad={map} drawingdata={drawingData} />
+                        <Toolbox mapLoad={map} drawingData={drawingData} />
                     ) : null}
                 </div>
             </div>
