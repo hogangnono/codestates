@@ -41,7 +41,7 @@ class Toolbox extends Component {
     };
 
     render() {
-        const { drawingData } = this.props;
+        const { drawingData, mapLoad } = this.props;
         const {
             backgroundBlueForFilterTab,
             backgroundBlueForDrawingTab,
@@ -62,7 +62,7 @@ class Toolbox extends Component {
                         onClick={() => {
                             this.handleOnFilter(true);
                         }}
-                        onKeyPress={() => {}}
+                        onKeyPress={() => { }}
                         role="button"
                         tabIndex="0"
                     >
@@ -77,7 +77,7 @@ class Toolbox extends Component {
                         onClick={() => {
                             this.handleOnDrawing(true);
                         }}
-                        onKeyPress={() => {}}
+                        onKeyPress={() => { }}
                         role="button"
                         tabIndex="0"
                     >
@@ -86,7 +86,7 @@ class Toolbox extends Component {
                 </div>
                 <div>
                     {onFilter ? <Filter /> : null}
-                    {onDrawing ? <Drawing drawingData={drawingData} /> : null}
+                    {onDrawing ? <Drawing map={mapLoad} drawingdata={drawingData} /> : null}
                 </div>
             </div>
         );

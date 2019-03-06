@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 import * as d3 from 'd3';
-import './CustomOverlay.less';
-var CustomOverlay = function(options) {
+import '../CustomOverlay.less';
+var CustomOverlay = function (options) {
     // make a div that contain shape and whole info
     const div = document.createElement('div');
     // make a input that contaion description of shape
@@ -39,26 +39,26 @@ CustomOverlay.prototype = new window.naver.maps.OverlayView();
 
 CustomOverlay.prototype.constructor = CustomOverlay;
 
-CustomOverlay.prototype.setPosition = function(position) {
+CustomOverlay.prototype.setPosition = function (position) {
     this._startPos = position.startPos;
     this._endPos = position.endPos;
     this.draw();
 };
 
-CustomOverlay.prototype.getPosition = function() {
+CustomOverlay.prototype.getPosition = function () {
     const start = {};
     start.x = Math.min(this._startPos.coord.x, this._endPos.coord.x);
     start.y = Math.max(this._startPos.coord.y, this._endPos.coord.y);
     return start;
 };
 
-CustomOverlay.prototype.onAdd = function() {
+CustomOverlay.prototype.onAdd = function () {
     var overlayLayer = this.getPanes().overlayLayer;
 
     overlayLayer.appendChild(this._element);
 };
 
-CustomOverlay.prototype.draw = function() {
+CustomOverlay.prototype.draw = function () {
     if (!this.getMap()) {
         return;
     }
@@ -96,7 +96,7 @@ CustomOverlay.prototype.draw = function() {
     ellipse.style.ry = (height / 2) * 2 ** ratio;
 };
 
-CustomOverlay.prototype.onRemove = function() {
+CustomOverlay.prototype.onRemove = function () {
     this._element.parentNode.removeChild(this._element);
 };
 
