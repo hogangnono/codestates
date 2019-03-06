@@ -13,10 +13,11 @@ import './App.less';
 class App extends Component {
     constructor(props) {
         super(props);
+        this.bound = '';
+        this.drawList = [];
         this.state = {
-            name: '',
+            name: 'jihun',
             factor: '',
-
             map: undefined, // Will set state to naver map instance
             circleToggle: true, // Indicates whether to create circle
             naver: undefined, // Will set state to window.naver
@@ -41,7 +42,13 @@ class App extends Component {
         );
         this.setState({ map, naver });
 
+        this.bound = map.getBounds();
         this.mainPageLoad(map);
+        this.drawingComponent();
+        naver.maps.Event.addListener(map, 'idle', e => {
+            this.bound = map.getBounds();
+            this.mainPageLoad(map);
+        });
     };
 
     drawingComponent = () => {
@@ -59,6 +66,7 @@ class App extends Component {
                 // offset: x, y of screen
                 const { coord, offset } = e;
                 startPos = { coord, offset };
+                console.log('시작점: ', startPos);
                 shapeData.startPos = startPos;
                 naver.maps.Event.removeListener(leftClick);
             });
@@ -69,6 +77,8 @@ class App extends Component {
                 e => {
                     const { coord, offset } = e;
                     const endPos = { coord, offset };
+                    console.log('중간점: ', (startPos.coord._lat + endPos.coord._lat) / 2, (startPos.coord._lng + endPos.coord._lng) / 2);
+                    console.log('끝점: ', endPos);
                     // this.setState({ endPos });
                     // console.log('endPos', endPos);
 
@@ -142,10 +152,12 @@ class App extends Component {
 
     mainPageLoad = map => {
         const { name, factor } = this.state;
+        const bound = this.bound;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
-                factor
+                factor,
+                bound
             })
             .then(async result => {
                 const resultData = await result.data;
@@ -154,11 +166,14 @@ class App extends Component {
                         const { startPos, endPos, zoomLevel } = JSON.parse(
                             el.figures
                         );
-                        return new CustomOverlay({
-                            position: { startPos, endPos },
-                            naverMap: map,
-                            zoom: zoomLevel
-                        }).setMap(map);
+                        if (!this.drawList.includes(el.id)) {
+                            this.drawList.push(el.id);
+                            return new CustomOverlay({
+                                position: { startPos, endPos },
+                                naverMap: map,
+                                zoom: zoomLevel
+                            }).setMap(map);
+                        }
                     });
                 } else if (result.status === 204) {
                     alert('호재 데이터 정보 없음');
@@ -200,14 +215,14 @@ class App extends Component {
                         <li
                             className="loginFavorBtn"
                             onClick={this.showModal}
-                            onKeyPress={() => {}}
+                            onKeyPress={() => { }}
                         >
                             {`My`}
                         </li>
                         <li
                             className="loginFavorBtn"
                             onClick={this.showFilterDrawingTool}
-                            onKeyPress={() => {}}
+                            onKeyPress={() => { }}
                         >
                             {`호재`}
                         </li>
