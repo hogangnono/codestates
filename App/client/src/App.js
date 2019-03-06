@@ -1,33 +1,12 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
-// import Toolbox from './Toolbox';
+import Toolbox from './Toolbox';
 import CustomOverlay from './CustomOverlay';
 import LoginModal from './LoginModal';
 import './App.less';
 
 class App extends Component {
-<<<<<<< HEAD
-    constructor(props) {
-        super(props);
-        this.state = {
-            // mapLoad: undefined,
-            name: '',
-            factor: '',
-
-            map: undefined, // Will set state to naver map instance
-            circleToggle: true, // Indicates whether to create circle
-            naver: undefined, // Will set state to window.naver
-
-            leftClick: undefined, // Will set state to leftClick listener
-            rightClick: undefined, // Will set state to rightClick listener
-
-            toggleColor: true,
-
-            mouseEvent: undefined // Will set mouse event here from listener
-        };
-    }
-=======
     state = {
         name: '',
         factor: '',
@@ -47,7 +26,6 @@ class App extends Component {
         showModal: false,
         mouseEvent: undefined // Will set mouse event here from listener
     };
->>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
 
     componentDidMount = async () => {
         const naver = window.naver;
@@ -55,27 +33,16 @@ class App extends Component {
             d3.select('#map').node(),
             this.mapOption()
         );
-<<<<<<< HEAD
-
-=======
->>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
         this.setState({ map, naver });
         this.mainPageLoad(map);
     };
 
     drawingComponent = () => {
         let startPos;
-<<<<<<< HEAD
-
-        const naver = window.naver;
-        const { map } = this.state;
-        const { circleToggle } = this.state;
-=======
         const naver = window.naver;
         const { map, drawingData } = this.state;
         const { circleToggle } = this.state;
         const shapeData = {};
->>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
@@ -83,11 +50,7 @@ class App extends Component {
                 // offset: x, y of screen
                 const { coord, offset } = e;
                 startPos = { coord, offset };
-<<<<<<< HEAD
-
-=======
                 shapeData.startPos = startPos;
->>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
                 naver.maps.Event.removeListener(leftClick);
             });
 
@@ -97,14 +60,6 @@ class App extends Component {
                 e => {
                     const { coord, offset } = e;
                     const endPos = { coord, offset };
-<<<<<<< HEAD
-                    new CustomOverlay({
-                        position: { startPos, endPos },
-                        naverMap: map,
-                        zoom: ''
-                    }).setMap(map);
-
-=======
                     // this.setState({ endPos });
                     // console.log('endPos', endPos);
 
@@ -117,7 +72,6 @@ class App extends Component {
                     shapeData.endPos = endPos;
                     shapeData.zoomLevel = getZoomLevel._zoom;
                     this.setState({ drawingData: [...drawingData, shapeData] });
->>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
                     naver.maps.Event.removeListener(rightClick);
                 }
             );
@@ -178,11 +132,7 @@ class App extends Component {
     };
 
     mainPageLoad = map => {
-<<<<<<< HEAD
-        const { name, factor } = this.state;
-=======
         const { name, bound } = this.state;
->>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
@@ -206,47 +156,6 @@ class App extends Component {
                 }
             })
             .catch(error => {
-<<<<<<< HEAD
-                if (error.response.status === 500) {
-                    console.log(error);
-                    alert('load fail');
-                } else {
-                    console.log(error);
-                    alert('error!');
-                }
-            });
-    };
-
-    mouseClick = e => {
-        const { circleToggle } = this.state;
-        const { toggleColor } = this.state;
-        if (e.type === 'contextmenu' && circleToggle !== true) {
-            this.setState({ toggleColor: !toggleColor });
-            this.setState({ circleToggle: !circleToggle });
-        }
-    };
-
-    render() {
-        const { toggleColor } = this.state;
-        const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
-        return (
-            <div id="wrapper">
-                <div
-                    id="map"
-                    onClick={this.mouseClick}
-                    onContextMenu={this.mouseClick}
-                    onKeyDown={this.mouseClick}
-                >
-                    {/* <Toolbox mapLoad={mapLoad} /> */}
-                </div>
-                <button
-                    type="button"
-                    className={btnClass}
-                    onClick={this.circleToggleAndEllipseAndChangeColor}
-                >
-                    {`Circle`}
-                </button>
-=======
                 // if (error.response.status === 500) {
                 //     console.log(error);
                 //     alert('load fail');
@@ -305,7 +214,6 @@ class App extends Component {
                         <Toolbox mapLoad={map} drawingData={drawingData} />
                     ) : null}
                 </div>
->>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
             </div>
         );
     }
