@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Drawing.less';
 import axios from 'axios';
+// import {
+//     FaSlash,
+//     FaCircle,
+//     FaSquareFull,
+//     FaDrawPolygon,
+//     FaArrowLeft
+// } from 'react-icons/fa';
 import upwardsPointer from './img/upwards-pointer.png';
 import downwardsPointer from './img/downwards-pointer.png';
 import Button from './Components/Button';
@@ -62,6 +69,23 @@ class Toolbox extends Component {
         const { drawingData, map } = this.props;
         return (
             <div id="drawingComponentContainer">
+                {/* <div className="drawingToolBox">
+                    <span className="drawingTools">
+                        <FaSlash className="rotateIcon1" />
+                    </span>
+                    <span className="drawingTools">
+                        <FaArrowLeft className="rotateIcon2" />
+                    </span>
+                    <span className="drawingTools">
+                        <FaSquareFull />
+                    </span>
+                    <span className="drawingTools">
+                        <FaCircle />
+                    </span>
+                    <span className="drawingTools">
+                        <FaDrawPolygon />
+                    </span>
+                </div> */}
                 <Button map={map} Shape={Circle} title="선" />
                 <Button map={map} Shape={Circle} title="화살표" />
                 <Button map={map} Shape={Circle} title="사각형" />

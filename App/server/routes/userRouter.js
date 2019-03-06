@@ -5,9 +5,8 @@ const sequelize = require('sequelize');
 const { User, Drawing, Figure } = require('../models');
 const Op = sequelize.Op;
 
-router.get('/', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
     const { name } = req.body;
-    console.log(name);
     let transaction;
     try {
         transaction = await User.sequelize.transaction();

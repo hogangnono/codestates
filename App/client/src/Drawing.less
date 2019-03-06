@@ -1,3 +1,5 @@
+@mainColor: #4d55b2;
+@white: #fff;
 body {
   font-family: Apple SD Gothic Neo, sans-serif;
   color: #333;
@@ -7,74 +9,95 @@ body {
   width: 100%;
   height: 520px;
   bottom: 0;
-}
 
-#myDrawingsContainer {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 40px 15px;
-  align-items: center;
-  box-sizing: border-box;
-  font-size: 14px;
-}
+  .drawingList {
+    font-size: 12px;
+    margin: 5px 20px;
+  }
 
-.drawingList {
-  font-size: 12px;
-  margin: 5px 20px;
-}
+  .drawingPointer {
+    width: 20px;
+    height: auto;
+  }
+  .drawingToolBox {
+    width: 100%;
+    height: 40px;
+    // background-color: red;
+  }
+  .drawingTools {
+    float: left;
+    list-style: none;
+    background-color: @white;
+    width: 16%;
+    height: 20px;
+    padding: 10px 0;
+    margin: 0 2%;
+    font-size: 13px;
+    text-align: center;
+    border-color: #c0c0c061;
+    border-radius: 3px;
+    color: @mainColor;
+    font-size: 18px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    transition-duration: 0.3s;
+    cursor: pointer;
 
-.drawingPointer {
-  width: 20px;
-  height: auto;
-}
+    .rotateIcon1 {
+      transform: rotate(90deg);
+    }
+    .rotateIcon2 {
+      transform: rotate(-45deg);
+    }
+    &:hover {
+      background-color: @mainColor;
+      color: @white;
+    }
+  }
 
-.drawingTools {
-  float: left;
-  list-style: none;
-  background-color: #ffffff;
-  width: 16%;
-  height: 20px;
-  padding: 10px 0;
-  margin: 0 2%;
-  font-size: 13px;
-  text-align: center;
-  border-color: #c0c0c061;
-  border-radius: 3px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-  transition-duration: 0.3s;
-  cursor: pointer;
-}
+  #myDrawingsContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 15px;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
 
-#saveCloseBtns {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 70px;
-  box-sizing: border-box;
-}
-.saveCloseBtn {
-  position: absolute;
-  width: 120px;
-  top: 0;
-  right: 20px;
-  text-align: center;
-  border-radius: 5px;
-  border: none;
-  padding: 10px 0;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
-  background-color: #fff;
-  font-size: 15px;
-  color: #333;
-  transition-duration: 0.2s;
-}
-.saveCloseBtn:first-child {
-  left: 20px;
-}
-.drawingTools:hover,
-.saveCloseBtn:hover {
-  background-color: #4d55b2;
-  color: white;
+  #saveCloseBtns {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    box-sizing: border-box;
+  }
+  .saveCloseBtn {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 0;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+    background-color: @white;
+    font-size: 15px;
+    color: #333;
+    transition-duration: 0.2s;
+    @media (max-width: 768px) {
+      width: 45%;
+    }
+    @media (min-width: 767px) {
+      width: 120px;
+    }
+    &:hover {
+      background-color: @mainColor;
+      color: @white;
+    }
+  }
+  .saveCloseBtn:first-child {
+    left: 20px;
+  }
 }
 
 // .lightPurple {
