@@ -22,6 +22,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/load', async (req, res) => {
     const { name, bound } = req.body;
+
     let transaction;
     try {
         transaction = await User.sequelize.transaction();
@@ -29,8 +30,10 @@ router.post('/load', async (req, res) => {
         const result = await Figure.findAll({
             include: [{ model: Drawing, where: { user_id: userId } }],
             where: {
-                center_lat: { [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01] },
-                center_lng: { [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01] }
+                center_lat: {
+                    [Op.between]: [bound._min._lat, bound._max._lat]
+                },
+                center_lng: { [Op.between]: [bound._min._lng, bound._max._lng] }
             }
         });
         await transaction.commit();
