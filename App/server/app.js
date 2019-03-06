@@ -17,7 +17,7 @@ const models = require('./models/index');
 models.sequelize
     .sync()
     .then(() => {
-        models.factor.bulkCreate(category, { ignoreDuplicates: true });
+        models.Factor.bulkCreate(category, { ignoreDuplicates: true });
         console.log(' DB 연결 성공');
     })
     .catch(err => {
