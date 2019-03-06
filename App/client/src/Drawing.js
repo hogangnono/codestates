@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Drawing.less';
 import axios from 'axios';
-import {
-    FaSlash,
-    FaCircle,
-    FaSquareFull,
-    FaDrawPolygon,
-    FaArrowLeft
-} from 'react-icons/fa';
+// import {
+//     FaSlash,
+//     FaCircle,
+//     FaSquareFull,
+//     FaDrawPolygon,
+//     FaArrowLeft
+// } from 'react-icons/fa';
 import upwardsPointer from './img/upwards-pointer.png';
 import downwardsPointer from './img/downwards-pointer.png';
 import Button from './Components/Button';
@@ -69,7 +69,7 @@ class Toolbox extends Component {
         const { drawingData, map } = this.props;
         return (
             <div id="drawingComponentContainer">
-                <div className="drawingToolBox">
+                {/* <div className="drawingToolBox">
                     <span className="drawingTools">
                         <FaSlash className="rotateIcon1" />
                     </span>
@@ -85,12 +85,12 @@ class Toolbox extends Component {
                     <span className="drawingTools">
                         <FaDrawPolygon />
                     </span>
-                </div>
-                {/* <Button map={map} Shape={Circle} title="선" />
+                </div> */}
+                <Button map={map} Shape={Circle} title="선" />
                 <Button map={map} Shape={Circle} title="화살표" />
                 <Button map={map} Shape={Circle} title="사각형" />
                 <Button map={map} Shape={Circle} title="원" />
-                <Button map={map} Shape={Circle} title="다각형" /> */}
+                <Button map={map} Shape={Circle} title="다각형" />
                 <div id="myDrawingsContainer">
                     <span className="subTitle">저장된 호재 그림</span>
                     {myDrawingsVisible ? visible : invisible}
