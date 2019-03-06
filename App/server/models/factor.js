@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    const factor = sequelize.define(
-        'factor',
+    const Factor = sequelize.define(
+        'Factor',
         {
             id: {
                 type: Sequelize.INTEGER,
@@ -19,8 +19,6 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    factor.associate = models => {
-        // associations can be defined here
-    };
-    return factor;
+    Factor.associate = models => {};
+    return Factor;
 };
