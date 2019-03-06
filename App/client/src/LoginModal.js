@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './LoginModal.less';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 
 class LoginModal extends Component {
@@ -7,14 +8,42 @@ class LoginModal extends Component {
         showModal: PropTypes.func.isRequired
     };
 
+    state = {
+        name: ''
+    };
+
+    componentDidMount() {}
+
     handleLogin = () => {
-        console.log('로그인버튼을 눌렀습니다.');
-        localStorage.setItem('isLogin', JSON.stringify(true));
-        this.closeModal();
+        const { showModal } = this.props;
+        const { name } = this.state;
+        axios
+            .get('http://127.0.0.1:3001/user/', {
+                name
+            })
+            .then(async result => {
+                const resultData = await result.data;
+                if (result.status === 200 || result.status === 201) {
+                    alert(resultData);
+                } else if (result.status === 204) {
+                    alert('호재 데이터 정보 없음');
+                }
+            })
+            .catch(error => {
+                alert(error);
+            });
+        showModal();
+    };
+
+    handleChange = e => {
+        this.setState({
+            name: e.target.value
+        });
     };
 
     render() {
         const { showModal } = this.props;
+        const { name } = this.state;
         return (
             <div id="loginModalContainer">
                 <div className="loginModal">
@@ -33,6 +62,8 @@ class LoginModal extends Component {
                             className="textInputBox"
                             type="text"
                             placeholder="이름(ID)을 입력해주세요!"
+                            value={name}
+                            onChange={this.handleChange}
                         />
                         <button
                             type="button"

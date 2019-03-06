@@ -57,7 +57,7 @@ class Toolbox extends Component {
                 />
             </div>
         );
-        // const { drawingData } = this.props;
+        const { drawingData } = this.props;
         return (
             <div id="drawingComponentContainer">
                 <span className="drawingTools">선</span>
@@ -70,12 +70,8 @@ class Toolbox extends Component {
                     {myDrawingsVisible ? visible : invisible}
                 </div>
                 {myDrawingsVisible ? (
-                    <div>
+                    <div className="userFactorList">
                         <p className="drawingList">drawing1</p>
-                        <p className="drawingList">drawing2</p>
-                        <p className="drawingList">drawing3</p>
-                        <p className="drawingList">drawing4</p>
-                        <p className="drawingList">drawing5</p>
                     </div>
                 ) : null}
                 <div id="saveCloseBtns">
@@ -83,7 +79,7 @@ class Toolbox extends Component {
                         type="button"
                         className="saveCloseBtn"
                         onClick={() => {
-                            // this.handleAxios('user/save', drawingData);
+                            this.handleAxios('user/save', drawingData);
                         }}
                     >
                         {`저장`}

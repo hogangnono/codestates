@@ -20,11 +20,9 @@ module.exports = (sequelize, DataTypes) => {
             freezeTableName: true
         }
     );
-    // figure.removeAttribute('updatedAt');
     Figure.associate = models => {
         Figure.belongsTo(models.Factor, { foreignKey: 'factor_id' });
         Figure.belongsTo(models.Drawing, { foreignKey: 'drawing_id' });
-        // associations can be defined here
     };
     return Figure;
 };

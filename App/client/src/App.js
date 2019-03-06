@@ -14,6 +14,7 @@ class App extends Component {
     state = {
         name: '',
         factor: '',
+        bound: '',
 
         map: undefined, // Will set state to naver map instance
         circleToggle: true, // Indicates whether to create circle
@@ -135,11 +136,11 @@ class App extends Component {
     };
 
     mainPageLoad = map => {
-        const { name, factor } = this.state;
+        const { name, bound } = this.state;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
-                factor
+                bound
             })
             .then(async result => {
                 const resultData = await result.data;
