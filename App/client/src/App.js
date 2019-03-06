@@ -4,6 +4,9 @@ import * as d3 from 'd3';
 import axios from 'axios';
 import Toolbox from './Toolbox';
 import CustomOverlay from './CustomOverlay';
+// import CustomPolygon from './CustomPolygon';
+// import CustomRect from './CustomRect';
+// import CustomArrow from './CustomArrow';
 import LoginModal from './LoginModal';
 import './App.less';
 
@@ -11,8 +14,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // mapLoad: undefined,
-            name: 'jihun',
+            name: '',
             factor: '',
 
             map: undefined, // Will set state to naver map instance
@@ -21,18 +23,14 @@ class App extends Component {
 
             leftClick: undefined, // Will set state to leftClick listener
             rightClick: undefined, // Will set state to rightClick listener
-
             toggleColor: true,
 
             // mouseEvent: undefined, // Will set mouse event here from listener
             drawingData: [],
             showFilterDrawingTool: false,
             showModal: false,
-
             mouseEvent: undefined // Will set mouse event here from listener
-
         };
-
     }
 
     componentDidMount = async () => {
@@ -41,12 +39,10 @@ class App extends Component {
             d3.select('#map').node(),
             this.mapOption()
         );
-        // this.drawingComponent();
-        this.setState({ map: map });
-        this.setState({ naver: naver });
+        this.setState({ map, naver });
 
         this.mainPageLoad(map);
-    }
+    };
 
     drawingComponent = () => {
         let startPos;
@@ -67,24 +63,27 @@ class App extends Component {
                 naver.maps.Event.removeListener(leftClick);
             });
 
-            const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
+            const rightClick = naver.maps.Event.addListener(
+                map,
+                'rightclick',
+                e => {
+                    const { coord, offset } = e;
+                    const endPos = { coord, offset };
+                    // this.setState({ endPos });
+                    // console.log('endPos', endPos);
 
-                const { coord, offset } = e;
-                const endPos = { coord, offset };
-                // this.setState({ endPos });
-                // console.log('endPos', endPos);
-
-                const getZoomLevel = new CustomOverlay({
-                    position: { startPos, endPos },
-                    naverMap: map,
-                    zoom: ''
-                });
-                getZoomLevel.setMap(map);
-                shapeData.endPos = endPos;
-                shapeData.zoomLevel = getZoomLevel._zoom;
-                this.setState({ drawingData: [...drawingData, shapeData] });
-                naver.maps.Event.removeListener(rightClick);
-            });
+                    const getZoomLevel = new CustomOverlay({
+                        position: { startPos, endPos },
+                        naverMap: map,
+                        zoom: ''
+                    });
+                    getZoomLevel.setMap(map);
+                    shapeData.endPos = endPos;
+                    shapeData.zoomLevel = getZoomLevel._zoom;
+                    this.setState({ drawingData: [...drawingData, shapeData] });
+                    naver.maps.Event.removeListener(rightClick);
+                }
+            );
 
             this.setState({ rightClick: rightClick });
             this.setState({ leftClick: leftClick });
@@ -115,7 +114,7 @@ class App extends Component {
         this.drawingComponent();
         this.ellipseState();
         this.removeListener();
-    }
+    };
 
     mapOption = () => {
         const naver = window.naver;
@@ -141,7 +140,7 @@ class App extends Component {
         return mapOptions;
     };
 
-    mainPageLoad = (map) => {
+    mainPageLoad = map => {
         const { name, factor } = this.state;
         axios
             .post('http://127.0.0.1:3001/user/load', {
@@ -166,45 +165,58 @@ class App extends Component {
                 }
             })
             .catch(error => {
-                if (error.response.status === 500) {
-                    console.log(error);
-                    alert('load fail');
-                } else {
-                    console.log(error);
-                    alert('error!');
-                }
+                // if (error.response.status === 500) {
+                //     console.log(error);
+                //     alert('load fail');
+                // } else {
+                //     console.log(error);
+                //     alert('error!');
+                // }
+                alert(error);
             });
     };
-
 
     showFilterDrawingTool = () => {
         const { showFilterDrawingTool } = this.state;
         this.setState({ showFilterDrawingTool: !showFilterDrawingTool });
-    }
+    };
 
     showModal = () => {
         console.log('my버튼을 눌렀다!');
         this.setState({ showModal: true });
-    }
+    };
 
     render() {
-        const { map, toggleColor, drawingData, showFilterDrawingTool, showModal } = this.state;
-        const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
+        const {
+            map,
+            drawingData,
+            showFilterDrawingTool,
+            showModal
+        } = this.state;
         return (
             <div id="wrapper">
                 <div id="map">
                     <ul id="loginFavorContainer">
-                        <li className="loginFavorBtn" onClick={this.showModal} onKeyPress={() => { }}>My</li>
-                        <li className="loginFavorBtn" onClick={this.showFilterDrawingTool} onKeyPress={() => { }}>호재</li>
+                        <li
+                            className="loginFavorBtn"
+                            onClick={this.showModal}
+                            onKeyPress={() => {}}
+                        >
+                            {`My`}
+                        </li>
+                        <li
+                            className="loginFavorBtn"
+                            onClick={this.showFilterDrawingTool}
+                            onKeyPress={() => {}}
+                        >
+                            {`호재`}
+                        </li>
                     </ul>
-                    {showModal ? (
-                        <LoginModal />
-                    ) : null}
+                    {showModal ? <LoginModal /> : null}
                     {showFilterDrawingTool ? (
                         <Toolbox mapLoad={map} drawingdata={drawingData} />
                     ) : null}
                 </div>
-                <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor}>Circle</button>
             </div>
         );
     }

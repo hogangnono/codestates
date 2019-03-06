@@ -1,20 +1,20 @@
 /* eslint-disable linebreak-style */
 import * as d3 from 'd3';
 import './CustomOverlay.less';
-var CustomOverlay = function (options) {
+var CustomOverlay = function(options) {
     // make a div that contain shape and whole info
     const div = document.createElement('div');
     // make a input that contaion description of shape
     var input = document.createElement('div');
     input.innerHTML = '<input type="text" placeholder="호재를 입력해주세요"></input>';
-    input.addEventListener('click', (e) => {
+    input.addEventListener('click', e => {
         e.target.focus();
     });
 
     // make deletebutton
     const deleteButton = document.createElement('div');
     deleteButton.className = 'deleteButton';
-    deleteButton.addEventListener('click', (e) => {
+    deleteButton.addEventListener('click', e => {
         this.onRemove();
     });
 
@@ -39,26 +39,26 @@ CustomOverlay.prototype = new window.naver.maps.OverlayView();
 
 CustomOverlay.prototype.constructor = CustomOverlay;
 
-CustomOverlay.prototype.setPosition = function (position) {
+CustomOverlay.prototype.setPosition = function(position) {
     this._startPos = position.startPos;
     this._endPos = position.endPos;
     this.draw();
 };
 
-CustomOverlay.prototype.getPosition = function () {
+CustomOverlay.prototype.getPosition = function() {
     const start = {};
     start.x = Math.min(this._startPos.coord.x, this._endPos.coord.x);
     start.y = Math.max(this._startPos.coord.y, this._endPos.coord.y);
     return start;
 };
 
-CustomOverlay.prototype.onAdd = function () {
+CustomOverlay.prototype.onAdd = function() {
     var overlayLayer = this.getPanes().overlayLayer;
 
     overlayLayer.appendChild(this._element);
 };
 
-CustomOverlay.prototype.draw = function () {
+CustomOverlay.prototype.draw = function() {
     if (!this.getMap()) {
         return;
     }
@@ -77,8 +77,8 @@ CustomOverlay.prototype.draw = function () {
     // calculate the div width and height(Subtraction of two coordinates) with zoom ratio
     const width = Math.abs(this._endPos.offset.x - this._startPos.offset.x);
     const height = Math.abs(this._endPos.offset.y - this._startPos.offset.y);
-    const widthRatio = width * (2 ** ratio);
-    const heightRatio = height * (2 ** ratio);
+    const widthRatio = width * 2 ** ratio;
+    const heightRatio = height * 2 ** ratio;
 
     // match the div and svg size
     this._element.style.width = `${widthRatio}px`;
@@ -92,12 +92,11 @@ CustomOverlay.prototype.draw = function () {
     const ellipse = svg.childNodes[0];
     ellipse.style.cx = widthRatio / 2;
     ellipse.style.cy = heightRatio / 2;
-    ellipse.style.rx = (width / 2) * (2 ** ratio);
-    ellipse.style.ry = (height / 2) * (2 ** ratio);
-
+    ellipse.style.rx = (width / 2) * 2 ** ratio;
+    ellipse.style.ry = (height / 2) * 2 ** ratio;
 };
 
-CustomOverlay.prototype.onRemove = function () {
+CustomOverlay.prototype.onRemove = function() {
     this._element.parentNode.removeChild(this._element);
 };
 
