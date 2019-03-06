@@ -192,6 +192,8 @@ class App extends Component {
                             className="loginFavorBtn"
                             onClick={this.showModal}
                             onKeyPress={this.showModal}
+                            role="button"
+                            tabIndex="0"
                         >
                             {`My`}
                         </div>
@@ -199,6 +201,8 @@ class App extends Component {
                             className="loginFavorBtn"
                             onClick={this.showFilterDrawingTool}
                             onKeyPress={this.showFilterDrawingTool}
+                            role="button"
+                            tabIndex="0"
                         >
                             {`호재`}
                         </div>

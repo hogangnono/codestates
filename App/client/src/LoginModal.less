@@ -1,3 +1,12 @@
+@modalWidth: 500px;
+@modalHeight: 300px;
+@modalInnerWidth: 300px;
+@modalInnerHeight: 300px;
+
+.topLeft {
+  top: 50%;
+  left: 50%;
+}
 #loginModalContainer {
   position: absolute;
   z-index: 10;
@@ -12,23 +21,21 @@
     position: relative;
     background-color: #fff;
     border-radius: 10px;
-    top: 50%;
-    left: 50%;
-    margin-top: -150px;
-    margin-left: -250px;
-    width: 500px;
-    height: 300px;
+    .topLeft;
+    margin-top: -@modalHeight / 2;
+    margin-left: -@modalWidth / 2;
+    width: @modalWidth;
+    height: @modalHeight;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 
     .inputContainer {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      margin-top: -75px;
-      margin-left: -150px;
-      width: 300px;
-      height: 150px;
-      line-height: 150px;
+      .topLeft;
+      margin-top: -@modalInnerHeight / 2;
+      margin-left: -@modalInnerWidth / 2;
+      width: @modalInnerWidth;
+      height: @modalInnerHeight;
+      line-height: @modalInnerHeight / 2;
 
       .username {
         color: #aaa;
