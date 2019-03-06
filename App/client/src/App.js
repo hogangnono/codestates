@@ -60,11 +60,11 @@ class App extends Component {
     };
 
     mainPageLoad = map => {
-        const { name, factor } = this.state;
+        const { name, bound } = this.state;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
-                factor
+                bound
             })
             .then(async result => {
                 const resultData = await result.data;
@@ -101,8 +101,8 @@ class App extends Component {
     };
 
     showModal = () => {
-        console.log('my버튼을 눌렀다!');
-        this.setState({ showModal: true });
+        const { showModal } = this.state;
+        this.setState({ showModal: !showModal });
     };
 
     render() {
@@ -131,9 +131,11 @@ class App extends Component {
                             {`호재`}
                         </li>
                     </ul>
-                    {showModal ? <LoginModal /> : null}
+                    {showModal ? (
+                        <LoginModal showModal={this.showModal} />
+                    ) : null}
                     {showFilterDrawingTool ? (
-                        <Toolbox mapLoad={map} drawingdata={drawingData} />
+                        <Toolbox mapLoad={map} drawingData={drawingData} />
                     ) : null}
                 </div>
             </div>

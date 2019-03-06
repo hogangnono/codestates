@@ -17,10 +17,8 @@ module.exports = (sequelize, DataTypes) => {
             freezeTableName: true
         }
     );
-    // Drawing.removeAttribute('updatedAt');
     Drawing.associate = models => {
         Drawing.belongsTo(models.User, { foreignKey: 'user_id' });
-        // associations can be defined here
     };
     return Drawing;
 };
