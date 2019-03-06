@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    const figure = sequelize.define(
-        'figure',
+    const Figure = sequelize.define(
+        'Figure',
         {
             id: {
                 type: Sequelize.INTEGER,
@@ -16,15 +16,15 @@ module.exports = (sequelize, DataTypes) => {
             drawing_id: DataTypes.INTEGER
         },
         {
-            timestamps: true,
+            timestamps: false,
             freezeTableName: true
         }
     );
     // figure.removeAttribute('updatedAt');
-    figure.associate = models => {
-        figure.belongsTo(models.factor, { foreignKey: 'factor_id' });
-        figure.belongsTo(models.drawing, { foreignKey: 'drawing_id' });
+    Figure.associate = models => {
+        Figure.belongsTo(models.Factor, { foreignKey: 'factor_id' });
+        Figure.belongsTo(models.Drawing, { foreignKey: 'drawing_id' });
         // associations can be defined here
     };
-    return figure;
+    return Figure;
 };
