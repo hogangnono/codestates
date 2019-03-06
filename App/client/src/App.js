@@ -41,12 +41,9 @@ class App extends Component {
             this.mapOption()
         );
         this.setState({ map, naver });
-
         this.bound = map.getBounds();
         this.mainPageLoad(map);
-        this.drawingComponent();
         naver.maps.Event.addListener(map, 'idle', e => {
-            console.log('변화');
             this.bound = map.getBounds();
             this.mainPageLoad(map);
             this.DataDelete();
@@ -159,6 +156,8 @@ class App extends Component {
                 bound
             })
             .then(async result => {
+                console.log('load data');
+                console.log(result.data.length);
                 const resultData = await result.data;
                 if (result.status === 200 || result.status === 201) {
                     resultData.map(el => {
@@ -198,9 +197,9 @@ class App extends Component {
             const position = {};
             position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
             position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
-
-            if (!this.bound.hasLatLng(position)) {
-                this.drawList[key].setMap(null);
+            if (position.y < this.bound._min._lat - 0.01 || position.y > this.bound._max._lat + 0.01
+                || position.x < this.bound._min._lng - 0.01 || position.x > this.bound._max._lng + 0.01) {
+                value.setMap(null);
                 delete this.drawList[key];
             }
         });
