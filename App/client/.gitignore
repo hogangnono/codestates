@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+config
 
 # testing
 /coverage
@@ -22,6 +23,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 configure
+<<<<<<< HEAD
 configures
 config
+=======
+>>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
 

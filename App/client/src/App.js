@@ -3,12 +3,11 @@ import * as d3 from 'd3';
 import axios from 'axios';
 // import Toolbox from './Toolbox';
 import CustomOverlay from './CustomOverlay';
-// import CustomPolygon from './CustomPolygon';
-// import CustomRect from './CustomRect';
-// import CustomArrow from './CustomArrow';
+import LoginModal from './LoginModal';
 import './App.less';
 
 class App extends Component {
+<<<<<<< HEAD
     constructor(props) {
         super(props);
         this.state = {
@@ -28,24 +27,55 @@ class App extends Component {
             mouseEvent: undefined // Will set mouse event here from listener
         };
     }
+=======
+    state = {
+        name: '',
+        factor: '',
+        bound: '',
 
-    componentDidMount() {
+        map: undefined, // Will set state to naver map instance
+        circleToggle: true, // Indicates whether to create circle
+        naver: undefined, // Will set state to window.naver
+
+        leftClick: undefined, // Will set state to leftClick listener
+        rightClick: undefined, // Will set state to rightClick listener
+        toggleColor: true,
+
+        // mouseEvent: undefined, // Will set mouse event here from listener
+        drawingData: [],
+        showFilterDrawingTool: false,
+        showModal: false,
+        mouseEvent: undefined // Will set mouse event here from listener
+    };
+>>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
+
+    componentDidMount = async () => {
         const naver = window.naver;
-        const map = new naver.maps.Map(
+        const map = await new naver.maps.Map(
             d3.select('#map').node(),
             this.mapOption()
         );
+<<<<<<< HEAD
 
+=======
+>>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
         this.setState({ map, naver });
         this.mainPageLoad(map);
-    }
+    };
 
     drawingComponent = () => {
         let startPos;
+<<<<<<< HEAD
 
         const naver = window.naver;
         const { map } = this.state;
         const { circleToggle } = this.state;
+=======
+        const naver = window.naver;
+        const { map, drawingData } = this.state;
+        const { circleToggle } = this.state;
+        const shapeData = {};
+>>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
 
         if (circleToggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
@@ -53,7 +83,11 @@ class App extends Component {
                 // offset: x, y of screen
                 const { coord, offset } = e;
                 startPos = { coord, offset };
+<<<<<<< HEAD
 
+=======
+                shapeData.startPos = startPos;
+>>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
                 naver.maps.Event.removeListener(leftClick);
             });
 
@@ -63,12 +97,27 @@ class App extends Component {
                 e => {
                     const { coord, offset } = e;
                     const endPos = { coord, offset };
+<<<<<<< HEAD
                     new CustomOverlay({
                         position: { startPos, endPos },
                         naverMap: map,
                         zoom: ''
                     }).setMap(map);
 
+=======
+                    // this.setState({ endPos });
+                    // console.log('endPos', endPos);
+
+                    const getZoomLevel = new CustomOverlay({
+                        position: { startPos, endPos },
+                        naverMap: map,
+                        zoom: ''
+                    });
+                    getZoomLevel.setMap(map);
+                    shapeData.endPos = endPos;
+                    shapeData.zoomLevel = getZoomLevel._zoom;
+                    this.setState({ drawingData: [...drawingData, shapeData] });
+>>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
                     naver.maps.Event.removeListener(rightClick);
                 }
             );
@@ -110,7 +159,7 @@ class App extends Component {
             zoomControl: true,
             zoomControlOptions: {
                 style: naver.maps.ZoomControlStyle.SMALL,
-                position: naver.maps.Position.TOP_RIGHT
+                position: naver.maps.Position.LEFT_BOTTOM
             },
             logoControl: true,
             logoControlOptions: {
@@ -122,18 +171,22 @@ class App extends Component {
             },
             mapDataControl: true,
             mapDataControlOptions: {
-                position: naver.maps.Position.BOTTOM_LEFT
+                position: naver.maps.Position.BOTTOM_RIGHT
             }
         };
         return mapOptions;
     };
 
     mainPageLoad = map => {
+<<<<<<< HEAD
         const { name, factor } = this.state;
+=======
+        const { name, bound } = this.state;
+>>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
-                factor
+                bound
             })
             .then(async result => {
                 const resultData = await result.data;
@@ -153,6 +206,7 @@ class App extends Component {
                 }
             })
             .catch(error => {
+<<<<<<< HEAD
                 if (error.response.status === 500) {
                     console.log(error);
                     alert('load fail');
@@ -192,6 +246,66 @@ class App extends Component {
                 >
                     {`Circle`}
                 </button>
+=======
+                // if (error.response.status === 500) {
+                //     console.log(error);
+                //     alert('load fail');
+                // } else {
+                //     console.log(error);
+                //     alert('error!');
+                // }
+                alert(error);
+            });
+    };
+
+    showFilterDrawingTool = () => {
+        const { showFilterDrawingTool } = this.state;
+        this.setState({ showFilterDrawingTool: !showFilterDrawingTool });
+    };
+
+    showModal = () => {
+        const { showModal } = this.state;
+        this.setState({ showModal: !showModal });
+    };
+
+    render() {
+        const {
+            map,
+            drawingData,
+            showFilterDrawingTool,
+            showModal
+        } = this.state;
+        return (
+            <div id="wrapper">
+                <div id="map">
+                    <div id="loginFavorContainer">
+                        <div
+                            className="loginFavorBtn"
+                            onClick={this.showModal}
+                            onKeyPress={this.showModal}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`My`}
+                        </div>
+                        <div
+                            className="loginFavorBtn"
+                            onClick={this.showFilterDrawingTool}
+                            onKeyPress={this.showFilterDrawingTool}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`호재`}
+                        </div>
+                    </div>
+                    {showModal ? (
+                        <LoginModal showModal={this.showModal} />
+                    ) : null}
+                    {showFilterDrawingTool ? (
+                        <Toolbox mapLoad={map} drawingData={drawingData} />
+                    ) : null}
+                </div>
+>>>>>>> c085460b61915ba3ff644e4f8c63ceac0f27e402
             </div>
         );
     }
