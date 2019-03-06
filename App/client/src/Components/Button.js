@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import '../App.less';
+// import '../App.less';
 import PropTypes from 'prop-types';
+import '../Drawing.less';
 
 
 class Button extends Component {
@@ -82,6 +83,7 @@ class Button extends Component {
 
 
     createShape = () => {
+        console.log('We are reaching all the way here.');
         const { map } = this.state;
         this.drawingComponent(map);
         this.toggleState();
@@ -89,13 +91,16 @@ class Button extends Component {
     }
 
     render() {
-        const { toggle } = this.state;
-        const btnClass = toggle ? 'lightPurple' : 'darkPurple';
+        // const { toggle } = this.state;
+        // const btnClass = toggle ? 'lightPurple' : 'darkPurple';
+        const { title } = this.props;
 
         return (
-            <button type="button" className={btnClass} onClick={this.createShape} ref={this.setWrapperRef}>
-                Circle
-            </button>
+            <div>
+                <span type="button" className="drawingTools" onClick={this.createShape} onKeyPress={() => { }} ref={this.setWrapperRef}>
+                    {title}
+                </span>
+            </div>
         );
     }
 }

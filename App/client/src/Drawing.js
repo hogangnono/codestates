@@ -3,6 +3,8 @@ import './Drawing.less';
 import axios from 'axios';
 import upwardsPointer from './img/upwards-pointer.png';
 import downwardsPointer from './img/downwards-pointer.png';
+import Button from './Components/Button';
+import Circle from './CustomOverlay/Circle';
 
 class Toolbox extends Component {
     state = {
@@ -29,12 +31,12 @@ class Toolbox extends Component {
     render() {
         const { myDrawingsVisible } = this.state;
         const visible = (
-            <div onClick={this._foldMyDrawings} onKeyPress={() => {}}>
+            <div onClick={this._foldMyDrawings} onKeyPress={() => { }}>
                 <img className="drawingPointer" src={upwardsPointer} alt="▴" />
             </div>
         );
         const invisible = (
-            <div onClick={this._foldMyDrawings} onKeyPress={() => {}}>
+            <div onClick={this._foldMyDrawings} onKeyPress={() => { }}>
                 <img
                     className="drawingPointer"
                     src={downwardsPointer}
@@ -42,14 +44,14 @@ class Toolbox extends Component {
                 />
             </div>
         );
-        const { drawingdata } = this.props;
+        const { drawingdata, map } = this.props;
         return (
             <div id="drawingComponentContainer">
-                <span className="drawingTools">선</span>
-                <span className="drawingTools">화살표</span>
-                <span className="drawingTools">사각형</span>
-                <span className="drawingTools">원</span>
-                <span className="drawingTools">다각형</span>
+                <Button map={map} Shape={Circle} title="선" />
+                <Button map={map} Shape={Circle} title="화살표" />
+                <Button map={map} Shape={Circle} title="사각형" />
+                <Button map={map} Shape={Circle} title="원" />
+                <Button map={map} Shape={Circle} title="다각형" />
                 <div id="myDrawingsContainer">
                     <span className="subTitle">저장된 호재 그림</span>
                     {myDrawingsVisible ? visible : invisible}

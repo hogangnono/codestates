@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
 import Toolbox from './Toolbox';
-import CustomOverlay from './CustomOverlay';
+// import CustomOverlay from './CustomOverlay';
 // import CustomPolygon from './CustomPolygon';
 // import CustomRect from './CustomRect';
 // import CustomArrow from './CustomArrow';
