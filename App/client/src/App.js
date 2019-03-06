@@ -12,9 +12,7 @@ class App extends Component {
         this.state = {
             name: 'jihun',
             factor: '',
-            map: undefined, // Will set state to naver map instance
-            toggle: false // Indicates whether to create circle
-            // toggleColor: true
+            map: undefined // Will set state to naver map instance
         };
 
     }
@@ -89,20 +87,8 @@ class App extends Component {
             });
     };
 
-    // mouseClick = (e) => {
-    //     const { toggle } = this.state;
-    //     // const { toggleColor } = this.state;
-    //     if (e.type === 'contextmenu' && toggle !== true) {
-
-    //         this.setState({ toggle: !toggle });
-    //         // this.setState({ circleToggle: !circleToggle });
-    //     }
-    // }
-
     render() {
         const { map } = this.state;
-        // const { toggle } = this.state;
-        // const { toggleColor } = this.state;
         return (
             <div id="wrapper">
                 <div id="map">

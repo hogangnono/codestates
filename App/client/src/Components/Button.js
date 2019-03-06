@@ -83,7 +83,6 @@ class Button extends Component {
 
     createShape = () => {
         const { map } = this.state;
-        // this.changeColor();
         this.drawingComponent(map);
         this.toggleState();
         this.removeListener();
