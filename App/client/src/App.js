@@ -15,10 +15,8 @@ import Circle from './CustomOverlay/Circle';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.bound = '';
-        this.drawList = {};
         this.state = {
-            name: 'jihun',
+            name: '',
             factor: '',
             drawingData: [],
             showFilterDrawingTool: false,
@@ -32,14 +30,9 @@ class App extends Component {
             d3.select('#map').node(),
             this.mapOption()
         );
-        this.setState({ map, naver });
-        this.bound = map.getBounds();
+
+        this.setState({ map: map });
         this.mainPageLoad(map);
-        naver.maps.Event.addListener(map, 'idle', e => {
-            this.bound = map.getBounds();
-            this.mainPageLoad(map);
-            this.DataDelete();
-        });
     };
 
     mapOption = () => {
@@ -67,32 +60,24 @@ class App extends Component {
     };
 
     mainPageLoad = map => {
-        const { name, factor } = this.state;
-        const bound = this.bound;
+        const { name, bound } = this.state;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
-                factor,
                 bound
             })
             .then(async result => {
-                console.log('load data');
-                console.log(result.data.length);
                 const resultData = await result.data;
                 if (result.status === 200 || result.status === 201) {
                     resultData.map(el => {
                         const { startPos, endPos, zoomLevel } = JSON.parse(
                             el.figures
                         );
-                        if (!(el.id in this.drawList)) {
-                            const overlay = new CustomOverlay({
-                                position: { startPos, endPos },
-                                naverMap: map,
-                                zoom: zoomLevel
-                            });
-                            overlay.setMap(map);
-                            this.drawList[el.id] = overlay;
-                        }
+                        return new Circle({
+                            position: { startPos, endPos },
+                            naverMap: map,
+                            zoom: zoomLevel
+                        }).setMap(map);
                     });
                 } else if (result.status === 204) {
                     alert('호재 데이터 정보 없음');
@@ -109,22 +94,6 @@ class App extends Component {
                 alert(error);
             });
     };
-
-    DataDelete = () => {
-        Object.entries(this.drawList).forEach(el => {
-            const key = el[0];
-            const value = el[1];
-            const position = {};
-            position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
-            position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
-            if (position.y < this.bound._min._lat - 0.01 || position.y > this.bound._max._lat + 0.01
-                || position.x < this.bound._min._lng - 0.01 || position.x > this.bound._max._lng + 0.01) {
-                value.setMap(null);
-                delete this.drawList[key];
-            }
-        });
-
-    }
 
     showFilterDrawingTool = () => {
         const { showFilterDrawingTool } = this.state;
