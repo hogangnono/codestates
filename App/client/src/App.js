@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
 // import Toolbox from './Toolbox';
-import CircleButton from './Components/CircleButton';
+import Button from './Components/Button';
 import './App.less';
 import Circle from './CustomOverlay/Circle';
 
@@ -12,9 +12,7 @@ class App extends Component {
         this.state = {
             name: 'jihun',
             factor: '',
-            map: undefined, // Will set state to naver map instance
-            circleToggle: true, // Indicates whether to create circle
-            toggleColor: true
+            map: undefined // Will set state to naver map instance
         };
 
     }
@@ -27,7 +25,6 @@ class App extends Component {
         );
 
         this.setState({ map: map });
-
         this.mainPageLoad(map);
     }
 
@@ -90,25 +87,14 @@ class App extends Component {
             });
     };
 
-    mouseClick = (e) => {
-        const { circleToggle } = this.state;
-        const { toggleColor } = this.state;
-        if (e.type === 'contextmenu' && circleToggle !== true) {
-
-            this.setState({ toggleColor: !toggleColor });
-            this.setState({ circleToggle: !circleToggle });
-        }
-    }
-
     render() {
         const { map } = this.state;
-        const { circleToggle } = this.state;
-        const { toggleColor } = this.state;
+
         return (
             <div id="wrapper">
-                <div id="map" onClick={this.mouseClick} onContextMenu={this.mouseClick} onKeyDown={this.mouseClick}>
+                <div id="map">
                 </div>
-                <CircleButton map={map} circleToggle={circleToggle} toggleColor={toggleColor} />
+                <Button map={map} Shape={Circle} />
             </div>
         );
     }

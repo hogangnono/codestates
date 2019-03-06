@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import '../App.less';
 import PropTypes from 'prop-types';
-import Circle from '../CustomOverlay/Circle';
 
 
-class CircleButton extends Component {
+class Button extends Component {
     constructor(props) {
         super(props);
         this.state = {
             map: props.map, // Set this up as props
-            toggleColor: props.toggleColor,
-            circleToggle: props.circleToggle,
+            toggle: true,
             leftClick: undefined,
             rightClick: undefined
         };
@@ -20,7 +18,7 @@ class CircleButton extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener('mousedown', this.handleClickOutside);
+        document.addEventListener('mouseup', this.handleClickOutside);
     }
 
     setWrapperRef(node) {
@@ -28,12 +26,10 @@ class CircleButton extends Component {
     }
 
     handleClickOutside(event) {
-        const { toggleColor } = this.state;
-        const { circleToggle } = this.state;
+        const { toggle } = this.state;
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            if (event.button === 2 && circleToggle !== true) {
-                this.setState({ toggleColor: !toggleColor });
-                this.setState({ circleToggle: !circleToggle });
+            if (event.button === 2 && toggle !== true) {
+                this.setState({ toggle: !toggle });
             }
         }
     }
@@ -42,9 +38,10 @@ class CircleButton extends Component {
         let startPos;
         const naver = window.naver;
         const { map } = this.props;
-        const { circleToggle } = this.state;
+        const { Shape } = this.props;
+        const { toggle } = this.state;
 
-        if (circleToggle === true) {
+        if (toggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
                 const { coord, offset } = e;
                 startPos = { coord, offset };
@@ -55,7 +52,7 @@ class CircleButton extends Component {
             const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
                 const { coord, offset } = e;
                 const endPos = { coord, offset };
-                new Circle({
+                new Shape({
                     position: { startPos, endPos },
                     naverMap: map,
                     zoom: ''
@@ -67,12 +64,12 @@ class CircleButton extends Component {
             this.setState({ rightClick: rightClick });
             this.setState({ leftClick: leftClick });
         }
-        this.setState({ circleToggle: !circleToggle }); // Complete shape and turn off toggle
+        this.setState({ toggle: !toggle }); // Complete shape and turn off toggle
     };
 
-    ellipseState() {
-        const { circleToggle } = this.state;
-        this.setState({ circleToggle: !circleToggle });
+    toggleState() {
+        const { toggle } = this.state;
+        this.setState({ toggle: !toggle });
     }
 
     removeListener() {
@@ -83,33 +80,28 @@ class CircleButton extends Component {
         naver.maps.Event.removeListener(rightClick);
     }
 
-    changeColor() {
-        const { toggleColor } = this.state;
-        this.setState({ toggleColor: !toggleColor });
-    }
 
-    circleToggleAndEllipseAndChangeColor = () => {
+    createShape = () => {
         const { map } = this.state;
-        this.changeColor();
         this.drawingComponent(map);
-        this.ellipseState();
+        this.toggleState();
         this.removeListener();
     }
 
     render() {
-        const { toggleColor } = this.state;
-        const btnClass = toggleColor ? 'lightPurple' : 'darkPurple';
+        const { toggle } = this.state;
+        const btnClass = toggle ? 'lightPurple' : 'darkPurple';
 
         return (
-            <button type="button" className={btnClass} onClick={this.circleToggleAndEllipseAndChangeColor} ref={this.setWrapperRef}>
+            <button type="button" className={btnClass} onClick={this.createShape} ref={this.setWrapperRef}>
                 Circle
             </button>
         );
     }
 }
 
-CircleButton.propTypes = {
+Button.propTypes = {
     children: PropTypes.element.isRequired
 };
 
-export default CircleButton;
+export default Button;
