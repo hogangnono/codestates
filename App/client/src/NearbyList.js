@@ -1,11 +1,16 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import NearbyDrawings from './NearbyDrawings';
 import MyDrawings from './MyDrawings';
 import './NearbyList.less';
 
 class NearbyList extends Component {
+    static propTypes = {
+        mapLoad: PropTypes.object.isRequired
+    };
+
     state = {
         onNearbyDrawings: true,
         onMyDrawings: false,
@@ -25,8 +30,8 @@ class NearbyList extends Component {
     }
 
     getCenterLatLng = () => {
-        const { map } = this.props;
-        const mapCenter = map.getCenter();
+        const { mapLoad } = this.props;
+        const mapCenter = mapLoad.getCenter();
         console.log('mapCenter : ', mapCenter);
         // this.setState({ mapCenter });
     }
@@ -54,8 +59,8 @@ class NearbyList extends Component {
     };
 
     render() {
-        const { map } = this.props;
-        console.log('render의 map이에요.\n지금 map의 값 : ', map);
+        const { mapLoad } = this.props;
+        console.log('render의 map이에요.\n지금 map의 값 : ', mapLoad);
         const {
             nearbyListBackgroundColor,
             myDrawingsBackgroundColor,
@@ -64,7 +69,7 @@ class NearbyList extends Component {
             onNearbyDrawings,
             onMyDrawings
         } = this.state;
-        if (!map) {
+        if (!mapLoad) {
             console.log('render return 전에 if 문에 들어왔어요!');
             return (<div></div>);
         }

@@ -2,25 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Drawing.less';
 import axios from 'axios';
-import upwardsPointer from './img/upwards-pointer.png';
-import downwardsPointer from './img/downwards-pointer.png';
 import Button from './Components/Button';
 import Circle from './CustomOverlay/Circle';
+import MyDrawingElement from './MyDrawingElement';
 
 class Toolbox extends Component {
     static propTypes = {
         drawingData: PropTypes.array.isRequired,
-        map: PropTypes.object.isRequired
+        map: PropTypes.object.isRequired,
+        closeFn: PropTypes.func.isRequired
     };
 
     state = {
-        myDrawingsVisible: true
-    };
-
-    _foldMyDrawings = () => {
-        const { myDrawingsVisible } = this.state;
-        this.setState({ myDrawingsVisible: !myDrawingsVisible });
-    };
+        index: 0,
+        theNumberOfFigure: []
+    }
 
     handleAxios = (parseURL, body) => {
         const basicURL = 'http://localhost:3001/';
@@ -34,66 +30,31 @@ class Toolbox extends Component {
             });
     };
 
+    checkDrawStatus = () => {
+        const { index, theNumberOfFigure } = this.state;
+        this.setState({
+            theNumberOfFigure: [...theNumberOfFigure, index + 1],
+            index: index + 1
+        });
+    }
+
     render() {
-        const { myDrawingsVisible } = this.state;
-        const visible = (
-            <div
-                onClick={this._foldMyDrawings}
-                onKeyPress={this._foldMyDrawings}
-                role="button"
-                tabIndex="0"
-            >
-                <img className="drawingPointer" src={upwardsPointer} alt="▴" />
-            </div>
-        );
-        const invisible = (
-            <div
-                onClick={this._foldMyDrawings}
-                onKeyPress={this._foldMyDrawings}
-                role="button"
-                tabIndex="0"
-            >
-                <img
-                    className="drawingPointer"
-                    src={downwardsPointer}
-                    alt="▼"
-                />
-            </div>
-        );
-        const { drawingData, map } = this.props;
+        const { drawingData, map, closeFn } = this.props;
+        const { theNumberOfFigure } = this.state;
         return (
             <div id="drawingComponentContainer">
-                {/* <div className="drawingToolBox">
-                    <span className="drawingTools">
-                        <FaSlash className="rotateIcon1" />
-                    </span>
-                    <span className="drawingTools">
-                        <FaArrowLeft className="rotateIcon2" />
-                    </span>
-                    <span className="drawingTools">
-                        <FaSquareFull />
-                    </span>
-                    <span className="drawingTools">
-                        <FaCircle />
-                    </span>
-                    <span className="drawingTools">
-                        <FaDrawPolygon />
-                    </span>
-        </div> */}
-                <Button map={map} Shape={Circle} icons="line" />
-                <Button map={map} Shape={Circle} icons="arrow" />
-                <Button map={map} Shape={Circle} icons="square" />
-                <Button map={map} Shape={Circle} icons="circle" />
-                <Button map={map} Shape={Circle} icons="polygon" />
+                <Button map={map} Shape={Circle} icons="line" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Circle} icons="square" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} />
                 <div id="myDrawingsContainer">
-                    <span className="subTitle">저장된 호재 그림</span>
-                    {myDrawingsVisible ? visible : invisible}
+                    { theNumberOfFigure.map(el => {
+                        return (
+                            <MyDrawingElement key={'Idrew' + el} />
+                        );
+                    }) }
                 </div>
-                {myDrawingsVisible ? (
-                    <div className="userFactorList">
-                        <p className="drawingList">drawing1</p>
-                    </div>
-                ) : null}
                 <div id="saveCloseBtns">
                     <button
                         type="button"
@@ -104,7 +65,11 @@ class Toolbox extends Component {
                     >
                         {`저장`}
                     </button>
-                    <button type="button" className="saveCloseBtn">
+                    <button
+                        type="button"
+                        className="saveCloseBtn"
+                        onClick={() => closeFn()}
+                    >
                         {`닫기`}
                     </button>
                 </div>

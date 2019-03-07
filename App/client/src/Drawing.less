@@ -57,11 +57,17 @@ body {
   #myDrawingsContainer {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 40px 15px;
-    align-items: center;
+    align-items: left;
     box-sizing: border-box;
     font-size: 14px;
+    .drewShape {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 0 10px 10px;
+    }
   }
 
   #saveCloseBtns {
