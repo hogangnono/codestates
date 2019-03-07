@@ -11,11 +11,14 @@ module.exports = (sequelize, DataTypes) => {
             center_lat: DataTypes.DOUBLE,
             center_lng: DataTypes.DOUBLE,
             figures: DataTypes.STRING,
+            description: DataTypes.STRING,
             css: DataTypes.STRING,
             factor_id: DataTypes.INTEGER,
             drawing_id: DataTypes.INTEGER
         },
         {
+            charset: 'utf8',
+            collate: 'utf8_unicode_ci',
             timestamps: false,
             freezeTableName: true
         }

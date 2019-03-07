@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import axios from 'axios';
 import Toolbox from './Toolbox';
 import LoginModal from './LoginModal';
+import NearbyList from './NearbyList';
 import './App.less';
 import Circle from './CustomOverlay/Circle';
 // import Button from './Components/Button'
@@ -10,8 +11,10 @@ import Circle from './CustomOverlay/Circle';
 class App extends Component {
     constructor(props) {
         super(props);
+        this.bound = '';
+        this.drawList = {};
         this.state = {
-            name: '',
+            name: 'jihun',
             // factor: '',
             drawingData: [],
             showFilterDrawingTool: false,
@@ -27,7 +30,13 @@ class App extends Component {
         );
 
         this.setState({ map: map });
+        this.bound = map.getBounds();
         this.mainPageLoad(map);
+        naver.maps.Event.addListener(map, 'idle', e => {
+            this.bound = map.getBounds();
+            this.mainPageLoad(map);
+            this.DataDelete();
+        });
     };
 
     mapOption = () => {
@@ -55,7 +64,8 @@ class App extends Component {
     };
 
     mainPageLoad = map => {
-        const { name, bound } = this.state;
+        const { name } = this.state;
+        const bound = this.bound;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
@@ -68,11 +78,15 @@ class App extends Component {
                         const { startPos, endPos, zoomLevel } = JSON.parse(
                             el.figures
                         );
-                        return new Circle({
-                            position: { startPos, endPos },
-                            naverMap: map,
-                            zoom: zoomLevel
-                        }).setMap(map);
+                        if (!(el.id in this.drawList)) {
+                            const overlay = new Circle({
+                                position: { startPos, endPos },
+                                naverMap: map,
+                                zoom: zoomLevel
+                            });
+                            overlay.setMap(map);
+                            this.drawList[el.id] = overlay;
+                        }
                     });
                 } else if (result.status === 204) {
                     alert('호재 데이터 정보 없음');
@@ -89,6 +103,23 @@ class App extends Component {
                 alert(error);
             });
     };
+
+    DataDelete = () => {
+        Object.entries(this.drawList).forEach(el => {
+            const key = el[0];
+            const value = el[1];
+            const position = {};
+            // reference point
+            position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
+            position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
+            if (position.y < this.bound._min._lat - 0.01 || position.y > this.bound._max._lat + 0.01
+                || position.x < this.bound._min._lng - 0.01 || position.x > this.bound._max._lng + 0.01) {
+                value.setMap(null);
+                delete this.drawList[key];
+            }
+        });
+
+    }
 
     showFilterDrawingTool = () => {
         const { showFilterDrawingTool } = this.state;
@@ -110,7 +141,8 @@ class App extends Component {
         return (
             <div id="wrapper">
                 <div id="map">
-                    <div id="loginFavorContainer">
+                    <NearbyList map={map} />
+                    <ul id="loginFavorContainer">
                         <div
                             className="loginFavorBtn"
                             onClick={this.showModal}
@@ -129,7 +161,7 @@ class App extends Component {
                         >
                             {`호재`}
                         </div>
-                    </div>
+                    </ul>
                     {showModal ? (
                         <LoginModal showModal={this.showModal} />
                     ) : null}
