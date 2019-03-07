@@ -1,11 +1,10 @@
 /* eslint-disable camelcase */
-const express = require('express');
-const router = express.Router();
 const sequelize = require('sequelize');
-const { User, Drawing, Figure, Factor } = require('../models');
+const { User, Drawing, Figure, Factor } = require('../../models');
 const Op = sequelize.Op;
 
-router.post('/', async (req, res, next) => {
+/* Signup */
+exports.signup = async (req, res) => {
     const { name } = req.body;
     let transaction;
     try {
@@ -17,9 +16,10 @@ router.post('/', async (req, res, next) => {
         await transaction.rollback();
         res.status(500).send('이름 저장에 실패했습니다.');
     }
-});
+};
 
-router.post('/load', async (req, res) => {
+/* Load data */
+exports.load = async (req, res) => {
     const { name, factor, bound } = req.body;
     let transaction;
     // not login
@@ -41,7 +41,6 @@ router.post('/load', async (req, res) => {
                     }
                 });
                 await transaction.commit();
-                console.log('result: ', result);
                 res.status(200).json(result);
             } catch (err) {
                 console.log('/load ERROR :: Reason :: ', err);
@@ -72,9 +71,10 @@ router.post('/load', async (req, res) => {
             }
         }
     }
-});
+};
 
-router.post('/save', async (req, res, next) => {
+/* Save data */
+exports.save = async (req, res) => {
     let transaction;
     const { name, data } = req.body;
     try {
@@ -102,9 +102,10 @@ router.post('/save', async (req, res, next) => {
         await transaction.rollback();
         res.status(400).send('데이터 저장에 실패했습니다.');
     }
-});
+};
 
-router.delete('/deleteAll', async (req, res) => {
+/* Delete all data */
+exports.deleteAll = async (req, res) => {
     const { name } = req.body;
     let transaction;
     try {
@@ -128,6 +129,4 @@ router.delete('/deleteAll', async (req, res) => {
         await transaction.rollback();
         res.status(500).send('유저 호재 정보 삭제 실패.');
     }
-});
-
-module.exports = router;
+};
