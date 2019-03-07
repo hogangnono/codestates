@@ -10,11 +10,11 @@ import Circle from './CustomOverlay/Circle';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.bound = '';
+        this.bound = undefined;
         this.drawList = {};
         this.state = {
-            name: 'jihun',
-            factor: '',
+            name: undefined,
+            factor: undefined,
             drawingData: [],
             showFilterDrawingTool: false,
             showModal: false
@@ -33,6 +33,7 @@ class App extends Component {
         this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
+            console.log(this.bound);
             this.mainPageLoad(map);
             this.DataDelete();
         });
@@ -63,15 +64,21 @@ class App extends Component {
     };
 
     mainPageLoad = map => {
-        const { name } = this.state;
+        const { name, factor } = this.state;
         const bound = this.bound;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
+                factor,
                 bound
             })
             .then(async result => {
-                const resultData = await result.data;
+                const data = result.data;
+                const resultData = await data[0];
+                // eslint-disable-next-line no-unused-vars
+                const userData = await data[1];
+                // if there is user data
+
                 if (result.status === 200 || result.status === 201) {
                     resultData.map(el => {
                         const { startPos, endPos, zoomLevel } = JSON.parse(

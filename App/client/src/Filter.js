@@ -117,6 +117,7 @@ class Toolbox extends Component {
                                 onKeyPress={() => {}}
                                 role="button"
                                 tabIndex="0"
+                                key={factor}
                                 // style={this.styleToggle(check1)}
                             >
                                 {'# '}
@@ -135,7 +136,7 @@ class Toolbox extends Component {
                         tabIndex="0"
                         style={{
                             color: check7 ? '#fff' : '#4d55b2',
-                            'background-color': check7 ? '#4d55b2' : '#fff'
+                            backgroundColor: check7 ? '#4d55b2' : '#fff'
                         }}
                     >
                         내 정보 보기
