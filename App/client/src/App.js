@@ -10,8 +10,10 @@ import Circle from './CustomOverlay/Circle';
 class App extends Component {
     constructor(props) {
         super(props);
+        this.bound = '';
+        this.drawList = [];
         this.state = {
-            name: '',
+            name: 'jihun',
             // factor: '',
             drawingData: [],
             showFilterDrawingTool: false,
@@ -27,7 +29,12 @@ class App extends Component {
         );
 
         this.setState({ map: map });
+        this.bound = map.getBounds();
         this.mainPageLoad(map);
+        naver.maps.Event.addListener(map, 'idle', e => {
+            this.bound = map.getBounds();
+            this.mainPageLoad(map);
+        });
     };
 
     mapOption = () => {
@@ -55,7 +62,8 @@ class App extends Component {
     };
 
     mainPageLoad = map => {
-        const { name, bound } = this.state;
+        const { name } = this.state;
+        const bound = this.bound;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
@@ -68,11 +76,14 @@ class App extends Component {
                         const { startPos, endPos, zoomLevel } = JSON.parse(
                             el.figures
                         );
-                        return new Circle({
-                            position: { startPos, endPos },
-                            naverMap: map,
-                            zoom: zoomLevel
-                        }).setMap(map);
+                        if (!this.drawList.includes(el.id)) {
+                            this.drawList.push(el.id);
+                            return new Circle({
+                                position: { startPos, endPos },
+                                naverMap: map,
+                                zoom: zoomLevel
+                            }).setMap(map);
+                        }
                     });
                 } else if (result.status === 204) {
                     alert('호재 데이터 정보 없음');
