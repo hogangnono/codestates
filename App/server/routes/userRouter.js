@@ -33,7 +33,8 @@ router.post('/load', async (req, res) => {
                     [Op.between]: [bound._min._lat, bound._max._lat]
                 },
                 center_lng: { [Op.between]: [bound._min._lng, bound._max._lng] }
-            }
+            },
+            transaction
         });
         await transaction.commit();
         res.status(200).json(result);
@@ -63,7 +64,6 @@ router.post('/save', async (req, res, next) => {
                 };
                 return returnFigure;
             });
-
             await Figure.bulkCreate(dataWithDrawingId);
             await transaction.commit();
             res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
