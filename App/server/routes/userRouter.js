@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const sequelize = require('sequelize');
-const { User, Drawing, Figure } = require('../models');
+const { User, Drawing, Figure, Factor } = require('../models');
 const Op = sequelize.Op;
 
 router.post('/', async (req, res, next) => {
@@ -20,29 +20,57 @@ router.post('/', async (req, res, next) => {
 });
 
 router.post('/load', async (req, res) => {
-    const { name, bound } = req.body;
-
+    const { name, factor, bound } = req.body;
     let transaction;
-    try {
-        transaction = await User.sequelize.transaction();
-        const userId = await User.findOne({ where: { name } }).get('id');
-        const result = await Figure.findAll({
-            include: [{ model: Drawing, where: { user_id: userId } }],
-            where: {
-                center_lat: {
-                    [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
-                },
-                center_lng: {
-                    [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
-                }
+    // not login
+    if (!name) {
+        // not filtering
+        if (!factor) {
+            try {
+                transaction = await User.sequelize.transaction();
+                // const userId = await User.findOne({ where: { name } }).get('id');
+                const result = await Figure.findAll({
+                    // include: [{ model: Drawing, where: { user_id: userId } }], //include => join을 함
+                    where: {
+                        center_lat: {
+                            [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
+                        },
+                        center_lng: {
+                            [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
+                        }
+                    }
+                });
+                await transaction.commit();
+                console.log('result: ', result);
+                res.status(200).json(result);
+            } catch (err) {
+                console.log('/load ERROR :: Reason :: ', err);
+                await transaction.rollback();
+                res.status(400).send('데이터 요청에 실패했습니다.');
             }
-        });
-        await transaction.commit();
-        res.status(200).json(result);
-    } catch (err) {
-        console.log('/load ERROR :: Reason :: ', err);
-        await transaction.rollback();
-        res.status(400).send('데이터 요청에 실패했습니다.');
+        } else { // filtering factor
+            try {
+                transaction = await User.sequelize.transaction();
+                const factorId = await Factor.findOne({ where: { name: factor } }).get('id');
+                const result = await Figure.findAll({
+                    where: {
+                        factor_id: factorId,
+                        center_lat: {
+                            [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
+                        },
+                        center_lng: {
+                            [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
+                        }
+                    }
+                });
+                await transaction.commit();
+                res.status(200).json(result);
+            } catch (err) {
+                console.log('/load ERROR :: Reason :: ', err);
+                await transaction.rollback();
+                res.status(400).send('데이터 요청에 실패했습니다.');
+            }
+        }
     }
 });
 
