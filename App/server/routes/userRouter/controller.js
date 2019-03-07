@@ -22,55 +22,77 @@ exports.signup = async (req, res) => {
 exports.load = async (req, res) => {
     const { name, factor, bound } = req.body;
     let transaction;
-    // not login
-    if (!name) {
-        // not filtering
-        if (!factor) {
-            try {
-                transaction = await User.sequelize.transaction();
-                // const userId = await User.findOne({ where: { name } }).get('id');
-                const result = await Figure.findAll({
-                    // include: [{ model: Drawing, where: { user_id: userId } }], //include => join을 함
-                    where: {
-                        center_lat: {
-                            [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
-                        },
-                        center_lng: {
-                            [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
-                        }
+    const data = [];
+    // not filtering
+    if (!factor) {
+        try {
+            transaction = await User.sequelize.transaction();
+            const result = await Figure.findAll({
+                where: {
+                    center_lat: {
+                        [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
+                    },
+                    center_lng: {
+                        [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
                     }
-                });
-                await transaction.commit();
-                res.status(200).json(result);
-            } catch (err) {
-                console.log('/load ERROR :: Reason :: ', err);
-                await transaction.rollback();
-                res.status(400).send('데이터 요청에 실패했습니다.');
-            }
-        } else { // filtering factor
-            try {
-                transaction = await User.sequelize.transaction();
-                const factorId = await Factor.findOne({ where: { name: factor } }).get('id');
-                const result = await Figure.findAll({
-                    where: {
-                        factor_id: factorId,
-                        center_lat: {
-                            [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
-                        },
-                        center_lng: {
-                            [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
-                        }
+                }
+            });
+            await transaction.commit();
+            data.push(result);
+        } catch (err) {
+            console.log('/load ERROR :: Reason :: ', err);
+            await transaction.rollback();
+            res.status(400).send('데이터 요청에 실패했습니다.');
+        }
+    } else { // filtering factor
+        try {
+            transaction = await User.sequelize.transaction();
+            const factorId = await Factor.findOne({ where: { name: factor } }).get('id');
+            const result = await Figure.findAll({
+                where: {
+                    factor_id: factorId,
+                    center_lat: {
+                        [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
+                    },
+                    center_lng: {
+                        [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
                     }
-                });
-                await transaction.commit();
-                res.status(200).json(result);
-            } catch (err) {
-                console.log('/load ERROR :: Reason :: ', err);
-                await transaction.rollback();
-                res.status(400).send('데이터 요청에 실패했습니다.');
-            }
+                }
+            });
+            await transaction.commit();
+            data.push(result);
+        } catch (err) {
+            console.log('/load ERROR :: Reason :: ', err);
+            await transaction.rollback();
+            res.status(400).send('데이터 요청에 실패했습니다.');
         }
     }
+
+    // when user login
+    if (name) {
+        try {
+            transaction = await User.sequelize.transaction();
+            const userId = await User.findOne({ where: { name } }).get('id');
+            const result = await Figure.findAll({
+                include: [{ model: Drawing, where: { user_id: userId } }], // include => join을 함
+                where: {
+                    center_lat: {
+                        [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
+                    },
+                    center_lng: {
+                        [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
+                    }
+                }
+            });
+            await transaction.commit();
+            data.push(result);
+        } catch (err) {
+            console.log('/load ERROR :: Reason :: ', err);
+            await transaction.rollback();
+            res.status(400).send('데이터 요청에 실패했습니다.');
+        }
+    }
+    res.status(200).json(data);
 };
 
 /* Save data */

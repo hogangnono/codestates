@@ -10,7 +10,7 @@ import Circle from './CustomOverlay/Circle';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.bound = '';
+        this.bound = undefined;
         this.drawList = {};
         this.state = {
             name: undefined,
@@ -73,8 +73,12 @@ class App extends Component {
                 bound
             })
             .then(async result => {
-                const resultData = await result.data;
-                console.log(result);
+                const data = result.data;
+                const resultData = await data[0];
+                // eslint-disable-next-line no-unused-vars
+                const userData = await data[1];
+                // if there is user data
+
                 if (result.status === 200 || result.status === 201) {
                     resultData.map(el => {
                         const { startPos, endPos, zoomLevel } = JSON.parse(
