@@ -1,55 +1,18 @@
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import './Filter.less';
-// import axios from 'axios';
-// import Circle from './CustomOverlay/Circle';
+import axios from 'axios';
+import * as d3 from 'd3';
+import Circle from './CustomOverlay/Circle';
 
 class Toolbox extends Component {
     state = {
-        name: '',
+        name: 'jihun',
         bound: '',
         factor: '',
-        check1: false,
-        check2: false,
-        check3: false,
-        check4: false,
-        check5: false,
-        check6: false,
-        check7: false
-    };
-    // _toggle = (i) => {
-    //     const { `check${i}` } = this.state;
-    //     // `this.state.check${i}`
-    //     this.setState(prevState=>({ `check${i}`: !`check${i}` });
-    // };
-
-    _toggle1 = () => {
-        const { check1 } = this.state;
-        this.setState({ check1: !check1 });
-    };
-
-    _toggle2 = () => {
-        const { check2 } = this.state;
-        this.setState({ check2: !check2 });
-    };
-
-    _toggle3 = () => {
-        const { check3 } = this.state;
-        this.setState({ check3: !check3 });
-    };
-
-    _toggle4 = () => {
-        const { check4 } = this.state;
-        this.setState({ check4: !check4 });
-    };
-
-    _toggle5 = () => {
-        const { check5 } = this.state;
-        this.setState({ check5: !check5 });
-    };
-
-    _toggle6 = () => {
-        const { check6 } = this.state;
-        this.setState({ check6: !check6 });
+        check7: false,
+        factorArray: []
     };
 
     _toggle7 = () => {
@@ -57,27 +20,91 @@ class Toolbox extends Component {
         this.setState({ check7: !check7 });
     };
 
-    styleToggle = check => {
-        const obj = {};
-        if (check) {
-            obj.color = '#4d55b2';
-            obj['border-bottom'] = '2px solid #aaa';
-        } else {
-            obj.color = '#333';
-            obj['border-bottom'] = 'none';
+    // styleToggle = check => {
+    //     const obj = {};
+    //     if (check) {
+    //         obj.color = '#4d55b2';
+    //         obj['border-bottom'] = '2px solid #aaa';
+    //     } else {
+    //         obj.color = '#333';
+    //         obj['border-bottom'] = 'none';
+    //     }
+    //     return obj;
+    // };
+
+    mapOption = () => {
+        const naver = window.naver;
+        const mapOptions = {
+            zoomControl: true,
+            zoomControlOptions: {
+                style: naver.maps.ZoomControlStyle.SMALL,
+                position: naver.maps.Position.LEFT_BOTTOM
+            },
+            logoControl: true,
+            logoControlOptions: {
+                position: naver.maps.Position.BOTTOM_RIGHT
+            },
+            scaleControl: true,
+            scaleControlOptions: {
+                position: naver.maps.Position.BOTTOM_RIGHT
+            },
+            mapDataControl: true,
+            mapDataControlOptions: {
+                position: naver.maps.Position.BOTTOM_RIGHT
+            }
+        };
+        return mapOptions;
+    };
+
+    factorLoad = async (fact, i) => {
+        // let
+        const naver = window.naver;
+        const map = await new naver.maps.Map(
+            d3.select('#map').node(),
+            this.mapOption()
+        );
+        const { name, bound, factorArray, factor } = this.state;
+        await this.setState({ factor: fact });
+        if (!factorArray.includes(fact)) {
+            await this.setState({ factorArray: [...factorArray, fact] });
         }
-        return obj;
+        axios
+            .post('http://127.0.0.1:3001/user/load', {
+                name,
+                bound,
+                factor
+            })
+            .then(async result => {
+                const resultData = await result.data;
+                if (result.status === 200 || result.status === 201) {
+                    resultData.map(el => {
+                        const { startPos, endPos, zoomLevel } = JSON.parse(
+                            el.figures
+                        );
+                        return new Circle({
+                            position: { startPos, endPos },
+                            naverMap: map,
+                            zoom: zoomLevel
+                        }).setMap(map);
+                    });
+                } else if (result.status === 204) {
+                    alert('호재 데이터 정보 없음');
+                }
+            })
+            .catch(error => {
+                alert(error);
+            });
     };
 
     render() {
         const { check7 } = this.state;
         const factorBox = [
-            '# 상권형성',
-            '# 재건축',
-            '# 공공기관/문화/대형병원',
-            '# 도로개통/확장',
-            '# 지하철개통',
-            '# 기타'
+            '상권형성',
+            '재건축',
+            '공공기관/문화/대형병원',
+            '도로개통/확장',
+            '지하철개통',
+            '기타'
         ];
         return (
             <div id="filterContainer">
@@ -86,12 +113,13 @@ class Toolbox extends Component {
                         return (
                             <div
                                 className="filterBtn"
-                                onClick={`this._toggle${i + 1}`}
-                                onKeyPress={`this._toggle${i + 1}`}
+                                onClick={() => this.factorLoad(factor)}
+                                onKeyPress={() => {}}
                                 role="button"
                                 tabIndex="0"
-                                style={this.styleToggle(`check${i + 1}`)}
+                                // style={this.styleToggle(check1)}
                             >
+                                {'# '}
                                 {factor}
                             </div>
                         );

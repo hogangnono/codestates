@@ -6,7 +6,6 @@ import LoginModal from './LoginModal';
 import NearbyList from './NearbyList';
 import './App.less';
 import Circle from './CustomOverlay/Circle';
-// import Button from './Components/Button'
 
 class App extends Component {
     constructor(props) {
@@ -15,7 +14,7 @@ class App extends Component {
         this.drawList = {};
         this.state = {
             name: 'jihun',
-            // factor: '',
+            factor: '',
             drawingData: [],
             showFilterDrawingTool: false,
             showModal: false
@@ -112,14 +111,17 @@ class App extends Component {
             // reference point
             position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
             position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
-            if (position.y < this.bound._min._lat - 0.01 || position.y > this.bound._max._lat + 0.01
-                || position.x < this.bound._min._lng - 0.01 || position.x > this.bound._max._lng + 0.01) {
+            if (
+                position.y < this.bound._min._lat - 0.01
+                || position.y > this.bound._max._lat + 0.01
+                || position.x < this.bound._min._lng - 0.01
+                || position.x > this.bound._max._lng + 0.01
+            ) {
                 value.setMap(null);
                 delete this.drawList[key];
             }
         });
-
-    }
+    };
 
     showFilterDrawingTool = () => {
         const { showFilterDrawingTool } = this.state;
