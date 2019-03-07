@@ -65,7 +65,6 @@ router.post('/save', async (req, res, next) => {
                 };
                 return returnFigure;
             });
-
             await Figure.bulkCreate(dataWithDrawingId);
             await transaction.commit();
             res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');

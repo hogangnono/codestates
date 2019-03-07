@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import axios from 'axios';
 import Toolbox from './Toolbox';
 import LoginModal from './LoginModal';
+import NearbyList from './NearbyList';
 import './App.less';
 import Circle from './CustomOverlay/Circle';
 // import Button from './Components/Button'
@@ -140,7 +141,8 @@ class App extends Component {
         return (
             <div id="wrapper">
                 <div id="map">
-                    <div id="loginFavorContainer">
+                    <NearbyList map={map} />
+                    <ul id="loginFavorContainer">
                         <div
                             className="loginFavorBtn"
                             onClick={this.showModal}
@@ -159,7 +161,7 @@ class App extends Component {
                         >
                             {`호재`}
                         </div>
-                    </div>
+                    </ul>
                     {showModal ? (
                         <LoginModal showModal={this.showModal} />
                     ) : null}
