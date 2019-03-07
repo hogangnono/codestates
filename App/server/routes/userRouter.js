@@ -30,9 +30,11 @@ router.post('/load', async (req, res) => {
             include: [{ model: Drawing, where: { user_id: userId } }],
             where: {
                 center_lat: {
-                    [Op.between]: [bound._min._lat, bound._max._lat]
+                    [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
                 },
-                center_lng: { [Op.between]: [bound._min._lng, bound._max._lng] }
+                center_lng: {
+                    [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
+                }
             }
         });
         await transaction.commit();
