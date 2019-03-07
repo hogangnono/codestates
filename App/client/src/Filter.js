@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import './Filter.less';
+// import axios from 'axios';
+// import Circle from './CustomOverlay/Circle';
+
 class Toolbox extends Component {
     state = {
+        name: '',
+        bound: '',
+        factor: '',
         check1: false,
         check2: false,
         check3: false,
@@ -10,6 +16,11 @@ class Toolbox extends Component {
         check6: false,
         check7: false
     };
+    // _toggle = (i) => {
+    //     const { `check${i}` } = this.state;
+    //     // `this.state.check${i}`
+    //     this.setState(prevState=>({ `check${i}`: !`check${i}` });
+    // };
 
     _toggle1 = () => {
         const { check1 } = this.state;
