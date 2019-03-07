@@ -197,7 +197,7 @@ class App extends Component {
         return (
             <div id="wrapper">
                 <div id="map">
-                    <NearbyList />
+                    <NearbyList map={map} />
                     <ul id="loginFavorContainer">
                         <li
                             className="loginFavorBtn"

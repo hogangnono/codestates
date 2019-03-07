@@ -15,6 +15,22 @@ class NearbyList extends Component {
         myDrawingsFontColor: '#d2d4d8'
     }
 
+    componentDidMount = () => {
+        console.log('나는 componentDidMount입니다!');
+        // const naver = window.naver;
+        // const { map } = this.props;
+        // naver.maps.Event.addListener(map, 'idle', e => {
+        //     console.log('e', e);
+        // });
+    }
+
+    getCenterLatLng = () => {
+        const { map } = this.props;
+        const mapCenter = map.getCenter();
+        console.log('mapCenter : ', mapCenter);
+        // this.setState({ mapCenter });
+    }
+
     handleOnNearbyDrawings = value => {
         this.setState({
             onNearbyDrawings: value,
@@ -33,11 +49,13 @@ class NearbyList extends Component {
             nearbyListBackgroundColor: '#fff',
             myDrawingsBackgroundColor: '#4d55b2',
             nearbyFontColor: '#d2d4d8',
-            myDrawingsFontColor: '#fff'
+            myDrawingsFontColor: '#333'
         });
     };
 
     render() {
+        const { map } = this.props;
+        console.log('render의 map이에요.\n지금 map의 값 : ', map);
         const {
             nearbyListBackgroundColor,
             myDrawingsBackgroundColor,
@@ -46,6 +64,10 @@ class NearbyList extends Component {
             onNearbyDrawings,
             onMyDrawings
         } = this.state;
+        if (!map) {
+            console.log('render return 전에 if 문에 들어왔어요!');
+            return (<div></div>);
+        }
         return (
             <div id="nearbyListContainer">
                 <div id="nearbyTabMenu">
@@ -60,7 +82,7 @@ class NearbyList extends Component {
                         onKeyPress={() => {}}>
                         {`주변 호재`}
                     </div>
-                    <div className="nearbyEachTabMenu"
+                    <div className="nearbyEachTabMenu drawing"
                         style={{
                             backgroundColor: myDrawingsBackgroundColor,
                             color: myDrawingsFontColor
