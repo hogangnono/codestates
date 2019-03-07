@@ -1,68 +1,58 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Codestates X Hogangnono
 
-## Available Scripts
+호갱노노 여기호재 서비스 웹서버
 
-In the project directory, you can run:
+## 기본 환경 설치
 
-### `npm start`
+<ul>
+<li>node@latest</li>
+<li>yarn@latest</li>
+<li>eslint-hogangnono</li>
+</ul>
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 패키지 설치
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### yarn 설치
 
-### `npm test`
+```javascript
+$ sudo npm install -g yarn
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 프로젝트 패키지 설치
 
-### `npm run build`
+```javascript
+$ yarn
+```
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Package Dependencies
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+These are installed when running `yarn` or `npm install`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [D3](https://d3js.org/)
+- [axios](https://www.npmjs.com/package/axios)
+- [prop-types](https://www.npmjs.com/package/prop-types)
+- [create-react-app](https://github.com/facebook/create-react-app)
+- [react-icons](https://www.npmjs.com/package/react-icons)
+- [Less](http://lesscss.org/)
 
-### `npm run eject`
+## Project Description
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Naver 지도 API에서 제공하는 CustomOverlayView 클래스를 이용하여 D3로 SVG 도형 그리기 기능 구현
+- 여러 도형을 Custom Overlay로 하나씩 생성 
+- Naver 지도 API 이벤트 시스템에서 제공하는 addListener와 react event listener를 연결하여 원하는 위치에 도형을 그릴 수 있는 기능
+- 현재 지도의 'Viewport’ bound data (lat, long, center point)에 따라 도형이 나타남.
+  - 드래깅에 따라서 지도에 뜨는 도형 업데이트
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Client Interface
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+![picture](https://i.imgur.com/AtPF74t.png)
+> 호재 버튼을 누르면 필터와 그리기 탭이 있는 인터페이스가 뜹니다
 
-## Learn More
+<br />
+  
+![picture](https://i.imgur.com/PSNMnxe.png)
+> My Button을 누르면 로그인 팝업창이 뜹니다
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

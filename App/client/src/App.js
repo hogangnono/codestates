@@ -13,7 +13,7 @@ class App extends Component {
         this.bound = '';
         this.drawList = {};
         this.state = {
-            name: 'jihun',
+            name: 'jihye',
             // factor: '',
             drawingData: [],
             showFilterDrawingTool: false,
