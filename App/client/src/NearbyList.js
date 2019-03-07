@@ -79,7 +79,9 @@ class NearbyList extends Component {
                         onClick={() => {
                             this.handleOnNearbyDrawings(true);
                         }}
-                        onKeyPress={() => {}}>
+                        onKeyDown={this.handleOnNearbyDrawings}
+                        role="button"
+                        tabIndex="0">
                         {`주변 호재`}
                     </div>
                     <div className="nearbyEachTabMenu drawing"
@@ -90,7 +92,9 @@ class NearbyList extends Component {
                         onClick={() => {
                             this.handleOnMyDrawings(true);
                         }}
-                        onKeyPress={() => {}}>
+                        onKeyDown={this.handleOnMyDrawings}
+                        role="button"
+                        tabIndex="0">
                         {`My 호재`}
                     </div>
                 </div>

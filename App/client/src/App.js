@@ -113,7 +113,7 @@ class App extends Component {
                 <div id="map">
                     <NearbyList map={map} />
                     <ul id="loginFavorContainer">
-                        <li
+                        <div
                             className="loginFavorBtn"
                             onClick={this.showModal}
                             onKeyPress={this.showModal}
@@ -121,7 +121,7 @@ class App extends Component {
                             tabIndex="0"
                         >
                             {`My`}
-                        </li>
+                        </div>
                         <div
                             className="loginFavorBtn"
                             onClick={this.showFilterDrawingTool}
