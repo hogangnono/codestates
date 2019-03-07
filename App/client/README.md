@@ -18,6 +18,8 @@
 $ sudo npm install -g yarn
 ```
 
+클라이언트, 서버 폴더 각각 들어가서 `npm install` or `yarn`을 설치하시고 `npm start` or `yarn start` 두 파일에서 실행시키고 자동으로 브라우저(`localhost:3000`)에서 뜹니다. 
+
 ### 프로젝트 패키지 설치
 
 ```javascript
@@ -49,12 +51,15 @@ Ejected [create-react-app](https://github.com/facebook/create-react-app) and bro
 
 
 ![picture](https://i.imgur.com/AtPF74t.png)
-> 호재 버튼을 누르면 필터와 그리기 탭이 있는 인터페이스가 뜹니다
+> 호재 버튼을 누르면 필터와 그리기 탭이 있는 인터페이스가 뜹니다.
 
 <br />
   
 ![picture](https://i.imgur.com/PSNMnxe.png)
 > My Button을 누르면 로그인 팝업창이 뜹니다. 
 
+<br />
 
+![picture](https://i.imgur.com/VxSq9w9.png)
+> 기본적으로 주변에 있는 호재 정보와 유저가 저장한 정보를 볼 수 있는 인터페이스가 뜹니다.
 
