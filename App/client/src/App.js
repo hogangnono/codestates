@@ -108,11 +108,12 @@ class App extends Component {
             const key = el[0];
             const value = el[1];
             const position = {};
+            // reference point
             position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
             position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
-
-            if (!this.bound.hasLatLng(position)) {
-                this.drawList[key].setMap(null);
+            if (position.y < this.bound._min._lat - 0.01 || position.y > this.bound._max._lat + 0.01
+                || position.x < this.bound._min._lng - 0.01 || position.x > this.bound._max._lng + 0.01) {
+                value.setMap(null);
                 delete this.drawList[key];
             }
         });
