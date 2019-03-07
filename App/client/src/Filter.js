@@ -46,97 +46,45 @@ class Toolbox extends Component {
         this.setState({ check7: !check7 });
     };
 
+    styleToggle = check => {
+        const obj = {};
+        if (check) {
+            obj.color = '#4d55b2';
+            obj['border-bottom'] = '2px solid #aaa';
+        } else {
+            obj.color = '#333';
+            obj['border-bottom'] = 'none';
+        }
+        return obj;
+    };
+
     render() {
-        const {
-            check1,
-            check2,
-            check3,
-            check4,
-            check5,
-            check6,
-            check7
-        } = this.state;
+        const { check7 } = this.state;
+        const factorBox = [
+            '# 상권형성',
+            '# 재건축',
+            '# 공공기관/문화/대형병원',
+            '# 도로개통/확장',
+            '# 지하철개통',
+            '# 기타'
+        ];
         return (
             <div id="filterContainer">
                 <div className="filterBox">
-                    <div
-                        className="filterBtn"
-                        onClick={this._toggle1}
-                        onKeyPress={this._toggle1}
-                        role="button"
-                        tabIndex="0"
-                        style={{
-                            color: check1 ? '#4d55b2' : '#333',
-                            'border-bottom': check1 ? '2px solid #aaa' : 'none'
-                        }}
-                    >
-                        # 상권형성
-                    </div>
-                    <div
-                        className="filterBtn"
-                        onClick={this._toggle2}
-                        onKeyPress={this._toggle2}
-                        role="button"
-                        tabIndex="0"
-                        style={{
-                            color: check2 ? '#4d55b2' : '#333',
-                            'border-bottom': check2 ? '2px solid #aaa' : 'none'
-                        }}
-                    >
-                        # 재건축
-                    </div>
-                    <div
-                        className="filterBtn"
-                        onClick={this._toggle3}
-                        onKeyPress={this._toggle3}
-                        role="button"
-                        tabIndex="0"
-                        style={{
-                            color: check3 ? '#4d55b2' : '#333',
-                            'border-bottom': check3 ? '2px solid #aaa' : 'none'
-                        }}
-                    >
-                        # 공공기관/문화/대형병원
-                    </div>
-                    <div
-                        className="filterBtn"
-                        onClick={this._toggle4}
-                        onKeyPress={this._toggle4}
-                        role="button"
-                        tabIndex="0"
-                        style={{
-                            color: check4 ? '#4d55b2' : '#333',
-                            'border-bottom': check4 ? '2px solid #aaa' : 'none'
-                        }}
-                    >
-                        # 도로개통/확장
-                    </div>
-                    <div
-                        className="filterBtn"
-                        onClick={this._toggle5}
-                        onKeyPress={this._toggle5}
-                        role="button"
-                        tabIndex="0"
-                        style={{
-                            color: check5 ? '#4d55b2' : '#333',
-                            'border-bottom': check5 ? '2px solid #aaa' : 'none'
-                        }}
-                    >
-                        # 지하철개통
-                    </div>
-                    <div
-                        className="filterBtn"
-                        onClick={this._toggle6}
-                        onKeyPress={this._toggle6}
-                        role="button"
-                        tabIndex="0"
-                        style={{
-                            color: check6 ? '#4d55b2' : '#333',
-                            'border-bottom': check6 ? '2px solid #aaa' : 'none'
-                        }}
-                    >
-                        # 기타
-                    </div>
+                    {factorBox.map((factor, i) => {
+                        return (
+                            <div
+                                className="filterBtn"
+                                onClick={`this._toggle${i + 1}`}
+                                onKeyPress={`this._toggle${i + 1}`}
+                                role="button"
+                                tabIndex="0"
+                                style={this.styleToggle(`check${i + 1}`)}
+                            >
+                                {factor}
+                            </div>
+                        );
+                    })}
                 </div>
 
                 <div className="buttonBox">
