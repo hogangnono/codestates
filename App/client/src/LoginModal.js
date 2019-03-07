@@ -52,7 +52,7 @@ class LoginModal extends Component {
                         role="button"
                         tabIndex="0"
                     >
-                        x
+                        {`x`}
                     </div>
                     <div className="inputContainer">
                         <span className="username">이름 </span>
@@ -70,7 +70,7 @@ class LoginModal extends Component {
                             onClick={this.handleLogin}
                             onKeyDown={this.handleLogin}
                         >
-                            확인
+                            {`확인`}
                         </div>
                     </div>
                 </div>
