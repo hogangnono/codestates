@@ -12,13 +12,11 @@ class LoginModal extends Component {
         name: ''
     };
 
-    componentDidMount() {}
-
     handleLogin = () => {
         const { showModal } = this.props;
         const { name } = this.state;
         axios
-            .get('http://127.0.0.1:3001/user/', {
+            .post('http://127.0.0.1:3001/user/', {
                 name
             })
             .then(async result => {
@@ -65,13 +63,15 @@ class LoginModal extends Component {
                             value={name}
                             onChange={this.handleChange}
                         />
-                        <button
-                            type="button"
-                            title="로그인"
+                        <div
+                            className="loginButton"
+                            role="button"
+                            tabIndex="0"
                             onClick={this.handleLogin}
+                            onKeyDown={this.handleLogin}
                         >
                             확인
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
