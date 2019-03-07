@@ -11,7 +11,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.bound = '';
-        this.drawList = [];
+        this.drawList = {};
         this.state = {
             name: 'jihun',
             // factor: '',
@@ -34,6 +34,7 @@ class App extends Component {
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
+            this.DataDelete();
         });
     };
 
@@ -76,13 +77,14 @@ class App extends Component {
                         const { startPos, endPos, zoomLevel } = JSON.parse(
                             el.figures
                         );
-                        if (!this.drawList.includes(el.id)) {
-                            this.drawList.push(el.id);
-                            return new Circle({
+                        if (!(el.id in this.drawList)) {
+                            const overlay = new Circle({
                                 position: { startPos, endPos },
                                 naverMap: map,
                                 zoom: zoomLevel
-                            }).setMap(map);
+                            });
+                            overlay.setMap(map);
+                            this.drawList[el.id] = overlay;
                         }
                     });
                 } else if (result.status === 204) {
@@ -100,6 +102,22 @@ class App extends Component {
                 alert(error);
             });
     };
+
+    DataDelete = () => {
+        Object.entries(this.drawList).forEach(el => {
+            const key = el[0];
+            const value = el[1];
+            const position = {};
+            position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
+            position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
+
+            if (!this.bound.hasLatLng(position)) {
+                this.drawList[key].setMap(null);
+                delete this.drawList[key];
+            }
+        });
+
+    }
 
     showFilterDrawingTool = () => {
         const { showFilterDrawingTool } = this.state;
