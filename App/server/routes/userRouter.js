@@ -32,16 +32,10 @@ router.post('/load', async (req, res) => {
                 center_lat: {
                     [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
                 },
-<<<<<<< HEAD
-                center_lng: { [Op.between]: [bound._min._lng, bound._max._lng] }
-            },
-            transaction
-=======
                 center_lng: {
                     [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
                 }
             }
->>>>>>> b2b1fca2f8fb7e130d42720df5dcc11b49f344d7
         });
         await transaction.commit();
         res.status(200).json(result);
