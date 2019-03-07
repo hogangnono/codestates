@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
 import Toolbox from './Toolbox';
-// import CustomOverlay from './CustomOverlay';
 import LoginModal from './LoginModal';
 import './App.less';
 import Circle from './CustomOverlay/Circle';
@@ -13,7 +12,7 @@ class App extends Component {
         super(props);
         this.state = {
             name: '',
-            factor: '',
+            // factor: '',
             drawingData: [],
             showFilterDrawingTool: false,
             showModal: false

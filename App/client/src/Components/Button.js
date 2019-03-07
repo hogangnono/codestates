@@ -1,10 +1,22 @@
+/* eslint-disable no-nested-ternary */
 import React, { Component } from 'react';
-// import '../App.less';
+import {
+    FaSlash,
+    FaCircle,
+    FaSquareFull,
+    FaDrawPolygon,
+    FaArrowLeft
+} from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import '../Drawing.less';
 
-
 class Button extends Component {
+    static propTypes = {
+        icons: PropTypes.string.isRequired,
+        map: PropTypes.object.isRequired,
+        Shape: PropTypes.func.isRequired
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -50,17 +62,21 @@ class Button extends Component {
                 naver.maps.Event.removeListener(leftClick);
             });
 
-            const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
-                const { coord, offset } = e;
-                const endPos = { coord, offset };
-                new Shape({
-                    position: { startPos, endPos },
-                    naverMap: map,
-                    zoom: ''
-                }).setMap(map);
+            const rightClick = naver.maps.Event.addListener(
+                map,
+                'rightclick',
+                e => {
+                    const { coord, offset } = e;
+                    const endPos = { coord, offset };
+                    new Shape({
+                        position: { startPos, endPos },
+                        naverMap: map,
+                        zoom: ''
+                    }).setMap(map);
 
-                naver.maps.Event.removeListener(rightClick);
-            });
+                    naver.maps.Event.removeListener(rightClick);
+                }
+            );
 
             this.setState({ rightClick: rightClick });
             this.setState({ leftClick: leftClick });
@@ -81,31 +97,47 @@ class Button extends Component {
         naver.maps.Event.removeListener(rightClick);
     }
 
-
     createShape = () => {
         const { map } = this.state;
         this.drawingComponent(map);
         this.toggleState();
         this.removeListener();
-    }
+    };
 
     render() {
         // const { toggle } = this.state;
         // const btnClass = toggle ? 'lightPurple' : 'darkPurple';
-        const { title } = this.props;
-
+        const { icons } = this.props;
         return (
             <div>
-                <span type="button" className="drawingTools" onClick={this.createShape} onKeyPress={() => { }} ref={this.setWrapperRef}>
-                    {title}
+                <span
+                    role="button"
+                    tabIndex="0"
+                    className="drawingTools"
+                    onClick={this.createShape}
+                    onKeyPress={this.createShape}
+                    ref={this.setWrapperRef}
+                >
+                    {icons === 'line' ? (
+                        <FaSlash className="rotateIcon1" />
+                    ) : icons === 'arrow' ? (
+                        <FaArrowLeft className="rotateIcon2" />
+                    ) : icons === 'square' ? (
+                        <FaSquareFull />
+                    ) : icons === 'circle' ? (
+                        <FaCircle />
+                    ) : (
+                        <FaDrawPolygon />
+                    )}
                 </span>
             </div>
         );
     }
 }
+// <Shape className="rotateIcon1 rotateIcon2" />
 
-Button.propTypes = {
-    children: PropTypes.element.isRequired
-};
+// Button.propTypes = {
+//     children: PropTypes.element.isRequired
+// };
 
 export default Button;

@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Drawing.less';
 import axios from 'axios';
-// import {
-//     FaSlash,
-//     FaCircle,
-//     FaSquareFull,
-//     FaDrawPolygon,
-//     FaArrowLeft
-// } from 'react-icons/fa';
 import upwardsPointer from './img/upwards-pointer.png';
 import downwardsPointer from './img/downwards-pointer.png';
 import Button from './Components/Button';
@@ -16,7 +9,8 @@ import Circle from './CustomOverlay/Circle';
 
 class Toolbox extends Component {
     static propTypes = {
-        drawingData: PropTypes.array.isRequired
+        drawingData: PropTypes.array.isRequired,
+        map: PropTypes.object.isRequired
     };
 
     state = {
@@ -85,12 +79,12 @@ class Toolbox extends Component {
                     <span className="drawingTools">
                         <FaDrawPolygon />
                     </span>
-                </div> */}
-                <Button map={map} Shape={Circle} title="선" />
-                <Button map={map} Shape={Circle} title="화살표" />
-                <Button map={map} Shape={Circle} title="사각형" />
-                <Button map={map} Shape={Circle} title="원" />
-                <Button map={map} Shape={Circle} title="다각형" />
+        </div> */}
+                <Button map={map} Shape={Circle} icons="line" />
+                <Button map={map} Shape={Circle} icons="arrow" />
+                <Button map={map} Shape={Circle} icons="square" />
+                <Button map={map} Shape={Circle} icons="circle" />
+                <Button map={map} Shape={Circle} icons="polygon" />
                 <div id="myDrawingsContainer">
                     <span className="subTitle">저장된 호재 그림</span>
                     {myDrawingsVisible ? visible : invisible}

@@ -6,7 +6,8 @@ import './Toolbox.less';
 
 class Toolbox extends Component {
     static propTypes = {
-        drawingData: PropTypes.array.isRequired
+        drawingData: PropTypes.array.isRequired,
+        mapLoad: PropTypes.object.isRequired
     };
 
     state = {
@@ -62,7 +63,7 @@ class Toolbox extends Component {
                         onClick={() => {
                             this.handleOnFilter(true);
                         }}
-                        onKeyPress={() => { }}
+                        onKeyPress={() => {}}
                         role="button"
                         tabIndex="0"
                     >
@@ -77,7 +78,7 @@ class Toolbox extends Component {
                         onClick={() => {
                             this.handleOnDrawing(true);
                         }}
-                        onKeyPress={() => { }}
+                        onKeyPress={() => {}}
                         role="button"
                         tabIndex="0"
                     >
@@ -86,7 +87,9 @@ class Toolbox extends Component {
                 </div>
                 <div>
                     {onFilter ? <Filter /> : null}
-                    {onDrawing ? <Drawing map={mapLoad} drawingdata={drawingData} /> : null}
+                    {onDrawing ? (
+                        <Drawing map={mapLoad} drawingData={drawingData} />
+                    ) : null}
                 </div>
             </div>
         );
