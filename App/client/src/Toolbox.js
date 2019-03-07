@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Filter from './Filter';
 import Drawing from './Drawing';
 import './Toolbox.less';
 
 class Toolbox extends Component {
+    static propTypes = {
+        drawingData: PropTypes.array.isRequired,
+        mapLoad: PropTypes.object.isRequired
+    };
+
     state = {
         onFilter: true,
         onDrawing: false,
@@ -36,7 +42,7 @@ class Toolbox extends Component {
     };
 
     render() {
-        const { drawingdata } = this.props;
+        const { drawingData, mapLoad } = this.props;
         const {
             backgroundBlueForFilterTab,
             backgroundBlueForDrawingTab,
@@ -58,6 +64,8 @@ class Toolbox extends Component {
                             this.handleOnFilter(true);
                         }}
                         onKeyPress={() => {}}
+                        role="button"
+                        tabIndex="0"
                     >
                         {`필터`}
                     </div>
@@ -71,13 +79,17 @@ class Toolbox extends Component {
                             this.handleOnDrawing(true);
                         }}
                         onKeyPress={() => {}}
+                        role="button"
+                        tabIndex="0"
                     >
                         {`그리기`}
                     </div>
                 </div>
                 <div>
                     {onFilter ? <Filter /> : null}
-                    {onDrawing ? <Drawing drawingdata={drawingdata} /> : null}
+                    {onDrawing ? (
+                        <Drawing map={mapLoad} drawingData={drawingData} />
+                    ) : null}
                 </div>
             </div>
         );
