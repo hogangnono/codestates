@@ -1,11 +1,16 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import NearbyDrawings from './NearbyDrawings';
 import MyDrawings from './MyDrawings';
 import './NearbyList.less';
 
 class NearbyList extends Component {
+    static propTypes = {
+        map: PropTypes.object.isRequired
+    };
+
     state = {
         onNearbyDrawings: true,
         onMyDrawings: false,
@@ -13,7 +18,7 @@ class NearbyList extends Component {
         myDrawingsBackgroundColor: '#fff',
         nearbyFontColor: '#fff',
         myDrawingsFontColor: '#d2d4d8'
-    }
+    };
 
     componentDidMount = () => {
         console.log('나는 componentDidMount입니다!');
@@ -22,14 +27,14 @@ class NearbyList extends Component {
         // naver.maps.Event.addListener(map, 'idle', e => {
         //     console.log('e', e);
         // });
-    }
+    };
 
     getCenterLatLng = () => {
         const { map } = this.props;
         const mapCenter = map.getCenter();
         console.log('mapCenter : ', mapCenter);
         // this.setState({ mapCenter });
-    }
+    };
 
     handleOnNearbyDrawings = value => {
         this.setState({
@@ -66,12 +71,13 @@ class NearbyList extends Component {
         } = this.state;
         if (!map) {
             console.log('render return 전에 if 문에 들어왔어요!');
-            return (<div></div>);
+            return <div />;
         }
         return (
             <div id="nearbyListContainer">
                 <div id="nearbyTabMenu">
-                    <div className="nearbyEachTabMenu"
+                    <div
+                        className="nearbyEachTabMenu"
                         style={{
                             backgroundColor: nearbyListBackgroundColor,
                             color: nearbyFontColor
@@ -81,10 +87,12 @@ class NearbyList extends Component {
                         }}
                         onKeyDown={this.handleOnNearbyDrawings}
                         role="button"
-                        tabIndex="0">
+                        tabIndex="0"
+                    >
                         {`주변 호재`}
                     </div>
-                    <div className="nearbyEachTabMenu drawing"
+                    <div
+                        className="nearbyEachTabMenu drawing"
                         style={{
                             backgroundColor: myDrawingsBackgroundColor,
                             color: myDrawingsFontColor
@@ -94,13 +102,14 @@ class NearbyList extends Component {
                         }}
                         onKeyDown={this.handleOnMyDrawings}
                         role="button"
-                        tabIndex="0">
+                        tabIndex="0"
+                    >
                         {`My 호재`}
                     </div>
                 </div>
                 <div>
-                    {onNearbyDrawings ? (<NearbyDrawings />) : null}
-                    {onMyDrawings ? (<MyDrawings />) : null}
+                    {onNearbyDrawings ? <NearbyDrawings /> : null}
+                    {onMyDrawings ? <MyDrawings /> : null}
                 </div>
             </div>
         );
