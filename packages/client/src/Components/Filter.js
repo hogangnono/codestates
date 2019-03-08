@@ -139,7 +139,7 @@ class Filter extends Component {
                             backgroundColor: check7 ? '#4d55b2' : '#fff'
                         }}
                     >
-                        내 정보 보기
+                        {`내 정보 보기`}
                     </div>
                 </div>
             </div>
