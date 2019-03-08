@@ -63,23 +63,6 @@ class Toolbox extends Component {
         const { drawingData, map } = this.props;
         return (
             <div id="drawingComponentContainer">
-                {/* <div className="drawingToolBox">
-                    <span className="drawingTools">
-                        <FaSlash className="rotateIcon1" />
-                    </span>
-                    <span className="drawingTools">
-                        <FaArrowLeft className="rotateIcon2" />
-                    </span>
-                    <span className="drawingTools">
-                        <FaSquareFull />
-                    </span>
-                    <span className="drawingTools">
-                        <FaCircle />
-                    </span>
-                    <span className="drawingTools">
-                        <FaDrawPolygon />
-                    </span>
-        </div> */}
                 <Button map={map} Shape={Circle} icons="line" />
                 <Button map={map} Shape={Circle} icons="arrow" />
                 <Button map={map} Shape={Circle} icons="square" />
