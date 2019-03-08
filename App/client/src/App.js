@@ -16,7 +16,7 @@ class App extends Component {
             name: undefined,
             factor: undefined,
             drawingData: [],
-            showFilterDrawingTool: false,
+            showToolbox: false,
             showModal: false
         };
     }
@@ -130,10 +130,10 @@ class App extends Component {
         });
     };
 
-    showFilterDrawingTool = () => {
-        const { showFilterDrawingTool } = this.state;
-        this.setState({ showFilterDrawingTool: !showFilterDrawingTool });
-    };
+    showToolbox = () => {
+        const { showToolbox } = this.state;
+        this.setState({ showToolbox: !showToolbox });
+    }
 
     showModal = () => {
         const { showModal } = this.state;
@@ -144,13 +144,13 @@ class App extends Component {
         const {
             map,
             drawingData,
-            showFilterDrawingTool,
+            showToolbox,
             showModal
         } = this.state;
         return (
             <div id="wrapper">
                 <div id="map">
-                    <NearbyList map={map} />
+                    <NearbyList mapLoad={map} />
                     <ul id="loginFavorContainer">
                         <div
                             className="loginFavorBtn"
@@ -163,8 +163,8 @@ class App extends Component {
                         </div>
                         <div
                             className="loginFavorBtn"
-                            onClick={this.showFilterDrawingTool}
-                            onKeyPress={this.showFilterDrawingTool}
+                            onClick={this.showToolbox}
+                            onKeyPress={this.showToolbox}
                             role="button"
                             tabIndex="0"
                         >
@@ -174,9 +174,16 @@ class App extends Component {
                     {showModal ? (
                         <LoginModal showModal={this.showModal} />
                     ) : null}
-                    {showFilterDrawingTool ? (
+                    <div style={{ display: showToolbox ? 'block' : 'none' }}>
+                        <Toolbox
+                            closeFn={this.showToolbox}
+                            mapLoad={map}
+                            drawingData={drawingData}
+                        />
+                    </div>
+                    {/* {showToolbox ? (
                         <Toolbox mapLoad={map} drawingData={drawingData} />
-                    ) : null}
+                    ) : null} */}
                 </div>
             </div>
         );
