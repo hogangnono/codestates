@@ -5,6 +5,7 @@ import Toolbox from './Components/Toolbox';
 import LoginModal from './Components/LoginModal';
 import NearbyList from './Components/NearbyList';
 import './less/App.less';
+
 import Circle from './CustomOverlay/Circle';
 
 class App extends Component {
@@ -134,6 +135,7 @@ class App extends Component {
         const { showToolbox } = this.state;
         this.setState({ showToolbox: !showToolbox });
     }
+
 
     showModal = () => {
         const { showModal } = this.state;
