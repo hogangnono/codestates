@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Drawing.less';
+import '../less/Drawing.less';
 import axios from 'axios';
-import Button from './Components/Button';
-import Circle from './CustomOverlay/Circle';
+import Button from '../Module/Button';
+import Circle from '../CustomOverlay/Circle';
 import MyDrawingElement from './MyDrawingElement';
 
-class Toolbox extends Component {
+class Drawing extends Component {
     static propTypes = {
         drawingData: PropTypes.array.isRequired,
         map: PropTypes.object.isRequired,
@@ -49,11 +49,11 @@ class Toolbox extends Component {
                 <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} />
                 <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} />
                 <div id="myDrawingsContainer">
-                    { theNumberOfFigure.map(el => {
+                    {theNumberOfFigure.map(el => {
                         return (
                             <MyDrawingElement key={'Idrew' + el} />
                         );
-                    }) }
+                    })}
                 </div>
                 <div id="saveCloseBtns">
                     <button
@@ -78,4 +78,4 @@ class Toolbox extends Component {
     }
 }
 
-export default Toolbox;
+export default Drawing;

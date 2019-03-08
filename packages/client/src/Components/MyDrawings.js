@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
-import './MyDrawings.less';
+import '../less/MyDrawings.less';
 
 const fakeData = [
     {

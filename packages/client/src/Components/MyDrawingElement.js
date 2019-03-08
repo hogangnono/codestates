@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import './Drawing.less';
+import '../less/Drawing.less';
 import { IoMdTrash } from 'react-icons/io';
 // import Circle from './CustomOverlay/Circle';
 

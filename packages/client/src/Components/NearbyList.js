@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import NearbyDrawings from './NearbyDrawings';
 import MyDrawings from './MyDrawings';
-import './NearbyList.less';
+import '../less/NearbyList.less';
 
 class NearbyList extends Component {
     static propTypes = {

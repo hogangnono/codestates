@@ -1,12 +1,12 @@
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
-import './Filter.less';
+import '../less/Filter.less';
 import axios from 'axios';
 import * as d3 from 'd3';
-import Circle from './CustomOverlay/Circle';
+import Circle from '../CustomOverlay/Circle';
 
-class Toolbox extends Component {
+class Filter extends Component {
     state = {
         name: 'jihun',
         bound: '',
@@ -114,11 +114,11 @@ class Toolbox extends Component {
                             <div
                                 className="filterBtn"
                                 onClick={() => this.factorLoad(factor)}
-                                onKeyPress={() => {}}
+                                onKeyPress={() => { }}
                                 role="button"
                                 tabIndex="0"
                                 key={factor}
-                                // style={this.styleToggle(check1)}
+                            // style={this.styleToggle(check1)}
                             >
                                 {'# '}
                                 {factor}
@@ -147,4 +147,4 @@ class Toolbox extends Component {
     }
 }
 
-export default Toolbox;
+export default Filter;

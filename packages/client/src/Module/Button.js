@@ -8,7 +8,7 @@ import {
     FaArrowLeft
 } from 'react-icons/fa';
 import PropTypes from 'prop-types';
-import '../Drawing.less';
+import '../less/Drawing.less';
 
 class Button extends Component {
     static propTypes = {
@@ -128,9 +128,7 @@ class Button extends Component {
                         <FaSquareFull />
                     ) : icons === 'circle' ? (
                         <FaCircle />
-                    ) : (
-                        <FaDrawPolygon />
-                    )}
+                    ) : (<FaDrawPolygon />)}
                 </span>
             </div>
         );
