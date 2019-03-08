@@ -14,8 +14,9 @@
 </ul>
 
 ## 패키지 설치
-1. 클라이언트, 서버 폴더 각각 들어가서 `npm install` or `yarn`으로 설치 
-2. `root`에서 `npm run start` 실행하시면 됩니다. 자동으로 브라우저(`localhost:3000`)에서 뜹니다.   
+1. 클라이언트, 서버 폴더 각각 들어가서 `npm install` or `yarn`으로 설치
+2. `root`에서도 `npm install` or `yarn`으로 설치
+3. `root`에서 `npm run start` 실행하시면 됩니다. 자동으로 브라우저(`localhost:3000`)에서 뜹니다.   
 
 ### yarn 설치
 
