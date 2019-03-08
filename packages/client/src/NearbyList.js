@@ -8,7 +8,7 @@ import './NearbyList.less';
 
 class NearbyList extends Component {
     static propTypes = {
-        mapLoad: PropTypes.object.isRequired
+        map: PropTypes.object.isRequired
     };
 
     state = {
@@ -30,8 +30,8 @@ class NearbyList extends Component {
     };
 
     getCenterLatLng = () => {
-        const { mapLoad } = this.props;
-        const mapCenter = mapLoad.getCenter();
+        const { map } = this.props;
+        const mapCenter = map.getCenter();
         console.log('mapCenter : ', mapCenter);
         // this.setState({ mapCenter });
     };
@@ -59,8 +59,8 @@ class NearbyList extends Component {
     };
 
     render() {
-        const { mapLoad } = this.props;
-        console.log('render의 map이에요.\n지금 map의 값 : ', mapLoad);
+        const { map } = this.props;
+        console.log('render의 map이에요.\n지금 map의 값 : ', map);
         const {
             nearbyListBackgroundColor,
             myDrawingsBackgroundColor,
@@ -69,7 +69,7 @@ class NearbyList extends Component {
             onNearbyDrawings,
             onMyDrawings
         } = this.state;
-        if (!mapLoad) {
+        if (!map) {
             console.log('render return 전에 if 문에 들어왔어요!');
             return <div />;
         }

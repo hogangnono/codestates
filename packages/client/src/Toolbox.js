@@ -7,8 +7,7 @@ import './Toolbox.less';
 class Toolbox extends Component {
     static propTypes = {
         drawingData: PropTypes.array.isRequired,
-        mapLoad: PropTypes.object.isRequired,
-        closeFn: PropTypes.func.isRequired
+        mapLoad: PropTypes.object.isRequired
     };
 
     state = {
@@ -43,7 +42,7 @@ class Toolbox extends Component {
     };
 
     render() {
-        const { drawingData, mapLoad, closeFn } = this.props;
+        const { drawingData, mapLoad } = this.props;
         const {
             backgroundBlueForFilterTab,
             backgroundBlueForDrawingTab,
@@ -87,12 +86,10 @@ class Toolbox extends Component {
                     </div>
                 </div>
                 <div>
-                    <div style={{ display: onFilter ? 'block' : 'none' }}>
-                        <Filter />
-                    </div>
-                    <div style={{ display: onDrawing ? 'block' : 'none' }}>
-                        <Drawing map={mapLoad} drawingData={drawingData} closeFn={closeFn} />
-                    </div>
+                    {onFilter ? <Filter /> : null}
+                    {onDrawing ? (
+                        <Drawing map={mapLoad} drawingData={drawingData} />
+                    ) : null}
                 </div>
             </div>
         );

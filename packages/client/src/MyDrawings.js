@@ -1,25 +1,9 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
-import './MyDrawings.less';
+// import './NearbyList.less';
 
 const fakeData = [
-    {
-        id: 1,
-        center_lat: 37.455,
-        center_lng: 125.324,
-        figures: '[{startPos:1,endPos:2,zoomLevel:11},{startPos:1,endPos:2,zoomLevel:11},{startPos:1,endPos:2,zoomLevel:11}]',
-        description: '지하철이 연장개통한다고 해요.',
-        css: '{backgroundColor: blue}',
-        factor_id: 1,
-        drawing_id: 1,
-        Drawing: {
-            id: 1,
-            user_id: 1,
-            createdAt: '2019-03-07T02:18:55.000Z',
-            updatedAt: '2019-03-07T02:18:55.000Z'
-        }
-    },
     {
         id: 1,
         center_lat: 37.455,
@@ -44,13 +28,12 @@ class MyDrawings extends Component {
     render() {
         return (
             <div>
-                <ul id="myDrawingsContainer">
+                <ul>
                     {fakeData.map(figure => {
                         return (
                             <>
-                                <li key={'myDrawing' + figure.id} className="myDrawingLists">
-                                    <span className="myDrawingEachListTitle">{`[${fakeFactor[figure.factor_id]}]  `}</span>
-                                    <span className="myDrawingEachListDes">{figure.description}</span>
+                                <li>
+                                    {`[${fakeFactor[figure.factor_id]}] ${figure.description}`}
                                 </li>
                             </>
                         );
