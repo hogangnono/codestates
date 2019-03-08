@@ -1,8 +1,9 @@
 # Codestates X Hogangnono
-
-호갱노노 여기호재 서비스 웹서버
-
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
+[![react](https://img.shields.io/badge/maintained%20with-react-green.svg)](https://reactjs.org/)
+[![d3](https://img.shields.io/badge/maintained%20with-d3-orange.svg)](https://d3js.org/)
+
+호갱노노 x Codestates Project: 여기호재
 
 ## 기본 환경 설치
 
@@ -13,6 +14,8 @@
 </ul>
 
 ## 패키지 설치
+1. 클라이언트, 서버 폴더 각각 들어가서 `npm install` or `yarn`으로 설치 
+2. `root`에서 `npm run start` 실행하시면 됩니다. 자동으로 브라우저(`localhost:3000`)에서 뜹니다.   
 
 ### yarn 설치
 
@@ -20,9 +23,6 @@
 $ sudo npm install -g yarn
 
 ```
-
-클라이언트, 서버 폴더 각각 들어가서 `npm install` or `yarn`을 설치하시고 `root`에서 `npm run start` 실행하시면 됩니다. 자동으로 브라우저(`localhost:3000`)에서 뜹니다. 
-
 ### 프로젝트 패키지 설치
 
 ```javascript
