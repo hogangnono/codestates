@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
-import Toolbox from './Toolbox';
-import LoginModal from './LoginModal';
-import NearbyList from './NearbyList';
-import './App.less';
+import Toolbox from './Components/Toolbox';
+import LoginModal from './Components/LoginModal';
+import NearbyList from './Components/NearbyList';
+import './less/App.less';
+
 import Circle from './CustomOverlay/Circle';
 
 class App extends Component {
@@ -134,6 +135,7 @@ class App extends Component {
         const { showToolbox } = this.state;
         this.setState({ showToolbox: !showToolbox });
     }
+
 
     showModal = () => {
         const { showModal } = this.state;

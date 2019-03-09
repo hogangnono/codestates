@@ -8,13 +8,14 @@ import {
     FaArrowLeft
 } from 'react-icons/fa';
 import PropTypes from 'prop-types';
-import '../Drawing.less';
+import '../less/Drawing.less';
 
 class Button extends Component {
     static propTypes = {
         icons: PropTypes.string.isRequired,
         map: PropTypes.object.isRequired,
-        Shape: PropTypes.func.isRequired
+        Shape: PropTypes.func.isRequired,
+        drewStatus: PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -50,7 +51,7 @@ class Button extends Component {
     drawingComponent = () => {
         let startPos;
         const naver = window.naver;
-        const { map } = this.props;
+        const { map, drewStatus } = this.props;
         const { Shape } = this.props;
         const { toggle } = this.state;
 
@@ -66,6 +67,7 @@ class Button extends Component {
                 map,
                 'rightclick',
                 e => {
+                    drewStatus();
                     const { coord, offset } = e;
                     const endPos = { coord, offset };
                     new Shape({
@@ -126,9 +128,7 @@ class Button extends Component {
                         <FaSquareFull />
                     ) : icons === 'circle' ? (
                         <FaCircle />
-                    ) : (
-                        <FaDrawPolygon />
-                    )}
+                    ) : (<FaDrawPolygon />)}
                 </span>
             </div>
         );

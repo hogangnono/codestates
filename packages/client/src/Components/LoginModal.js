@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './LoginModal.less';
+import '../less/LoginModal.less';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 

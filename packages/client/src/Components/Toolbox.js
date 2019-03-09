@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Filter from './Filter';
 import Drawing from './Drawing';
-import './Toolbox.less';
+import '../less/Toolbox.less';
 
 class Toolbox extends Component {
     static propTypes = {
@@ -64,7 +64,7 @@ class Toolbox extends Component {
                         onClick={() => {
                             this.handleOnFilter(true);
                         }}
-                        onKeyPress={() => {}}
+                        onKeyPress={() => { }}
                         role="button"
                         tabIndex="0"
                     >
@@ -79,7 +79,7 @@ class Toolbox extends Component {
                         onClick={() => {
                             this.handleOnDrawing(true);
                         }}
-                        onKeyPress={() => {}}
+                        onKeyPress={() => { }}
                         role="button"
                         tabIndex="0"
                     >
