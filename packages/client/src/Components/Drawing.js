@@ -16,7 +16,7 @@ class Drawing extends Component {
     state = {
         index: 0,
         theNumberOfFigure: []
-    }
+    };
 
     handleAxios = (parseURL, body) => {
         const basicURL = 'http://localhost:3001/';
@@ -36,23 +36,26 @@ class Drawing extends Component {
             theNumberOfFigure: [...theNumberOfFigure, index + 1],
             index: index + 1
         });
-    }
+    };
 
     render() {
         const { drawingData, map, closeFn } = this.props;
         const { theNumberOfFigure } = this.state;
+        const iconArray = ['line', 'arrow', 'square', 'circle', 'polygon'];
         return (
             <div id="drawingComponentContainer">
-                <Button map={map} Shape={Circle} icons="line" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="square" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} />
+                {iconArray.map(iconImg => (
+                    <Button
+                        map={map}
+                        Shape={Circle}
+                        icons={iconImg}
+                        drewStatus={this.checkDrawStatus}
+                        key={iconImg}
+                    />
+                ))}
                 <div id="myDrawingsContainer">
                     {theNumberOfFigure.map(el => {
-                        return (
-                            <MyDrawingElement key={'Idrew' + el} />
-                        );
+                        return <MyDrawingElement key={'Idrew' + el} />;
                     })}
                 </div>
                 <div id="saveCloseBtns">

@@ -21,7 +21,7 @@ class NearbyList extends Component {
     };
 
     componentDidMount = () => {
-        console.log('나는 componentDidMount입니다!');
+        // console.log('나는 componentDidMount입니다!');
         // const naver = window.naver;
         // const { map } = this.props;
         // naver.maps.Event.addListener(map, 'idle', e => {
@@ -60,7 +60,7 @@ class NearbyList extends Component {
 
     render() {
         const { mapLoad } = this.props;
-        console.log('render의 map이에요.\n지금 map의 값 : ', mapLoad);
+        // console.log('render의 map이에요.\n지금 map의 값 : ', mapLoad);
         const {
             nearbyListBackgroundColor,
             myDrawingsBackgroundColor,
@@ -70,7 +70,7 @@ class NearbyList extends Component {
             onMyDrawings
         } = this.state;
         if (!mapLoad) {
-            console.log('render return 전에 if 문에 들어왔어요!');
+            // console.log('render return 전에 if 문에 들어왔어요!');
             return <div />;
         }
         return (
