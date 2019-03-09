@@ -4,6 +4,7 @@ import axios from 'axios';
 import Toolbox from './Components/Toolbox';
 import LoginModal from './Components/LoginModal';
 import NearbyList from './Components/NearbyList';
+import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 
 import Circle from './CustomOverlay/Circle';
@@ -38,7 +39,17 @@ class App extends Component {
             this.mainPageLoad(map);
             this.DataDelete();
         });
+
+        const userName = localStorage.getItem('token');
+        if (userName) {
+            const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
+            this.setState({ name: decryptedName });
+        }
     };
+
+    handleUserNameOnChange = (username) => {
+        this.setState({ name: username });
+    }
 
     mapOption = () => {
         const naver = window.naver;
@@ -137,7 +148,7 @@ class App extends Component {
     }
 
 
-    showModal = () => {
+    toggleModal = () => {
         const { showModal } = this.state;
         this.setState({ showModal: !showModal });
     };
@@ -145,6 +156,7 @@ class App extends Component {
     render() {
         const {
             map,
+            name,
             drawingData,
             showToolbox,
             showModal
@@ -156,8 +168,8 @@ class App extends Component {
                     <ul id="loginFavorContainer">
                         <div
                             className="loginFavorBtn"
-                            onClick={this.showModal}
-                            onKeyPress={this.showModal}
+                            onClick={this.toggleModal}
+                            onKeyPress={this.toggleModal}
                             role="button"
                             tabIndex="0"
                         >
@@ -174,13 +186,22 @@ class App extends Component {
                         </div>
                     </ul>
                     {showModal ? (
-                        <LoginModal showModal={this.showModal} />
+                        <LoginModal
+                            name={name}
+                            toggleModal={this.toggleModal}
+                            handleUserNameOnChange={this.handleUserNameOnChange}
+                            handleUserNameAndLoginStatus={this.handleUserNameAndLoginStatus}
+                        />
                     ) : null}
                     <div style={{ display: showToolbox ? 'block' : 'none' }}>
                         <Toolbox
                             closeFn={this.showToolbox}
                             mapLoad={map}
                             drawingData={drawingData}
+                            name={name}
+                            toggleModal={this.toggleModal}
+                            handleUserNameOnChange={this.handleUserNameOnChange}
+                            handleUserNameAndLoginStatus={this.handleUserNameAndLoginStatus}
                         />
                     </div>
                     {/* {showToolbox ? (
