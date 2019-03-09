@@ -5,6 +5,7 @@ import axios from 'axios';
 import Button from '../Module/Button';
 import Circle from '../CustomOverlay/Circle';
 import MyDrawingElement from './MyDrawingElement';
+import buttonState from '../Module/shapeButtonStates';
 
 class Drawing extends Component {
     static propTypes = {
@@ -15,7 +16,12 @@ class Drawing extends Component {
 
     state = {
         index: 0,
-        theNumberOfFigure: []
+        theNumberOfFigure: [],
+        lineButtonToggle: false, // ButtonToggle values will be set when clicked.
+        arrowButtonToggle: false, // ""
+        squareButtonToggle: false, // ""
+        circleButtonToggle: false, // ""
+        polygonButtonToggle: false // ""
     }
 
     handleAxios = (parseURL, body) => {
@@ -40,14 +46,36 @@ class Drawing extends Component {
 
     render() {
         const { drawingData, map, closeFn } = this.props;
-        const { theNumberOfFigure } = this.state;
+        const { theNumberOfFigure,
+            polygonButtonToggle,
+            lineButtonToggle,
+            squareButtonToggle,
+            circleButtonToggle,
+            arrowButtonToggle } = this.state;
+
+        const lineButtonState = buttonState.line.bind(this);
+        const arrowButtonState = buttonState.arrow.bind(this);
+        const squareButtonState = buttonState.square.bind(this);
+        const circleButtonState = buttonState.circle.bind(this);
+        const polygonButtonState = buttonState.polygon.bind(this);
+
         return (
             <div id="drawingComponentContainer">
-                <Button map={map} Shape={Circle} icons="line" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="square" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} />
+                <div onClick={lineButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="line" drewStatus={this.checkDrawStatus} toggle={lineButtonToggle} />
+                </div>
+                <div onClick={arrowButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} toggle={arrowButtonToggle} />
+                </div>
+                <div onClick={squareButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="square" drewStatus={this.checkDrawStatus} toggle={squareButtonToggle} />
+                </div>
+                <div onClick={circleButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} toggle={circleButtonToggle} />
+                </div>
+                <div onClick={polygonButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} toggle={polygonButtonToggle} />
+                </div>
                 <div id="myDrawingsContainer">
                     {theNumberOfFigure.map(el => {
                         return (

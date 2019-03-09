@@ -22,7 +22,6 @@ class Button extends Component {
         super(props);
         this.state = {
             map: props.map, // Set this up as props
-            toggle: true,
             leftClick: undefined,
             rightClick: undefined
         };
@@ -40,7 +39,7 @@ class Button extends Component {
     }
 
     handleClickOutside(event) {
-        const { toggle } = this.state;
+        const { toggle } = this.props;
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             if (event.button === 2 && toggle !== true) {
                 this.setState({ toggle: !toggle });
@@ -48,12 +47,14 @@ class Button extends Component {
         }
     }
 
-    drawingComponent = () => {
+    drawingComponent = (toggle) => {
         let startPos;
         const naver = window.naver;
         const { map, drewStatus } = this.props;
         const { Shape } = this.props;
-        const { toggle } = this.state;
+        // const { toggle } = this.props;
+        // toggle = !toggle;
+        console.log('inside drawingComponent: (2)', toggle);
 
         if (toggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
@@ -83,15 +84,15 @@ class Button extends Component {
             this.setState({ rightClick: rightClick });
             this.setState({ leftClick: leftClick });
         }
-        this.setState({ toggle: !toggle }); // Complete shape and turn off toggle
+        // this.setState({ toggle: !toggle }); // Complete shape and turn off toggle
     };
 
-    toggleState() {
-        const { toggle } = this.state;
-        this.setState({ toggle: !toggle });
-    }
+    // toggleState = () => {
+    // const { toggle } = this.props;
+    //     this.setState({ toggle: true });
+    // }
 
-    removeListener() {
+    removeListener = () => {
         const naver = window.naver;
         const { leftClick } = this.state;
         const { rightClick } = this.state;
@@ -99,25 +100,34 @@ class Button extends Component {
         naver.maps.Event.removeListener(rightClick);
     }
 
-    createShape = () => {
+    createShape = (toggle) => {
         const { map } = this.state;
-        this.drawingComponent(map);
-        this.toggleState();
+        // this.toggleState();
+        this.drawingComponent(map, toggle);
         this.removeListener();
     };
 
     render() {
         // const { toggle } = this.state;
         // const btnClass = toggle ? 'lightPurple' : 'darkPurple';
-        const { icons } = this.props;
+        const { icons, toggle } = this.props;
+        const { leftClick, rightClick } = this.state;
+        const naver = window.naver;
+
+        console.log('toggle in Button.js: ', toggle + ', icon: ' + icons);
+        if (toggle === false) {
+            naver.maps.Event.removeListener(leftClick);
+            naver.maps.Event.removeListener(rightClick);
+        }
+
         return (
             <div>
                 <span
                     role="button"
                     tabIndex="0"
                     className="drawingTools"
-                    onClick={this.createShape}
-                    onKeyPress={this.createShape}
+                    onClick={() => { this.createShape(toggle); }}
+                    onKeyPress={() => { }}
                     ref={this.setWrapperRef}
                 >
                     {icons === 'line' ? (
