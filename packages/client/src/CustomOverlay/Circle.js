@@ -1,63 +1,18 @@
-import * as d3 from 'd3';
-import './Circle.less';
-var CustomOverlay = function(options) {
-    // make a div that contain shape and whole info
-    const div = document.createElement('div');
-    // make a input that contaion description of shape
-    var input = document.createElement('div');
-    input.innerHTML = '<input type="text" placeholder="호재를 입력해주세요"></input>';
-    input.addEventListener('click', e => {
-        e.target.focus();
-    });
+// import * as d3 from 'd3';
+import Shape from './Shape';
 
-    // make deletebutton
-    const deleteButton = document.createElement('div');
-    deleteButton.className = 'deleteButton';
-    deleteButton.addEventListener('click', e => {
-        this.onRemove();
-    });
-
-    // make svg that contain shape
-    const svg = d3.create('svg');
-    svg.append('ellipse');
-
-    div.appendChild(svg.node());
-    div.appendChild(deleteButton);
-    div.appendChild(input);
-
-    this._element = div;
-
-    // current map ratio
-    this._zoom = options.zoom || options.naverMap.getZoom();
-    this._map = options.naverMap;
-    this.setPosition(options.position);
-    this.setMap(options.map || null);
+var Circle = function(options) {
+    Shape.call(this, options);
 };
 
-CustomOverlay.prototype = new window.naver.maps.OverlayView();
+Circle.prototype = Object.create(Shape.prototype);
+Circle.prototype.constructor = Circle;
 
-CustomOverlay.prototype.constructor = CustomOverlay;
-
-CustomOverlay.prototype.setPosition = function(position) {
-    this._startPos = position.startPos;
-    this._endPos = position.endPos;
-    this.draw();
+Circle.prototype.addShape = function() {
+    this.svg.append('ellipse');
 };
 
-CustomOverlay.prototype.getPosition = function() {
-    const start = {};
-    start.x = Math.min(this._startPos.coord.x, this._endPos.coord.x);
-    start.y = Math.max(this._startPos.coord.y, this._endPos.coord.y);
-    return start;
-};
-
-CustomOverlay.prototype.onAdd = function() {
-    var overlayLayer = this.getPanes().overlayLayer;
-
-    overlayLayer.appendChild(this._element);
-};
-
-CustomOverlay.prototype.draw = function() {
+Circle.prototype.draw = function() {
     if (!this.getMap()) {
         return;
     }
@@ -94,9 +49,4 @@ CustomOverlay.prototype.draw = function() {
     ellipse.style.rx = (width / 2) * 2 ** ratio;
     ellipse.style.ry = (height / 2) * 2 ** ratio;
 };
-
-CustomOverlay.prototype.onRemove = function() {
-    this._element.parentNode.removeChild(this._element);
-};
-
-export default CustomOverlay;
+export default Circle;
