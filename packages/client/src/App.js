@@ -5,6 +5,7 @@ import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import NearbyList from './Components/NearbyList';
 import DrawContainer from './Components/DrawContainer';
+import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 
 import Circle from './CustomOverlay/Circle';
@@ -52,6 +53,16 @@ class App extends Component {
             this.mainPageLoad(map);
             this.DataDelete();
         });
+
+        const userName = localStorage.getItem('token');
+        if (userName) {
+            const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
+            this.setState({ name: decryptedName });
+        }
+    };
+
+    handleUserNameOnChange = username => {
+        this.setState({ name: username });
     };
 
     mapOption = () => {
@@ -153,7 +164,7 @@ class App extends Component {
         this.setState({ showDraw: !showDraw });
     };
 
-    showModal = () => {
+    toggleModal = () => {
         const { showModal } = this.state;
         this.setState({ showModal: !showModal });
     };
@@ -229,6 +240,7 @@ class App extends Component {
     render() {
         const {
             map,
+            name,
             drawingData,
             showFilter,
             showDraw,
@@ -246,8 +258,8 @@ class App extends Component {
                     <div id="loginFavorContainer">
                         <div
                             className="loginFavorBtn"
-                            onClick={this.showModal}
-                            onKeyPress={this.showModal}
+                            onClick={this.toggleModal}
+                            onKeyPress={this.toggleModal}
                             role="button"
                             tabIndex="0"
                         >
@@ -273,7 +285,14 @@ class App extends Component {
                         </div>
                     </div>
                     {showModal ? (
-                        <LoginModal showModal={this.showModal} />
+                        <LoginModal
+                            name={name}
+                            toggleModal={this.toggleModal}
+                            handleUserNameOnChange={this.handleUserNameOnChange}
+                            handleUserNameAndLoginStatus={
+                                this.handleUserNameAndLoginStatus
+                            }
+                        />
                     ) : null}
                     <div style={{ display: !showFilter ? 'block' : 'none' }}>
                         <FilterContainer
@@ -288,6 +307,12 @@ class App extends Component {
                             closeFn={this.showDraw}
                             mapLoad={map}
                             drawingData={drawingData}
+                            name={name}
+                            toggleModal={this.toggleModal}
+                            handleUserNameOnChange={this.handleUserNameOnChange}
+                            handleUserNameAndLoginStatus={
+                                this.handleUserNameAndLoginStatus
+                            }
                         />
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 /* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
 import '../less/MyDrawings.less';
+import PropTypes from 'prop-types';
 
 const fakeData = [
     {
@@ -22,7 +23,7 @@ const fakeData = [
         }
     },
     {
-        id: 1,
+        id: 2,
         center_lat: 37.455,
         center_lng: 125.324,
         figures:
@@ -50,10 +51,17 @@ const fakeFactor = [
 ];
 
 class MyDrawings extends Component {
+    static propTypes = {
+        name: PropTypes.string.isRequired
+    };
+
     render() {
+        const { name } = this.props;
         return (
             <div>
                 <ul id="myDrawingsContainer">
+                    <p className="userName">{`${name} 님! 환영합니다 :)`}</p>
+                    <p>내가 그린 호재 정보들</p>
                     {fakeData.map(figure => {
                         return (
                             <div>

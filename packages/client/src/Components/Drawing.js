@@ -10,7 +10,8 @@ class Drawing extends Component {
     static propTypes = {
         drawingData: PropTypes.array.isRequired,
         map: PropTypes.object.isRequired,
-        closeFn: PropTypes.func.isRequired
+        closeFn: PropTypes.func.isRequired,
+        toggleModal: PropTypes.func.isRequired
     };
 
     state = {
@@ -18,16 +19,23 @@ class Drawing extends Component {
         theNumberOfFigure: []
     };
 
-    handleAxios = (parseURL, body) => {
+    handleRequestSave = (parseURL, body) => {
+        const { toggleModal } = this.props;
         const basicURL = 'http://localhost:3001/';
-        axios
-            .post(basicURL + parseURL, body)
-            .then(result => {
-                console.log('저장성공!');
-            })
-            .catch(err => {
-                console.log('err: ', err);
-            });
+        const isLogin = localStorage.getItem('isLogin');
+        if (JSON.parse(isLogin)) {
+            axios
+                .post(basicURL + parseURL, body)
+                .then(result => {
+                    console.log('저장성공!');
+                })
+                .catch(err => {
+                    console.log('err: ', err);
+                });
+        } else {
+            alert('저장을 위해선 로그인이 필요합니다 :)');
+            toggleModal();
+        }
     };
 
     checkDrawStatus = () => {
@@ -39,7 +47,11 @@ class Drawing extends Component {
     };
 
     render() {
-        const { drawingData, map, closeFn } = this.props;
+        const {
+            drawingData,
+            map,
+            closeFn
+        } = this.props;
         const { theNumberOfFigure } = this.state;
         const iconArray = ['line', 'arrow', 'square', 'circle', 'polygon'];
         return (
@@ -63,7 +75,7 @@ class Drawing extends Component {
                         type="button"
                         className="saveCloseBtn"
                         onClick={() => {
-                            this.handleAxios('user/save', drawingData);
+                            this.handleRequestSave('user/save', drawingData);
                         }}
                     >
                         {`저장`}
