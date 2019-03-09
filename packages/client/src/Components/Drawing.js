@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import '../less/Drawing.less';
 import axios from 'axios';
 import Button from '../Module/Button';
+import Line from '../CustomOverlay/Line';
 import Circle from '../CustomOverlay/Circle';
+import Rect from '../CustomOverlay/Rect';
 import MyDrawingElement from './MyDrawingElement';
 
 class Drawing extends Component {
@@ -43,9 +45,9 @@ class Drawing extends Component {
         const { theNumberOfFigure } = this.state;
         return (
             <div id="drawingComponentContainer">
-                <Button map={map} Shape={Circle} icons="line" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Line} icons="line" drewStatus={this.checkDrawStatus} />
                 <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="square" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Rect} icons="square" drewStatus={this.checkDrawStatus} />
                 <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} />
                 <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} />
                 <div id="myDrawingsContainer">
