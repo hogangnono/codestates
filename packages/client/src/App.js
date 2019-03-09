@@ -198,6 +198,10 @@ class App extends Component {
                             closeFn={this.showToolbox}
                             mapLoad={map}
                             drawingData={drawingData}
+                            name={name}
+                            toggleModal={this.toggleModal}
+                            handleUserNameOnChange={this.handleUserNameOnChange}
+                            handleUserNameAndLoginStatus={this.handleUserNameAndLoginStatus}
                         />
                     </div>
                     {/* {showToolbox ? (

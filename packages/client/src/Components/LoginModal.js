@@ -18,7 +18,6 @@ class LoginModal extends Component {
 
     componentDidMount() {
         const isLogin = localStorage.getItem('isLogin');
-        console.log('isLogin', isLogin);
         if (JSON.parse(isLogin)) {
             this.setState({ isLogin: true });
         }
