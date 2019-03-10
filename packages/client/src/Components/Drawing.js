@@ -4,35 +4,49 @@ import '../less/Drawing.less';
 import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
 import Button from '../Module/Button';
+import Line from '../CustomOverlay/Line';
 import Circle from '../CustomOverlay/Circle';
+import Rect from '../CustomOverlay/Rect';
 import MyDrawingElement from './MyDrawingElement';
 
 class Drawing extends Component {
     static propTypes = {
         drawingData: PropTypes.array.isRequired,
         map: PropTypes.object.isRequired,
-        closeFn: PropTypes.func.isRequired
+        closeFn: PropTypes.func.isRequired,
+        toggleModal: PropTypes.func.isRequired
     };
 
     state = {
         index: 0,
+<<<<<<< HEAD
         theNumberOfFigure: [],
         shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
         loadedListener: null,
         isInShapeCreateMode: false
+=======
+        theNumberOfFigure: []
+>>>>>>> 73333d7a05d7d1fc5a3bda756884a2da0ae44780
     };
 
-    handleAxios = (parseURL, body) => {
+    handleRequestSave = (parseURL, body) => {
+        const { toggleModal } = this.props;
         const basicURL = 'http://localhost:3001/';
-        axios
-            .post(basicURL + parseURL, body)
-            .then(result => {
-                console.log('저장성공!');
-            })
-            .catch(err => {
-                console.log('err: ', err);
-            });
+        const isLogin = localStorage.getItem('isLogin');
+        if (JSON.parse(isLogin)) {
+            axios
+                .post(basicURL + parseURL, body)
+                .then(result => {
+                    console.log('저장성공!');
+                })
+                .catch(err => {
+                    console.log('err: ', err);
+                });
+        } else {
+            alert('저장을 위해선 로그인이 필요합니다 :)');
+            toggleModal();
+        }
     };
 
     checkDrawStatus = () => {
@@ -42,6 +56,7 @@ class Drawing extends Component {
             index: index + 1
         });
     };
+<<<<<<< HEAD
 
     removeListener = () => {
         const naver = window.naver;
@@ -130,6 +145,49 @@ class Drawing extends Component {
                         />
                     );
                 })}
+=======
+
+    render() {
+        const {
+            drawingData,
+            map,
+            closeFn
+        } = this.props;
+        const { theNumberOfFigure } = this.state;
+        // const iconArray = ['line', 'arrow', 'square', 'circle', 'polygon'];
+        return (
+            <div id="drawingComponentContainer">
+                <Button
+                    map={map}
+                    Shape={Line}
+                    icons="line"
+                    drewStatus={this.checkDrawStatus}
+                />
+                <Button
+                    map={map}
+                    Shape={Circle}
+                    icons="arrow"
+                    drewStatus={this.checkDrawStatus}
+                />
+                <Button
+                    map={map}
+                    Shape={Rect}
+                    icons="square"
+                    drewStatus={this.checkDrawStatus}
+                />
+                <Button
+                    map={map}
+                    Shape={Circle}
+                    icons="circle"
+                    drewStatus={this.checkDrawStatus}
+                />
+                <Button
+                    map={map}
+                    Shape={Circle}
+                    icons="polygon"
+                    drewStatus={this.checkDrawStatus}
+                />
+>>>>>>> 73333d7a05d7d1fc5a3bda756884a2da0ae44780
                 <div id="myDrawingsContainer">
                     {theNumberOfFigure.map(el => {
                         return <MyDrawingElement key={'Idrew' + el} />;
@@ -140,7 +198,7 @@ class Drawing extends Component {
                         type="button"
                         className="saveCloseBtn"
                         onClick={() => {
-                            this.handleAxios('user/save', drawingData);
+                            this.handleRequestSave('user/save', drawingData);
                         }}
                     >
                         {`저장`}

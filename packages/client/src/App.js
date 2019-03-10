@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
-import Toolbox from './Components/Toolbox';
+import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import NearbyList from './Components/NearbyList';
+import DrawContainer from './Components/DrawContainer';
+import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 
 import Circle from './CustomOverlay/Circle';
@@ -13,12 +15,25 @@ class App extends Component {
         super(props);
         this.bound = undefined;
         this.drawList = {};
+        this.newToggleBox = {
+            상권: false,
+            '신축/재개발': false,
+            교육: false,
+            업무지구: false,
+            주택단지: false,
+            '도로개통/확장': false,
+            지하철개통: false,
+            기타: false
+        };
         this.state = {
             name: 'jihye',
             // factor: '',
             drawingData: [],
-            showToolbox: false,
-            showModal: false
+            map: undefined,
+            showFilter: false,
+            showModal: false,
+            check7: false,
+            showDraw: false
         };
     }
 
@@ -29,15 +44,28 @@ class App extends Component {
             this.mapOption()
         );
 
-        this.setState({ map: map });
+        this.setState({ map });
         this.bound = map.getBounds();
         this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
+<<<<<<< HEAD
             // console.log(this.bound);
+=======
+>>>>>>> 73333d7a05d7d1fc5a3bda756884a2da0ae44780
             this.mainPageLoad(map);
             this.DataDelete();
         });
+
+        const userName = localStorage.getItem('token');
+        if (userName) {
+            const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
+            this.setState({ name: decryptedName });
+        }
+    };
+
+    handleUserNameOnChange = username => {
+        this.setState({ name: username });
     };
 
     mapOption = () => {
@@ -107,14 +135,12 @@ class App extends Component {
                 //     console.log(error);
                 //     alert('error!');
                 // }
-                alert(error);
+                // alert(error);
             });
     };
 
     DataDelete = () => {
-        Object.entries(this.drawList).forEach(el => {
-            const key = el[0];
-            const value = el[1];
+        Object.entries(this.drawList).forEach(([key, value]) => {
             const position = {};
             // reference point
             position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
@@ -131,33 +157,97 @@ class App extends Component {
         });
     };
 
-    showToolbox = () => {
-        const { showToolbox } = this.state;
-        this.setState({ showToolbox: !showToolbox });
-    }
+    showFilter = () => {
+        const { showFilter } = this.state;
+        this.setState({ showFilter: !showFilter });
+    };
 
+    showDraw = () => {
+        const { showDraw } = this.state;
+        this.setState({ showDraw: !showDraw });
+    };
 
-    showModal = () => {
+    toggleModal = () => {
         const { showModal } = this.state;
         this.setState({ showModal: !showModal });
+    };
+
+    _toggle7 = () => {
+        const { check7 } = this.state;
+        this.setState({ check7: !check7 });
+        return check7;
+    };
+
+    factorLoad = category => {
+        const { name, map } = this.state;
+        const categories = { [category]: !this.newToggleBox[category] };
+        this.newToggleBox = { ...this.newToggleBox, ...categories };
+        const bound = this.bound;
+        const factors = [];
+        Object.entries(this.drawList).forEach(([key, value]) => {
+            value.setMap(null);
+            delete this.drawList[key];
+        });
+        Object.entries(this.newToggleBox).forEach(([key, value]) => {
+            if (value) {
+                factors.push(key);
+            }
+        });
+        axios
+            .post('http://127.0.0.1:3001/user/load', {
+                name,
+                bound,
+                factors
+            })
+            .then(async result => {
+                const data = await result.data;
+                // console.log(data);
+                const resultData = await data[0];
+                // const userData = await data[1];
+                if (result.status === 200 || result.status === 201) {
+                    resultData.map(async el => {
+                        const { startPos, endPos, zoomLevel } = JSON.parse(
+                            el.figures
+                        );
+                        if (!(el.id in this.drawList)) {
+                            const overlay = new Circle({
+                                position: { startPos, endPos },
+                                naverMap: map,
+                                zoom: zoomLevel
+                            });
+                            overlay.setMap(map);
+                            this.drawList[el.id] = overlay;
+                        }
+                    });
+                } else if (result.status === 204) {
+                    alert('호재 데이터 정보 없음');
+                }
+            })
+            .catch(error => {
+                alert(error);
+            });
     };
 
     render() {
         const {
             map,
+            name,
             drawingData,
-            showToolbox,
-            showModal
+            showFilter,
+            showDraw,
+            showModal,
+            check7
         } = this.state;
+
         return (
             <div id="wrapper">
                 <div id="map">
                     <NearbyList mapLoad={map} />
-                    <ul id="loginFavorContainer">
+                    <div id="loginFavorContainer">
                         <div
                             className="loginFavorBtn"
-                            onClick={this.showModal}
-                            onKeyPress={this.showModal}
+                            onClick={this.toggleModal}
+                            onKeyPress={this.toggleModal}
                             role="button"
                             tabIndex="0"
                         >
@@ -165,27 +255,53 @@ class App extends Component {
                         </div>
                         <div
                             className="loginFavorBtn"
-                            onClick={this.showToolbox}
-                            onKeyPress={this.showToolbox}
+                            onClick={this.showFilter}
+                            onKeyPress={this.showFilter}
                             role="button"
                             tabIndex="0"
                         >
-                            {`호재`}
+                            {`필터`}
                         </div>
-                    </ul>
+                        <div
+                            className="loginFavorBtn"
+                            onClick={this.showDraw}
+                            onKeyPress={this.showDraw}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`그리기`}
+                        </div>
+                    </div>
                     {showModal ? (
-                        <LoginModal showModal={this.showModal} />
+                        <LoginModal
+                            name={name}
+                            toggleModal={this.toggleModal}
+                            handleUserNameOnChange={this.handleUserNameOnChange}
+                            handleUserNameAndLoginStatus={
+                                this.handleUserNameAndLoginStatus
+                            }
+                        />
                     ) : null}
-                    <div style={{ display: showToolbox ? 'block' : 'none' }}>
-                        <Toolbox
-                            closeFn={this.showToolbox}
-                            mapLoad={map}
-                            drawingData={drawingData}
+                    <div style={{ display: !showFilter ? 'block' : 'none' }}>
+                        <FilterContainer
+                            check7={check7}
+                            _toggle7={this._toggle7}
+                            factorLoad={this.factorLoad}
                         />
                     </div>
-                    {/* {showToolbox ? (
-                        <Toolbox mapLoad={map} drawingData={drawingData} />
-                    ) : null} */}
+                    <div style={{ display: showDraw ? 'block' : 'none' }}>
+                        <DrawContainer
+                            closeFn={this.showDraw}
+                            mapLoad={map}
+                            drawingData={drawingData}
+                            name={name}
+                            toggleModal={this.toggleModal}
+                            handleUserNameOnChange={this.handleUserNameOnChange}
+                            handleUserNameAndLoginStatus={
+                                this.handleUserNameAndLoginStatus
+                            }
+                        />
+                    </div>
                 </div>
             </div>
         );
