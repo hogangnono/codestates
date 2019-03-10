@@ -14,8 +14,13 @@ class App extends Component {
         this.bound = undefined;
         this.drawList = {};
         this.state = {
+<<<<<<< HEAD:packages/client/src/App.js
             name: undefined,
             factor: undefined,
+=======
+            name: 'jihye',
+            // factor: '',
+>>>>>>> 2787a570ce946c8614809af009eb90746c468b10:App/client/src/App.js
             drawingData: [],
             showToolbox: false,
             showModal: false
