@@ -33,7 +33,9 @@ class App extends Component {
             showFilter: false,
             showModal: false,
             check7: false,
-            showDraw: false
+            showDraw: false,
+            deactiveFilter: '',
+            deactiveDraw: 'deactive'
         };
     }
 
@@ -154,13 +156,23 @@ class App extends Component {
     };
 
     showFilter = () => {
-        const { showFilter } = this.state;
-        this.setState({ showFilter: !showFilter });
+        const { showFilter, deactiveDraw } = this.state;
+
+        if (deactiveDraw === '') {
+            this.setState({
+                showFilter: !showFilter,
+                deactiveDraw: 'deactive'
+            });
+        } else {
+            this.setState({
+                showFilter: !showFilter,
+                deactiveDraw: ''
+            });
+        }
     };
 
     showDraw = () => {
-        this.showFilter();
-        const { showDraw, drawingData } = this.state;
+        const { showDraw, drawingData, deactiveFilter } = this.state;
         if (drawingData.length) {
             const pressedConfirm = confirm('저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?');
             if (pressedConfirm) {
@@ -169,7 +181,18 @@ class App extends Component {
                 return;
             }
         }
-        this.setState({ showDraw: !showDraw });
+
+        if (deactiveFilter === '') {
+            this.setState({
+                showDraw: !showDraw,
+                deactiveFilter: 'deactive'
+            });
+        } else {
+            this.setState({
+                showDraw: !showDraw,
+                deactiveFilter: ''
+            });
+        }
     };
 
     toggleModal = () => {
@@ -246,9 +269,10 @@ class App extends Component {
             showFilter,
             showDraw,
             showModal,
-            check7
+            check7,
+            deactiveFilter,
+            deactiveDraw
         } = this.state;
-
         return (
             <div id="wrapper">
                 <div id="map">
@@ -264,7 +288,7 @@ class App extends Component {
                             {`My`}
                         </div>
                         <div
-                            className="loginFavorBtn"
+                            className={`loginFavorBtn ${deactiveFilter}`}
                             onClick={this.showFilter}
                             onKeyPress={this.showFilter}
                             role="button"
@@ -273,7 +297,7 @@ class App extends Component {
                             {`필터`}
                         </div>
                         <div
-                            className="loginFavorBtn"
+                            className={`loginFavorBtn ${deactiveDraw}`}
                             onClick={this.showDraw}
                             onKeyPress={this.showDraw}
                             role="button"
