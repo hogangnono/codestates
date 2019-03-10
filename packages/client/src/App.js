@@ -49,10 +49,6 @@ class App extends Component {
         this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
-<<<<<<< HEAD
-            // console.log(this.bound);
-=======
->>>>>>> 73333d7a05d7d1fc5a3bda756884a2da0ae44780
             this.mainPageLoad(map);
             this.DataDelete();
         });

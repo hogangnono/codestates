@@ -19,15 +19,11 @@ class Drawing extends Component {
 
     state = {
         index: 0,
-<<<<<<< HEAD
         theNumberOfFigure: [],
         shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
         loadedListener: null,
         isInShapeCreateMode: false
-=======
-        theNumberOfFigure: []
->>>>>>> 73333d7a05d7d1fc5a3bda756884a2da0ae44780
     };
 
     handleRequestSave = (parseURL, body) => {
@@ -56,7 +52,6 @@ class Drawing extends Component {
             index: index + 1
         });
     };
-<<<<<<< HEAD
 
     removeListener = () => {
         const naver = window.naver;
@@ -71,7 +66,7 @@ class Drawing extends Component {
         const naver = window.naver;
         const { map } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
-        const overlays = [Circle, Circle, Circle, Circle, Circle]; // Change name of index to actual overlay name of import
+        const overlays = [Line, Circle, Rect, Circle, Circle]; // Change name of index to actual overlay name of import
         let Shape;
 
         for (let index = 0; index < icons.length; index++) {
@@ -145,49 +140,6 @@ class Drawing extends Component {
                         />
                     );
                 })}
-=======
-
-    render() {
-        const {
-            drawingData,
-            map,
-            closeFn
-        } = this.props;
-        const { theNumberOfFigure } = this.state;
-        // const iconArray = ['line', 'arrow', 'square', 'circle', 'polygon'];
-        return (
-            <div id="drawingComponentContainer">
-                <Button
-                    map={map}
-                    Shape={Line}
-                    icons="line"
-                    drewStatus={this.checkDrawStatus}
-                />
-                <Button
-                    map={map}
-                    Shape={Circle}
-                    icons="arrow"
-                    drewStatus={this.checkDrawStatus}
-                />
-                <Button
-                    map={map}
-                    Shape={Rect}
-                    icons="square"
-                    drewStatus={this.checkDrawStatus}
-                />
-                <Button
-                    map={map}
-                    Shape={Circle}
-                    icons="circle"
-                    drewStatus={this.checkDrawStatus}
-                />
-                <Button
-                    map={map}
-                    Shape={Circle}
-                    icons="polygon"
-                    drewStatus={this.checkDrawStatus}
-                />
->>>>>>> 73333d7a05d7d1fc5a3bda756884a2da0ae44780
                 <div id="myDrawingsContainer">
                     {theNumberOfFigure.map(el => {
                         return <MyDrawingElement key={'Idrew' + el} />;
