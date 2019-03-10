@@ -15,7 +15,8 @@ class Drawing extends Component {
 
     state = {
         index: 0,
-        theNumberOfFigure: []
+        theNumberOfFigure: [],
+        selectedButton: null
     }
 
     handleAxios = (parseURL, body) => {
@@ -38,16 +39,29 @@ class Drawing extends Component {
         });
     }
 
+    selectButton = (i) => {
+        console.log(i);
+        this.setState({ selectedButton: i });
+    }
+
     render() {
         const { drawingData, map, closeFn } = this.props;
         const { theNumberOfFigure } = this.state;
         return (
             <div id="drawingComponentContainer">
-                <Button map={map} Shape={Circle} icons="line" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="square" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Circle} icons="line" drewStatus={this.checkDrawStatus} selectButton={this.selectButton} />
+                <div onClick={this.arrowButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} selectButton={this.selectButton} />
+                </div>
+                <div onClick={this.squareButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="square" drewStatus={this.checkDrawStatus} selectButton={this.selectButton} />
+                </div>
+                <div onClick={this.circleButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} selectButton={this.selectButton} />
+                </div>
+                <div onClick={this.polygonButtonState} onKeyPress={() => { }}>
+                    <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} selectButton={this.selectButton} />
+                </div>
                 <div id="myDrawingsContainer">
                     {theNumberOfFigure.map(el => {
                         return (

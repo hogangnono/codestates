@@ -22,7 +22,6 @@ class Button extends Component {
         super(props);
         this.state = {
             map: props.map, // Set this up as props
-            toggle: true,
             leftClick: undefined,
             rightClick: undefined
         };
@@ -54,6 +53,7 @@ class Button extends Component {
         const { map, drewStatus } = this.props;
         const { Shape } = this.props;
         const { toggle } = this.state;
+        // toggle = !toggle;
 
         if (toggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
@@ -86,40 +86,68 @@ class Button extends Component {
         this.setState({ toggle: !toggle }); // Complete shape and turn off toggle
     };
 
-    toggleState() {
+    toggleState = () => {
         const { toggle } = this.state;
         this.setState({ toggle: !toggle });
     }
 
-    removeListener() {
+    removeListener = () => {
         const naver = window.naver;
         const { leftClick } = this.state;
         const { rightClick } = this.state;
+        const { toggle } = this.state;
         naver.maps.Event.removeListener(leftClick);
         naver.maps.Event.removeListener(rightClick);
+
+        console.log('toggle of state: ', toggle);
+        // if (toggle !== toggle2) {
+        //     console.log('State toggle is not equal to Props toggle.');
+        //     console.log('Toggle: ', toggle);
+        //     console.log('Toggle2: ', toggle2);
+        // }
+    }
+
+    testerBoolean = () => {
+        const { toggle } = this.state;
+        console.log('toggle: ', toggle);
     }
 
     createShape = () => {
         const { map } = this.state;
         this.drawingComponent(map);
-        this.toggleState();
+        // this.toggleState();
         this.removeListener();
+        // this.testerBoolean();
     };
 
     render() {
         // const { toggle } = this.state;
         // const btnClass = toggle ? 'lightPurple' : 'darkPurple';
+        // const { icons, toggle } = this.props;
+        // const { toggle2 } = this.state;
+        // const { leftClick, rightClick } = this.state;
+        // const naver = window.naver;
+
+        // if (toggle2 === false) {
+        //     naver.maps.Event.removeListener(leftClick);
+        //     naver.maps.Event.removeListener(rightClick);
+        // }
+
+        // console.log(`rceived toggle prop in button ${icons}`, toggle2);
+
+        const { selectButton } = this.props;
         const { icons } = this.props;
+
         return (
             <div>
                 <span
                     role="button"
                     tabIndex="0"
                     className="drawingTools"
-                    onClick={this.createShape}
-                    onKeyPress={this.createShape}
+                    // onClick={this.createShape}
+                    onKeyPress={() => { }}
                     ref={this.setWrapperRef}
-                >
+                    onClick={() => { selectButton(icons); }}>
                     {icons === 'line' ? (
                         <FaSlash className="rotateIcon1" />
                     ) : icons === 'arrow' ? (

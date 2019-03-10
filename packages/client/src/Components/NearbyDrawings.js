@@ -7,7 +7,7 @@ class NearbyDrawings extends Component {
     render() {
         return (
             <div>
-                NearbyDrawings
+                {`NearbyDrawings`}
             </div>
         );
     }
