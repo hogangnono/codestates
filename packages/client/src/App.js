@@ -14,6 +14,16 @@ class App extends Component {
         super(props);
         this.bound = undefined;
         this.drawList = {};
+        this.newToggleBox = {
+            상권: false,
+            '신축/재개발': false,
+            교육: false,
+            업무지구: false,
+            주택단지: false,
+            '도로개통/확장': false,
+            지하철개통: false,
+            기타: false
+        };
         this.state = {
             name: undefined,
             factor: undefined,
@@ -22,18 +32,7 @@ class App extends Component {
             showFilter: false,
             showModal: false,
             check7: false,
-            showDraw: false,
-            factorArray: [],
-            toggleBox: {
-                상권: false,
-                '신축/재개발': false,
-                교육: false,
-                업무지구: false,
-                주택단지: false,
-                도로개통: false,
-                지하철개통: false,
-                기타: false
-            }
+            showDraw: false
         };
     }
 
@@ -121,7 +120,7 @@ class App extends Component {
                 //     console.log(error);
                 //     alert('error!');
                 // }
-                alert(error);
+                // alert(error);
             });
     };
 
@@ -164,37 +163,25 @@ class App extends Component {
         return check7;
     };
 
-    filterToggleBox = category => {
-        const { toggleBox } = this.state;
-        const categoryObj = { [category]: !toggleBox[category] };
-        const newToggleBox = { ...toggleBox, ...categoryObj };
-        this.setState({
-            toggleBox: newToggleBox
-        });
-    };
-
-    factorLoad = async factor => {
-        const { toggleBox, name, map } = this.state;
+    factorLoad = category => {
+        const { name, map } = this.state;
+        const categories = { [category]: !this.newToggleBox[category] };
+        this.newToggleBox = { ...this.newToggleBox, ...categories };
         const bound = this.bound;
         const factors = [];
-        Object.entries(toggleBox).forEach(([key, value]) => {
-            if (value) {
-                factors.push(key);
-            }
-        });
-        // this.setState({
-        //     factorArray: [...factors]
-        // });
         Object.entries(this.drawList).forEach(([key, value]) => {
             value.setMap(null);
             delete this.drawList[key];
         });
-        console.log('factors', factors);
+        Object.entries(this.newToggleBox).forEach(([key, value]) => {
+            if (value) {
+                factors.push(key);
+            }
+        });
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
                 bound,
-                factor,
                 factors
             })
             .then(async result => {
@@ -233,12 +220,9 @@ class App extends Component {
             showFilter,
             showDraw,
             showModal,
-            check7,
-            factorArray
-            // toggleBox
+            check7
         } = this.state;
 
-        console.log('factorArray render', factorArray);
         return (
             <div id="wrapper">
                 <div id="map">
@@ -280,7 +264,6 @@ class App extends Component {
                             check7={check7}
                             _toggle7={this._toggle7}
                             factorLoad={this.factorLoad}
-                            filterToggleBox={this.filterToggleBox}
                         />
                     </div>
                     <div style={{ display: showDraw ? 'block' : 'none' }}>

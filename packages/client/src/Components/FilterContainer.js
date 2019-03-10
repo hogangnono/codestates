@@ -11,7 +11,7 @@ class FilterContainer extends Component {
     };
 
     render() {
-        const { check7, _toggle7, factorLoad, filterToggleBox } = this.props;
+        const { check7, _toggle7, factorLoad } = this.props;
         return (
             <div id="toolbox">
                 <div id="tabMenu">
@@ -31,7 +31,6 @@ class FilterContainer extends Component {
                             check7={check7}
                             _toggle7={_toggle7}
                             factorLoad={factorLoad}
-                            filterToggleBox={filterToggleBox}
                         />
                     </div>
                 </div>
