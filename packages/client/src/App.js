@@ -49,7 +49,7 @@ class App extends Component {
         this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
-            this.mainPageLoad(map);
+            // this.mainPageLoad(map);
             this.DataDelete();
         });
 
@@ -176,8 +176,10 @@ class App extends Component {
 
     factorLoad = category => {
         const { name, map } = this.state;
-        const categories = { [category]: !this.newToggleBox[category] };
-        this.newToggleBox = { ...this.newToggleBox, ...categories };
+        const toggleCategory = { [category]: !this.newToggleBox[category] };
+        if (toggleCategory[category]) {
+        }
+        this.newToggleBox = { ...this.newToggleBox, ...toggleCategory };
         const bound = this.bound;
         const factors = [];
         Object.entries(this.drawList).forEach(([key, value]) => {

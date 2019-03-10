@@ -1,5 +1,6 @@
 // import * as d3 from 'd3';
 import Shape from './Shape';
+import './Circle.less';
 
 var Circle = function(options) {
     Shape.call(this, options);

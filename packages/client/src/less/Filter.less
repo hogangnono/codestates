@@ -1,32 +1,60 @@
 body {
   font-family: Apple SD Gothic Neo, sans-serif;
-  color: #333;
 }
 #filterContainer {
   position: relative;
   width: 100%;
-  top: 80px;
+  top: 60px;
 }
 .filterBox {
   position: absolute;
-  width: 80%;
+  width: 100%;
   height: 430px;
   // border: 1px solid red;
 }
 .filterBtn {
-  width: 90%;
-  height: 50px;
-  line-height: 50px;
-  font-size: 18px;
+  position: relative;
+  width: auto;
+  height: 40px;
+  line-height: 42px;
+  font-size: 16px;
   transition-duration: 0.1s;
-  margin-left: 10%;
+  margin: 15px 20%;
+  // text-align: center;
+  // padding-left: 20px;
   cursor: pointer;
-  // border: 1px solid red;
+  color: #555;
+  border-radius: 30px;
   box-sizing: border-box;
+  letter-spacing: 1px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  // border: 1px solid red;
+}
+.checkedBox {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 30px;
+  box-sizing: border-box;
+  letter-spacing: 1px;
+  text-align: center;
+}
+input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+input[type="checkbox"]:checked ~ .checkedBox {
+  background-color: #4d55b2;
+  color: #fff;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
 }
 .buttonBox {
   position: absolute;
-  top: 430px;
+  top: 460px;
   width: 100%;
   height: 100px;
   // border: 1px solid red;
@@ -37,7 +65,7 @@ body {
   padding: 10px;
   margin: 0 10%;
   line-height: 30px;
-  border-radius: 10px;
+  border-radius: 20px;
   text-align: center;
   border: 1px solid #fff;
   box-sizing: border-box;
