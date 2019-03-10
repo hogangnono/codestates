@@ -19,7 +19,8 @@ class Drawing extends Component {
         theNumberOfFigure: [],
         shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
-        loadedListener: null
+        loadedListener: null,
+        isInShapeCreateMode: false
     };
 
     handleAxios = (parseURL, body) => {
@@ -46,10 +47,8 @@ class Drawing extends Component {
         const naver = window.naver;
         const { leftClick } = this.state;
         const { rightClick } = this.state;
-        const { toggle } = this.state;
         naver.maps.Event.removeListener(leftClick);
         naver.maps.Event.removeListener(rightClick);
-        console.log('toggle of state: ', toggle);
     };
 
     createShapeTest = () => {
@@ -59,8 +58,10 @@ class Drawing extends Component {
         const Shape = Circle;
         console.log('CreateShapeTest is called');
 
+
         // line / arrow / square / circle / polygon
         const { loadedListener } = this.state;
+
 
         if (loadedListener !== null) {
             naver.maps.Event.removeListener(loadedListener.leftClick);
@@ -87,6 +88,7 @@ class Drawing extends Component {
                 }).setMap(map);
 
                 naver.maps.Event.removeListener(rightClick);
+                this.setState({ isInShapeCreateMode: false });
             }
         );
 
@@ -101,12 +103,13 @@ class Drawing extends Component {
     selectButton = selectedIcon => {
         console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
+        this.setState({ isInShapeCreateMode: true });
         this.createShapeTest(); // Enter parameter for different shape
     };
 
     render() {
         const { drawingData, map, closeFn } = this.props;
-        const { theNumberOfFigure, selectedButton, shapes } = this.state;
+        const { theNumberOfFigure, selectedButton, shapes, isInShapeCreateMode } = this.state;
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -120,7 +123,7 @@ class Drawing extends Component {
                             icons={shape}
                             drewStatus={this.checkDrawStatus}
                             selectButton={this.selectButton}
-                            isSelected={selectedButton === shape ? true : false}
+                            isSelected={selectedButton === shape && isInShapeCreateMode ? true : false}
                         />
                     );
                 })}

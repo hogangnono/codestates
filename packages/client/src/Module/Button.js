@@ -39,18 +39,18 @@ class Button extends Component {
     }
 
     handleClickOutside(event) {
-        const { toggle } = this.state;
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            if (event.button === 2 && toggle !== true) {
-                this.setState({ toggle: !toggle });
-            }
+            // if (event.button === 2 && isInShapeCreateMode === true) {
+            //     // this.setState({ isInShapeCreateMode: false }, () => { console.log(isInShapeCreateMode); });
+            // }
+            console.log('Clicked outside.');
         }
     }
 
     render() {
-        const { selectButton, isSelected } = this.props;
+        const { selectButton, isSelected, isInShapeCreateMode } = this.props;
         const { icons } = this.props;
-        console.log('In button: ', icons, isSelected);
+        console.log(icons, ' isInShapeCreateMode: ', isInShapeCreateMode, ', isSelected: ' + isSelected);
 
         return (
             <div>
