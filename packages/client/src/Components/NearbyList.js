@@ -22,10 +22,7 @@ class NearbyList extends Component {
     render() {
         const { mapLoad } = this.props;
         // console.log('render의 map이에요.\n지금 map의 값 : ', mapLoad);
-        const {
-            nearbyListBackgroundColor,
-            nearbyFontColor
-        } = this.state;
+        const { nearbyListBackgroundColor, nearbyFontColor } = this.state;
         if (!mapLoad) {
             return <div />;
         }

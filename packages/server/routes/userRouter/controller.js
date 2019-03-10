@@ -20,42 +20,34 @@ exports.signup = async (req, res) => {
 
 /* Load data */
 exports.load = async (req, res) => {
-    const { name, factor, bound } = req.body;
+    const { name, bound, factors } = req.body;
     let transaction;
     const data = [];
+    const factorIdArray = [];
     // not filtering
-    if (!factor) {
+    if (factors && factors.length) {
         try {
             transaction = await User.sequelize.transaction();
-            const result = await Figure.findAll({
-                where: {
-                    center_lat: {
-                        [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
-                    },
-                    center_lng: {
-                        [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
-                    }
-                }
+            const factorId = await Factor.findAll({
+                where: { name: { [Op.in]: factors } }
             });
-            await transaction.commit();
-            data.push(result);
-        } catch (err) {
-            console.log('/load ERROR :: Reason :: ', err);
-            await transaction.rollback();
-            res.status(400).send('데이터 요청에 실패했습니다.');
-        }
-    } else { // filtering factor
-        try {
-            transaction = await User.sequelize.transaction();
-            const factorId = await Factor.findOne({ where: { name: factor } }).get('id');
+            factorId.forEach(idTable => {
+                factorIdArray.push(idTable.dataValues.id);
+            });
             const result = await Figure.findAll({
                 where: {
-                    factor_id: factorId,
+                    factor_id: { [Op.in]: factorIdArray },
                     center_lat: {
-                        [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
+                        [Op.between]: [
+                            bound._min._lat - 0.01,
+                            bound._max._lat + 0.01
+                        ]
                     },
                     center_lng: {
-                        [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
+                        [Op.between]: [
+                            bound._min._lng - 0.01,
+                            bound._max._lng + 0.01
+                        ]
                     }
                 }
             });
@@ -67,6 +59,64 @@ exports.load = async (req, res) => {
             res.status(400).send('데이터 요청에 실패했습니다.');
         }
     }
+    if (!factors || factors.length === 0) {
+        try {
+            transaction = await User.sequelize.transaction();
+            const result = await Figure.findAll({
+                where: {
+                    center_lat: {
+                        [Op.between]: [
+                            bound._min._lat - 0.01,
+                            bound._max._lat + 0.01
+                        ]
+                    },
+                    center_lng: {
+                        [Op.between]: [
+                            bound._min._lng - 0.01,
+                            bound._max._lng + 0.01
+                        ]
+                    }
+                }
+            });
+            await transaction.commit();
+            data.push(result);
+        } catch (err) {
+            console.log('/load ERROR :: Reason :: ', err);
+            await transaction.rollback();
+            res.status(400).send('데이터 요청에 실패했습니다.');
+        }
+    } else {
+        // filtering factor
+        // try {
+        //     transaction = await User.sequelize.transaction();
+        //     const factorId = await Factor.findOne({
+        //         where: { name: factor }
+        //     }).get('id');
+        //     const result = await Figure.findAll({
+        //         where: {
+        //             factor_id: factorId,
+        //             center_lat: {
+        //                 [Op.between]: [
+        //                     bound._min._lat - 0.01,
+        //                     bound._max._lat + 0.01
+        //                 ]
+        //             },
+        //             center_lng: {
+        //                 [Op.between]: [
+        //                     bound._min._lng - 0.01,
+        //                     bound._max._lng + 0.01
+        //                 ]
+        //             }
+        //         }
+        //     });
+        //     await transaction.commit();
+        //     data.push(result);
+        // } catch (err) {
+        //     console.log('/load ERROR :: Reason :: ', err);
+        //     await transaction.rollback();
+        //     res.status(400).send('데이터 요청에 실패했습니다.');
+        // }
+    }
 
     // when user login
     if (name) {
@@ -77,10 +127,16 @@ exports.load = async (req, res) => {
                 include: [{ model: Drawing, where: { user_id: userId } }], // include => join을 함
                 where: {
                     center_lat: {
-                        [Op.between]: [bound._min._lat - 0.01, bound._max._lat + 0.01]
+                        [Op.between]: [
+                            bound._min._lat - 0.01,
+                            bound._max._lat + 0.01
+                        ]
                     },
                     center_lng: {
-                        [Op.between]: [bound._min._lng - 0.01, bound._max._lng + 0.01]
+                        [Op.between]: [
+                            bound._min._lng - 0.01,
+                            bound._max._lng + 0.01
+                        ]
                     }
                 }
             });

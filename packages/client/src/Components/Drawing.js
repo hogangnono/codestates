@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import '../less/Drawing.less';
 import axios from 'axios';
 import Button from '../Module/Button';
+import Line from '../CustomOverlay/Line';
 import Circle from '../CustomOverlay/Circle';
+import Rect from '../CustomOverlay/Rect';
 import MyDrawingElement from './MyDrawingElement';
 
 class Drawing extends Component {
@@ -11,14 +13,9 @@ class Drawing extends Component {
         map: PropTypes.object.isRequired,
         closeFn: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-        drawingData: PropTypes.func.isRequired,
+        drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired
     };
-
-    state = {
-        index: 0,
-        theNumberOfFigure: []
-    }
 
     handleRequestSave = (parseURL, body) => {
         const { toggleModal, drawingData } = this.props;
@@ -42,14 +39,6 @@ class Drawing extends Component {
         }
     };
 
-    updateMyDrawingElementsLists = () => {
-        const { index, theNumberOfFigure } = this.state;
-        this.setState({
-            theNumberOfFigure: [...theNumberOfFigure, index + 1],
-            index: index + 1
-        });
-    }
-
     render() {
         const {
             map,
@@ -57,15 +46,40 @@ class Drawing extends Component {
             drawingData,
             updateDrawingData
         } = this.props;
-        // const { theNumberOfFigure } = this.state;
-        console.log('drawingData : ', drawingData);
+        console.log('drawingData : \n', drawingData);
+        // const iconArray = ['line', 'arrow', 'square', 'circle', 'polygon'];
         return (
             <div id="drawingComponentContainer">
-                <Button map={map} Shape={Circle} icons="line" updateDrawingData={updateDrawingData} />
-                <Button map={map} Shape={Circle} icons="arrow" updateDrawingData={updateDrawingData} />
-                <Button map={map} Shape={Circle} icons="square" updateDrawingData={updateDrawingData} />
-                <Button map={map} Shape={Circle} icons="circle" updateDrawingData={updateDrawingData} />
-                <Button map={map} Shape={Circle} icons="polygon" updateDrawingData={updateDrawingData} />
+                <Button
+                    map={map}
+                    Shape={Line}
+                    icons="line"
+                    updateDrawingData={updateDrawingData}
+                />
+                <Button
+                    map={map}
+                    Shape={Circle}
+                    icons="arrow"
+                    updateDrawingData={updateDrawingData}
+                />
+                <Button
+                    map={map}
+                    Shape={Rect}
+                    icons="square"
+                    updateDrawingData={updateDrawingData}
+                />
+                <Button
+                    map={map}
+                    Shape={Circle}
+                    icons="circle"
+                    updateDrawingData={updateDrawingData}
+                />
+                <Button
+                    map={map}
+                    Shape={Circle}
+                    icons="polygon"
+                    updateDrawingData={updateDrawingData}
+                />
                 <div id="myDrawingsContainer">
                     {drawingData.map((shape, index) => {
                         const newIndex = index + 1;
