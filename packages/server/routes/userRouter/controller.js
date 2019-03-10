@@ -20,24 +20,20 @@ exports.signup = async (req, res) => {
 
 /* Load data */
 exports.load = async (req, res) => {
-    const { name, bound, factor, factors } = req.body;
+    const { name, bound, factors } = req.body;
     let transaction;
     const data = [];
     const factorIdArray = [];
     // not filtering
-    console.log('factors', factors);
     if (factors && factors.length) {
         try {
             transaction = await User.sequelize.transaction();
             const factorId = await Factor.findAll({
                 where: { name: { [Op.in]: factors } }
             });
-            console.log('=======================');
             factorId.forEach(idTable => {
                 factorIdArray.push(idTable.dataValues.id);
             });
-            console.log('factorIdArray ', factorIdArray);
-            console.log('=======================');
             const result = await Figure.findAll({
                 where: {
                     factor_id: { [Op.in]: factorIdArray },
@@ -59,7 +55,7 @@ exports.load = async (req, res) => {
             data.push(result);
         } catch (err) {
             console.log('/load ERROR :: Reason :: ', err);
-            // await transaction.rollback();
+            await transaction.rollback();
             res.status(400).send('데이터 요청에 실패했습니다.');
         }
     }

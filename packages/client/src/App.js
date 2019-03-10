@@ -169,17 +169,15 @@ class App extends Component {
         this.newToggleBox = { ...this.newToggleBox, ...categories };
         const bound = this.bound;
         const factors = [];
+        Object.entries(this.drawList).forEach(([key, value]) => {
+            value.setMap(null);
+            delete this.drawList[key];
+        });
         Object.entries(this.newToggleBox).forEach(([key, value]) => {
             if (value) {
                 factors.push(key);
             }
         });
-        Object.entries(this.drawList).forEach(([key, value]) => {
-            value.setMap(null);
-            delete this.drawList[key];
-        });
-        console.log(this.newToggleBox);
-        console.log('factors', factors);
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
