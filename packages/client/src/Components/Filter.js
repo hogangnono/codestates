@@ -1,6 +1,6 @@
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/destructuring-assignment */
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import '../less/Filter.less';
 import PropTypes from 'prop-types';
 import FilterBox from './FilterBox';
@@ -13,12 +13,12 @@ class Filter extends Component {
     };
 
     render() {
-        const { check7, factorLoad, _toggle7, filterToggleBox } = this.props;
+        const { check7, factorLoad, _toggle7 } = this.props;
         const factorBox = [
             '상권',
-            '재개발/신축',
-            '업무지구',
+            '신축/재개발',
             '교육',
+            '업무지구',
             '주택단지',
             '도로개통/확장',
             '지하철개통',
@@ -33,7 +33,6 @@ class Filter extends Component {
                                 factorLoad={factorLoad}
                                 factor={factor}
                                 key={factor}
-                                filterToggleBox={filterToggleBox}
                             />
                         );
                     })}

@@ -9,12 +9,11 @@ class FilterBox extends Component {
     };
 
     render() {
-        const { factor, factorLoad, filterToggleBox } = this.props;
+        const { factor, factorLoad } = this.props;
         return (
             <div
                 className="filterBtn"
                 onClick={() => {
-                    filterToggleBox(factor);
                     factorLoad(factor);
                 }}
                 onKeyPress={() => factorLoad(factor)}
