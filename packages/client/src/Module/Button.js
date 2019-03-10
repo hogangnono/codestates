@@ -49,33 +49,70 @@ class Button extends Component {
     }
 
     drawingComponent = () => {
-        let startPos;
+        // let startPos;
         const naver = window.naver;
         const { map, drewStatus } = this.props;
         const { Shape } = this.props;
         const { toggle } = this.state;
-
+        let moveEvent;
+        let startPos;
+        let path;
+        const lineData = [];
+        let shapePoint = {};
+        let isClick = false;
         if (toggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
                 const { coord, offset } = e;
                 startPos = { coord, offset };
-
-                naver.maps.Event.removeListener(leftClick);
+                // 직선을 그릴 경우
+                if (Shape.name === 'Line') {
+                    isClick = true;
+                    // 화면상의 절대 좌표
+                    shapePoint.x = e.originalEvent.clientX;
+                    shapePoint.y = e.originalEvent.clientY;
+                    lineData.push(shapePoint);
+                    lineData.push(shapePoint);
+                    shapePoint = {};
+                    // 처음 그리는 경우
+                    if (lineData.length === 2) {
+                        path = new Shape({
+                            position: startPos,
+                            lineData: lineData,
+                            naverMap: map
+                        });
+                    } else {
+                        path.draw(lineData);
+                    }
+                    path.setMap(map);
+                }
+                // naver.maps.Event.removeListener(leftClick);
             });
-
+            moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
+                if (isClick) {
+                    const tempPoint = {};
+                    tempPoint.x = e.originalEvent.clientX;
+                    tempPoint.y = e.originalEvent.clientY;
+                    lineData[lineData.length - 1] = tempPoint;
+                    path.draw(lineData);
+                }
+            });
             const rightClick = naver.maps.Event.addListener(
                 map,
                 'rightclick',
                 e => {
                     drewStatus();
-                    const { coord, offset } = e;
-                    const endPos = { coord, offset };
-                    new Shape({
-                        position: { startPos, endPos },
-                        naverMap: map,
-                        zoom: ''
-                    }).setMap(map);
-
+                    if (Shape.name === 'Line') {
+                        naver.maps.Event.removeListener(moveEvent);
+                    } else {
+                        const { coord, offset } = e;
+                        const endPos = { coord, offset };
+                        new Shape({
+                            position: { startPos, endPos },
+                            naverMap: map,
+                            zoom: ''
+                        }).setMap(map);
+                    }
+                    naver.maps.Event.removeListener(leftClick);
                     naver.maps.Event.removeListener(rightClick);
                 }
             );

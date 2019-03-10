@@ -70,9 +70,7 @@ class MyDrawings extends Component {
                                     className="myDrawingLists"
                                 >
                                     <span className="myDrawingEachListTitle">
-                                        {`[${
-                                            fakeFactor[figure.factor_id]
-                                        }]  `}
+                                        {`[${fakeFactor[figure.factor_id]}]  `}
                                     </span>
                                     <span className="myDrawingEachListDes">
                                         {figure.description}
