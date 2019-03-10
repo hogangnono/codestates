@@ -12,40 +12,8 @@ import '../less/Drawing.less';
 
 class Button extends Component {
     static propTypes = {
-        icons: PropTypes.string.isRequired,
-        map: PropTypes.object.isRequired,
-        Shape: PropTypes.func.isRequired,
-        drewStatus: PropTypes.func.isRequired
+        icons: PropTypes.string.isRequired
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            map: props.map, // Set this up as props
-            leftClick: undefined,
-            rightClick: undefined
-        };
-
-        this.setWrapperRef = this.setWrapperRef.bind(this);
-        this.handleClickOutside = this.handleClickOutside.bind(this);
-    }
-
-    componentDidMount() {
-        document.addEventListener('mouseup', this.handleClickOutside);
-    }
-
-    setWrapperRef(node) {
-        this.wrapperRef = node;
-    }
-
-    handleClickOutside(event) {
-        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            // if (event.button === 2 && isInShapeCreateMode === true) {
-            //     // this.setState({ isInShapeCreateMode: false }, () => { console.log(isInShapeCreateMode); });
-            // }
-            console.log('Clicked outside.');
-        }
-    }
 
     render() {
         const { selectButton, isSelected, isInShapeCreateMode } = this.props;
@@ -61,7 +29,6 @@ class Button extends Component {
                         isSelected ? 'selected drawingTools' : 'drawingTools'
                     }
                     onKeyPress={() => { }}
-                    ref={this.setWrapperRef}
                     onClick={() => {
                         selectButton(icons);
                     }}
@@ -100,10 +67,5 @@ class Button extends Component {
         );
     }
 }
-// <Shape className="rotateIcon1 rotateIcon2" />
-
-// Button.propTypes = {
-//     children: PropTypes.element.isRequired
-// };
 
 export default Button;

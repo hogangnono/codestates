@@ -51,15 +51,20 @@ class Drawing extends Component {
         naver.maps.Event.removeListener(rightClick);
     };
 
-    createShapeTest = () => {
+    createShapeTest = (selectedIcon) => {
         let startPos;
         const naver = window.naver;
         const { map } = this.props;
-        const Shape = Circle;
-        console.log('CreateShapeTest is called');
+        const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
+        const overlays = [Circle, Circle, Circle, Circle, Circle]; // Change name of index to actual overlay name of import
+        let Shape;
 
+        for (let index = 0; index < icons.length; index++) {
+            if (selectedIcon === icons[index]) {
+                Shape = overlays[index];
+            }
+        }
 
-        // line / arrow / square / circle / polygon
         const { loadedListener } = this.state;
 
 
@@ -104,7 +109,7 @@ class Drawing extends Component {
         console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
-        this.createShapeTest(); // Enter parameter for different shape
+        this.createShapeTest(selectedIcon); // Enter parameter for different shape
     };
 
     render() {
@@ -119,54 +124,12 @@ class Drawing extends Component {
                     return (
                         <Button
                             map={map}
-                            Shape={Circle}
                             icons={shape}
-                            drewStatus={this.checkDrawStatus}
                             selectButton={this.selectButton}
                             isSelected={selectedButton === shape && isInShapeCreateMode ? true : false}
                         />
                     );
                 })}
-                {/* <Button
-                    map={map}
-                    Shape={Circle}
-                    icons="line"
-                    drewStatus={this.checkDrawStatus}
-                    selectButton={this.selectButton}
-                    isSelected={selectedButton === 'line' ? true : false}
-                />
-                <Button
-                    map={map}
-                    Shape={Circle}
-                    icons="arrow"
-                    drewStatus={this.checkDrawStatus}
-                    selectButton={this.selectButton}
-                    isSelected={selectedButton === 'arrow' ? true : false}
-                />
-                <Button
-                    map={map}
-                    Shape={Circle}
-                    icons="square"
-                    drewStatus={this.checkDrawStatus}
-                    selectButton={this.selectButton}
-                    isSelected={selectedButton === 'square' ? true : false}
-                />
-                <Button
-                    map={map}
-                    Shape={Circle}
-                    icons="circle"
-                    drewStatus={this.checkDrawStatus}
-                    selectButton={this.selectButton}
-                    isSelected={selectedButton === 'circle' ? true : false}
-                />
-                <Button
-                    map={map}
-                    Shape={Circle}
-                    icons="polygon"
-                    drewStatus={this.checkDrawStatus}
-                    selectButton={this.selectButton}
-                    isSelected={selectedButton === 'polygon' ? true : false}
-                /> */}
                 <div id="myDrawingsContainer">
                     {theNumberOfFigure.map(el => {
                         return <MyDrawingElement key={'Idrew' + el} />;
