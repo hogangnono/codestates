@@ -66,6 +66,7 @@ CustomOverlay.prototype.draw = function() {
     const pixelPosition = projection.fromCoordToOffset(position);
     this._element.style.position = 'absolute';
 
+    // console.log('pixel: ', pixelPosition)
     // place thd div where user click
     this._element.style.top = `${pixelPosition.y}px`;
     this._element.style.left = `${pixelPosition.x}px`;
