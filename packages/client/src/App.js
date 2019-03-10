@@ -1,3 +1,5 @@
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
@@ -27,13 +29,14 @@ class App extends Component {
         };
         this.state = {
             name: undefined,
-            factor: undefined,
+            // factor: undefined,
             drawingData: [],
             map: undefined,
             showFilter: false,
             showModal: false,
             check7: false,
-            showDraw: false
+            showDraw: false,
+            factors: []
         };
     }
 
@@ -49,7 +52,13 @@ class App extends Component {
         this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
-            // this.mainPageLoad(map);
+            // Object.entries(this.newToggleBox).forEach(([key, value]) => {
+            //     if (!value) {
+            //     } else {
+            //         this.mainPageLoad(map);
+            //     }
+            // });
+            this.mainPageLoad(map);
             this.DataDelete();
         });
 
@@ -89,12 +98,12 @@ class App extends Component {
     };
 
     mainPageLoad = map => {
-        const { name, factor } = this.state;
+        const { name, factors } = this.state;
         const bound = this.bound;
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
-                factor,
+                factors,
                 bound
             })
             .then(async result => {
@@ -153,19 +162,13 @@ class App extends Component {
         });
     };
 
-    showFilter = () => {
-        const { showFilter } = this.state;
-        this.setState({ showFilter: !showFilter });
-    };
-
-    showDraw = () => {
-        const { showDraw } = this.state;
-        this.setState({ showDraw: !showDraw });
-    };
-
     toggleModal = () => {
         const { showModal } = this.state;
         this.setState({ showModal: !showModal });
+    };
+
+    mainToggle = (stateName, toggle) => {
+        this.setState({ [stateName]: !toggle });
     };
 
     _toggle7 = () => {
@@ -177,8 +180,6 @@ class App extends Component {
     factorLoad = category => {
         const { name, map } = this.state;
         const toggleCategory = { [category]: !this.newToggleBox[category] };
-        if (toggleCategory[category]) {
-        }
         this.newToggleBox = { ...this.newToggleBox, ...toggleCategory };
         const bound = this.bound;
         const factors = [];
@@ -191,6 +192,10 @@ class App extends Component {
                 factors.push(key);
             }
         });
+        this.setState({
+            factors: factors
+        });
+
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
@@ -236,39 +241,36 @@ class App extends Component {
             showModal,
             check7
         } = this.state;
-
+        const mainButton = [
+            { name: 'My', stateName: 'showModal', toggleName: showModal },
+            { name: '필터', stateName: 'showFilter', toggleName: showFilter },
+            { name: '그리기', stateName: 'showDraw', toggleName: showDraw }
+        ];
         return (
             <div id="wrapper">
                 <div id="map">
                     <NearbyList mapLoad={map} />
                     <div id="loginFavorContainer">
-                        <div
-                            className="loginFavorBtn"
-                            onClick={this.toggleModal}
-                            onKeyPress={this.toggleModal}
-                            role="button"
-                            tabIndex="0"
-                        >
-                            {`My`}
-                        </div>
-                        <div
-                            className="loginFavorBtn"
-                            onClick={this.showFilter}
-                            onKeyPress={this.showFilter}
-                            role="button"
-                            tabIndex="0"
-                        >
-                            {`필터`}
-                        </div>
-                        <div
-                            className="loginFavorBtn"
-                            onClick={this.showDraw}
-                            onKeyPress={this.showDraw}
-                            role="button"
-                            tabIndex="0"
-                        >
-                            {`그리기`}
-                        </div>
+                        {mainButton.map(button => (
+                            <div
+                                className="loginFavorBtn"
+                                onClick={() => this.mainToggle(
+                                    button.stateName,
+                                    button.toggleName
+                                )
+                                }
+                                onKeyPress={() => this.mainToggle(
+                                    button.stateName,
+                                    button.toggleName
+                                )
+                                }
+                                role="button"
+                                tabIndex="0"
+                                key={button}
+                            >
+                                {button.name}
+                            </div>
+                        ))}
                     </div>
                     {showModal ? (
                         <LoginModal
