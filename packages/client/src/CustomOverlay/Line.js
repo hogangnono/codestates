@@ -3,7 +3,7 @@ var Line = function(options) {
     // current map ratio
     this._zoom = options.zoom || options.naverMap.getZoom();
     this._map = options.naverMap;
-    this._shapePoint = options.shapePoint;
+    this._lineData = options.lineData;
     this.setPosition(options.position);
     this.setMap(options.map || null);
 };
@@ -12,7 +12,7 @@ Line.prototype = new window.naver.maps.OverlayView();
 Line.prototype.constructor = Line;
 
 Line.prototype.setPosition = function(position) {
-    this._startPos = position.point;
+    this._startPos = position.startPos;
     this.draw();
 };
 
@@ -37,49 +37,47 @@ Line.prototype.onAdd = function() {
 };
 
 Line.prototype.addShape = function() {
-    this.svg.append('path');
+    this._path = this.svg.append('path');
 };
 
 
-Line.prototype.draw = function(point) {
+Line.prototype.draw = function(lineData) {
     if (!this.getMap()) {
         return;
     }
-    let endPixelPosition = {};
-    if (!point) {
-        endPixelPosition.x = this._shapePoint.x + 4;
-        endPixelPosition.y = this._shapePoint.y + 4;
-    } else {
-        endPixelPosition = point;
+
+    if (lineData) {
+        this._lineData = lineData;
     }
     this._element.className = 'aaaaaa';
     this._element.style.position = 'absolute';
-    this.bound = this.map.getBounds();
-    const pointt = {};
-    pointt.x = this.bound._min.x;
-    pointt.y = this.bound._max.y;
-    new window.naver.maps.Marker({
-        position: new window.naver.maps.LatLng(pointt.y, pointt.x),
-        map: this.map
-    });
-    const projectionn = this.map.getProjection();
-    const startt = projectionn.fromCoordToOffset(pointt);
-    this._element.style.top = `${startt.y}px`;
-    this._element.style.left = `${startt.x}px`;
+    // 지도를 이동했을때 새로운 영역의 왼쪽 상단의 좌표를 확인
+    const bound = this.map.getBounds();
+    const boundCoord = {};
+    // lan, lng값을 가짐
+    boundCoord.x = bound._min.x;
+    boundCoord.y = bound._max.y;
+    // coord 값을 offset 값으로 변경
+    const projection = this.map.getProjection();
+    const boundOffset = projection.fromCoordToOffset(boundCoord);
+    // 새로운 영역 위치에 div를 생성
+    this._element.style.top = `${boundOffset.y}px`;
+    this._element.style.left = `${boundOffset.x}px`;
     this._element.style.width = `${window.innerWidth}px`;
     this._element.style.height = `${window.innerHeight}px`;
-
+    // svg도 윈도우 크기에 맞게 생성
     const svg = this._element.childNodes[0];
     svg.style.width = `${window.innerWidth}px`;
     svg.style.height = `${window.innerHeight}px`;
 
-    // place the rect's center point and resize
-    const line = svg.childNodes[0];
-    // d 설정 관련 함수
-    line.setAttribute('d', `M ${this._shapePoint.x} ${this._shapePoint.y} L ${endPixelPosition.x} ${endPixelPosition.y}`);
-    line.setAttribute('stroke', `red`);
-    line.setAttribute('stroke-width', `2`);
-    line.setAttribute('fill', `none`);
+    const line = d3.line()
+                .x(function(d) { return (d.x); })
+                .y(function(d) { return (d.y); });
+
+    this._path.attr('d', line(this._lineData))
+            .attr('stroke', 'black')
+            .attr('stroke-width', 5)
+            .attr('fill', 'none');
 };
 
 Line.prototype.onRemove = function() {
