@@ -39,7 +39,7 @@ class Button extends Component {
     }
 
     handleClickOutside(event) {
-        const { toggle } = this.props;
+        const { toggle } = this.state;
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             if (event.button === 2 && toggle !== true) {
                 this.setState({ toggle: !toggle });
@@ -47,14 +47,13 @@ class Button extends Component {
         }
     }
 
-    drawingComponent = (toggle) => {
+    drawingComponent = () => {
         let startPos;
         const naver = window.naver;
         const { map, drewStatus } = this.props;
         const { Shape } = this.props;
-        // const { toggle } = this.props;
+        const { toggle } = this.state;
         // toggle = !toggle;
-        console.log('inside drawingComponent: (2)', toggle);
 
         if (toggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
@@ -84,41 +83,60 @@ class Button extends Component {
             this.setState({ rightClick: rightClick });
             this.setState({ leftClick: leftClick });
         }
-        // this.setState({ toggle: !toggle }); // Complete shape and turn off toggle
+        this.setState({ toggle: !toggle }); // Complete shape and turn off toggle
     };
 
-    // toggleState = () => {
-    // const { toggle } = this.props;
-    //     this.setState({ toggle: true });
-    // }
+    toggleState = () => {
+        const { toggle } = this.state;
+        this.setState({ toggle: !toggle });
+    }
 
     removeListener = () => {
         const naver = window.naver;
         const { leftClick } = this.state;
         const { rightClick } = this.state;
+        const { toggle } = this.state;
         naver.maps.Event.removeListener(leftClick);
         naver.maps.Event.removeListener(rightClick);
+
+        console.log('toggle of state: ', toggle);
+        // if (toggle !== toggle2) {
+        //     console.log('State toggle is not equal to Props toggle.');
+        //     console.log('Toggle: ', toggle);
+        //     console.log('Toggle2: ', toggle2);
+        // }
     }
 
-    createShape = (toggle) => {
+    testerBoolean = () => {
+        const { toggle } = this.state;
+        console.log('toggle: ', toggle);
+    }
+
+    createShape = () => {
         const { map } = this.state;
+        this.drawingComponent(map);
         // this.toggleState();
-        this.drawingComponent(map, toggle);
         this.removeListener();
+        // this.testerBoolean();
     };
 
     render() {
         // const { toggle } = this.state;
         // const btnClass = toggle ? 'lightPurple' : 'darkPurple';
-        const { icons, toggle } = this.props;
-        const { leftClick, rightClick } = this.state;
-        const naver = window.naver;
+        // const { icons, toggle } = this.props;
+        // const { toggle2 } = this.state;
+        // const { leftClick, rightClick } = this.state;
+        // const naver = window.naver;
 
-        console.log('toggle in Button.js: ', toggle + ', icon: ' + icons);
-        if (toggle === false) {
-            naver.maps.Event.removeListener(leftClick);
-            naver.maps.Event.removeListener(rightClick);
-        }
+        // if (toggle2 === false) {
+        //     naver.maps.Event.removeListener(leftClick);
+        //     naver.maps.Event.removeListener(rightClick);
+        // }
+
+        // console.log(`rceived toggle prop in button ${icons}`, toggle2);
+
+        const { selectButton } = this.props;
+        const { icons } = this.props;
 
         return (
             <div>
@@ -126,10 +144,10 @@ class Button extends Component {
                     role="button"
                     tabIndex="0"
                     className="drawingTools"
-                    onClick={() => { this.createShape(toggle); }}
+                    // onClick={this.createShape}
                     onKeyPress={() => { }}
                     ref={this.setWrapperRef}
-                >
+                    onClick={() => { selectButton(icons); }}>
                     {icons === 'line' ? (
                         <FaSlash className="rotateIcon1" />
                     ) : icons === 'arrow' ? (
