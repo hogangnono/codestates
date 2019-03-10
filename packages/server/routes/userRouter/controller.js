@@ -11,7 +11,7 @@ exports.signup = async (req, res) => {
         transaction = await User.sequelize.transaction();
         await User.findOrCreate({ where: { name } });
         await transaction.commit();
-        res.status(200).send('유저 이름을 Row로 저장했습니다! :)');
+        res.status(200).send(`어서오세요! ${name}님!\n로그인에 성공했습니다 :)`);
     } catch (err) {
         await transaction.rollback();
         res.status(500).send('이름 저장에 실패했습니다.');

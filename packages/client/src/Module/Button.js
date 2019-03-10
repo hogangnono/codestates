@@ -15,7 +15,7 @@ class Button extends Component {
         icons: PropTypes.string.isRequired,
         map: PropTypes.object.isRequired,
         Shape: PropTypes.func.isRequired,
-        drewStatus: PropTypes.func.isRequired
+        updateDrawingData: PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -51,8 +51,7 @@ class Button extends Component {
     drawingComponent = () => {
         let startPos;
         const naver = window.naver;
-        const { map, drewStatus } = this.props;
-        const { Shape } = this.props;
+        const { map, Shape, updateDrawingData } = this.props;
         const { toggle } = this.state;
 
         if (toggle === true) {
@@ -67,14 +66,15 @@ class Button extends Component {
                 map,
                 'rightclick',
                 e => {
-                    drewStatus();
                     const { coord, offset } = e;
                     const endPos = { coord, offset };
-                    new Shape({
+                    const shapeData = {
                         position: { startPos, endPos },
                         naverMap: map,
                         zoom: ''
-                    }).setMap(map);
+                    };
+                    new Shape(shapeData).setMap(map);
+                    updateDrawingData(shapeData);
 
                     naver.maps.Event.removeListener(rightClick);
                 }

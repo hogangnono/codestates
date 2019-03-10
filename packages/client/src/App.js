@@ -17,9 +17,9 @@ class App extends Component {
         this.state = {
             name: undefined,
             factor: undefined,
-            drawingData: [],
             showToolbox: false,
-            showModal: false
+            showModal: false,
+            drawingData: []
         };
     }
 
@@ -143,7 +143,13 @@ class App extends Component {
     };
 
     showToolbox = () => {
-        const { showToolbox } = this.state;
+        const { showToolbox, drawingData } = this.state;
+        if (drawingData.length) {
+            const pressedConfirm = confirm('저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?');
+            if (pressedConfirm) {
+                this.setState({ drawingData: [] });
+            }
+        }
         this.setState({ showToolbox: !showToolbox });
     }
 
@@ -152,6 +158,11 @@ class App extends Component {
         const { showModal } = this.state;
         this.setState({ showModal: !showModal });
     };
+
+    updateDrawingData = (shapeData) => {
+        const { drawingData } = this.state;
+        this.setState({ drawingData: [...drawingData, shapeData] });
+    }
 
     render() {
         const {
@@ -195,18 +206,16 @@ class App extends Component {
                     ) : null}
                     <div style={{ display: showToolbox ? 'block' : 'none' }}>
                         <Toolbox
-                            closeFn={this.showToolbox}
                             mapLoad={map}
-                            drawingData={drawingData}
                             name={name}
-                            toggleModal={this.toggleModal}
                             handleUserNameOnChange={this.handleUserNameOnChange}
                             handleUserNameAndLoginStatus={this.handleUserNameAndLoginStatus}
+                            drawingData={drawingData}
+                            updateDrawingData={this.updateDrawingData}
+                            toggleModal={this.toggleModal}
+                            closeFn={this.showToolbox}
                         />
                     </div>
-                    {/* {showToolbox ? (
-                        <Toolbox mapLoad={map} drawingData={drawingData} />
-                    ) : null} */}
                 </div>
             </div>
         );

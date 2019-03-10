@@ -6,10 +6,11 @@ import '../less/Toolbox.less';
 
 class Toolbox extends Component {
     static propTypes = {
-        drawingData: PropTypes.array.isRequired,
         mapLoad: PropTypes.object.isRequired,
         closeFn: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired
+        toggleModal: PropTypes.func.isRequired,
+        drawingData: PropTypes.array.isRequired,
+        updateDrawingData: PropTypes.func.isRequired
     };
 
     state = {
@@ -45,10 +46,11 @@ class Toolbox extends Component {
 
     render() {
         const {
-            drawingData,
             mapLoad,
             closeFn,
-            toggleModal
+            toggleModal,
+            drawingData,
+            updateDrawingData
         } = this.props;
         const {
             backgroundBlueForFilterTab,
@@ -100,8 +102,9 @@ class Toolbox extends Component {
                         <Drawing
                             map={mapLoad}
                             drawingData={drawingData}
-                            closeFn={closeFn}
+                            updateDrawingData={updateDrawingData}
                             toggleModal={toggleModal}
+                            closeFn={closeFn}
                         />
                     </div>
                 </div>

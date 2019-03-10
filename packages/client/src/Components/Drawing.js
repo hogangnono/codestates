@@ -8,10 +8,11 @@ import MyDrawingElement from './MyDrawingElement';
 
 class Drawing extends Component {
     static propTypes = {
-        drawingData: PropTypes.array.isRequired,
         map: PropTypes.object.isRequired,
         closeFn: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired
+        toggleModal: PropTypes.func.isRequired,
+        drawingData: PropTypes.func.isRequired,
+        updateDrawingData: PropTypes.func.isRequired
     };
 
     state = {
@@ -20,10 +21,13 @@ class Drawing extends Component {
     }
 
     handleRequestSave = (parseURL, body) => {
-        const { toggleModal } = this.props;
+        const { toggleModal, drawingData } = this.props;
         const basicURL = 'http://localhost:3001/';
         const isLogin = localStorage.getItem('isLogin');
         if (JSON.parse(isLogin)) {
+            if (!drawingData.length) {
+                return alert('그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)');
+            }
             axios
                 .post(basicURL + parseURL, body)
                 .then(result => {
@@ -38,7 +42,7 @@ class Drawing extends Component {
         }
     };
 
-    checkDrawStatus = () => {
+    updateMyDrawingElementsLists = () => {
         const { index, theNumberOfFigure } = this.state;
         this.setState({
             theNumberOfFigure: [...theNumberOfFigure, index + 1],
@@ -48,22 +52,25 @@ class Drawing extends Component {
 
     render() {
         const {
-            drawingData,
             map,
-            closeFn
+            closeFn,
+            drawingData,
+            updateDrawingData
         } = this.props;
-        const { theNumberOfFigure } = this.state;
+        // const { theNumberOfFigure } = this.state;
+        console.log('drawingData : ', drawingData);
         return (
             <div id="drawingComponentContainer">
-                <Button map={map} Shape={Circle} icons="line" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="square" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Circle} icons="line" updateDrawingData={updateDrawingData} />
+                <Button map={map} Shape={Circle} icons="arrow" updateDrawingData={updateDrawingData} />
+                <Button map={map} Shape={Circle} icons="square" updateDrawingData={updateDrawingData} />
+                <Button map={map} Shape={Circle} icons="circle" updateDrawingData={updateDrawingData} />
+                <Button map={map} Shape={Circle} icons="polygon" updateDrawingData={updateDrawingData} />
                 <div id="myDrawingsContainer">
-                    {theNumberOfFigure.map(el => {
+                    {drawingData.map((shape, index) => {
+                        const newIndex = index + 1;
                         return (
-                            <MyDrawingElement key={'Idrew' + el} />
+                            <MyDrawingElement key={'Idrew' + newIndex} drawingData={drawingData} />
                         );
                     })}
                 </div>
