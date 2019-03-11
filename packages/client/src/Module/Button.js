@@ -60,16 +60,20 @@ class Button extends Component {
         const lineData = [];
         let shapePoint = {};
         let isClick = false;
+        let isFirst = true;
+        let isCircle = false;
+        let newDrawing;
         if (toggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
                 const { coord, offset } = e;
                 startPos = { coord, offset };
+                // 화면상의 절대 좌표
+                shapePoint.x = e.originalEvent.clientX;
+                shapePoint.y = e.originalEvent.clientY;
+                console.log(Shape.name);
                 // 직선을 그릴 경우
                 if (Shape.name === 'Line') {
                     isClick = true;
-                    // 화면상의 절대 좌표
-                    shapePoint.x = e.originalEvent.clientX;
-                    shapePoint.y = e.originalEvent.clientY;
                     lineData.push(shapePoint);
                     lineData.push(shapePoint);
                     shapePoint = {};
@@ -80,20 +84,44 @@ class Button extends Component {
                             lineData: lineData,
                             naverMap: map
                         });
+                        console.log('이건 길: ', path);
                     } else {
                         path.draw(lineData);
                     }
                     path.setMap(map);
+                } else {
+                    console.log('원을 그린다');
+                    // 원을 처음 클릭한 경우
+                    if (isFirst) {
+                        console.log('처음 눌렀다');
+                        isCircle = true;
+                        newDrawing = new Shape({
+                            position: { startPos },
+                            shapePoint: shapePoint,
+                            naverMap: map
+                        });
+
+                        newDrawing.setMap(map);
+                        console.log('이건 원: ', newDrawing);
+                    } else {
+                        console.log('끝낸다');
+                        naver.maps.Event.removeListener(moveEvent);
+                    }
+                    isFirst = !isFirst;
                 }
                 // naver.maps.Event.removeListener(leftClick);
             });
             moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
+                const tempPoint = {};
+                tempPoint.x = e.originalEvent.clientX;
+                tempPoint.y = e.originalEvent.clientY;
+                // 직선일 경우
                 if (isClick) {
-                    const tempPoint = {};
-                    tempPoint.x = e.originalEvent.clientX;
-                    tempPoint.y = e.originalEvent.clientY;
                     lineData[lineData.length - 1] = tempPoint;
                     path.draw(lineData);
+                }
+                if (isCircle) {
+                    newDrawing.draw(tempPoint);
                 }
             });
             const rightClick = naver.maps.Event.addListener(
@@ -103,14 +131,6 @@ class Button extends Component {
                     drewStatus();
                     if (Shape.name === 'Line') {
                         naver.maps.Event.removeListener(moveEvent);
-                    } else {
-                        const { coord, offset } = e;
-                        const endPos = { coord, offset };
-                        new Shape({
-                            position: { startPos, endPos },
-                            naverMap: map,
-                            zoom: ''
-                        }).setMap(map);
                     }
                     naver.maps.Event.removeListener(leftClick);
                     naver.maps.Event.removeListener(rightClick);
