@@ -1,8 +1,9 @@
 import * as d3 from 'd3';
 var Line = function(options) {
-    // current map ratio
+    // 현재 맵의 축적 또는 저장될 당시의 축적
     this._zoom = options.zoom || options.naverMap.getZoom();
     this._map = options.naverMap;
+    // 선분의 꼭지점
     this._lineData = options.lineData;
     this.setPosition(options.position);
     this.setMap(options.map || null);
@@ -76,7 +77,7 @@ Line.prototype.draw = function(lineData) {
 
     this._path.attr('d', line(this._lineData))
             .attr('stroke', 'black')
-            .attr('stroke-width', 5)
+            .attr('stroke-width', 3)
             .attr('fill', 'none');
 };
 

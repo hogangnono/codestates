@@ -1,10 +1,10 @@
 import * as d3 from 'd3';
 var Circle = function(options) {
-    console.log('들어온 정보는 이거: ', options);
-    // current map ratio
+    // 현재 맵의 축적 또는 저장될 당시의 축적
     this._zoom = options.zoom || options.naverMap.getZoom();
     this._map = options.naverMap;
-    this._shapePoint = options.shapePoint;
+    // 원의 시작점과 끝점
+    this._lineData = options.lineData;
     this.setPosition(options.position);
     this.setMap(options.map || null);
 };
@@ -28,7 +28,7 @@ Circle.prototype.onAdd = function() {
     // make a div that contain Circle and whole info
     const div = document.createElement('div');
 
-    // make svg that contain Circle
+    // 원을 가지는 svg를 가지고 div안에 넣음
     this.svg = d3.create('svg');
     this.addShape();
     div.appendChild(this.svg.node());
@@ -41,23 +41,19 @@ Circle.prototype.addShape = function() {
     this._path = this.svg.append('path');
 };
 
-
-Circle.prototype.draw = function(tempPoint) {
+Circle.prototype.draw = function(lineData) {
     if (!this.getMap()) {
         return;
     }
-
-    if (tempPoint) {
-        this._width = Math.abs((tempPoint.x - this._shapePoint.x) / 2);
-        this._height = Math.abs(tempPoint.y - this._shapePoint.y);
-        // this._shapePoint.x = Math.min(this._shapePoint.x, tempPoint.x);
-        // this._shapePoint.y = Math.min(this._shapePoint.y, tempPoint.y);
-
-    } else {
-        this._width = 1;
-        this._height = 1;
+    if (lineData) {
+        this._lineData = lineData;
     }
-    this._element.className = 'aaaaaa';
+    // 새로운 시작점을 정해줌 (lineData[0] 찍은 위치, lineData[1]는 현재 마우스 위치)
+    this._width = Math.abs(this._lineData[1].x - this._lineData[0].x) + 1;
+    this._height = Math.abs(this._lineData[1].y - this._lineData[0].y) + 1;
+    this._startPos.x = Math.min(this._lineData[0].x, this._lineData[1].x);
+    this._startPos.y = Math.min(this._lineData[0].y, this._lineData[1].y);
+    /* Set div */
     this._element.style.position = 'absolute';
     // 지도를 이동했을때 새로운 영역의 왼쪽 상단의 좌표를 확인
     const bound = this.map.getBounds();
@@ -73,12 +69,19 @@ Circle.prototype.draw = function(tempPoint) {
     this._element.style.left = `${boundOffset.x}px`;
     this._element.style.width = `${window.innerWidth}px`;
     this._element.style.height = `${window.innerHeight}px`;
-    // svg도 윈도우 크기에 맞게 생성
-    const svg = this._element.childNodes[0];
-    svg.style.width = `${window.innerWidth}px`;
-    svg.style.height = `${window.innerHeight}px`;
 
-    this._path.attr('d', `M ${this._shapePoint.x} ${this._shapePoint.y} A ${this._width} ${this._height} 0 1 0 ${this._shapePoint.x} ${this._shapePoint.y - 1}`);
+    /* Set svg */
+    const svg = this._element.childNodes[0];
+    svg.style.position = 'absolute';
+    // svg를 원 크기에 맞게 생성
+    svg.style.top = `${this._startPos.y}px`;
+    svg.style.left = `${this._startPos.x}px`;
+    svg.style.width = `${this._width + 3}px`;
+    svg.style.height = `${this._height + 3}px`;
+
+    /* Set path */
+    this._path.attr('d', `M 1 ${this._height / 2 + 2} A ${this._width / 2} ${this._height / 2} 0 1 0 1 ${this._height / 2 + 1.9}`)
+    .attr('stroke', 'black').attr('stroke-width', '3').attr('fill', 'none');
 };
 
 Circle.prototype.onRemove = function() {

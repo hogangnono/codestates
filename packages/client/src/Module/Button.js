@@ -63,6 +63,8 @@ class Button extends Component {
         let isFirst = true;
         let isCircle = false;
         let newDrawing;
+        let tempPoint = {};
+
         if (toggle === true) {
             const leftClick = naver.maps.Event.addListener(map, 'click', e => {
                 const { coord, offset } = e;
@@ -70,12 +72,11 @@ class Button extends Component {
                 // 화면상의 절대 좌표
                 shapePoint.x = e.originalEvent.clientX;
                 shapePoint.y = e.originalEvent.clientY;
-                console.log(Shape.name);
                 // 직선을 그릴 경우
                 if (Shape.name === 'Line') {
+                    lineData.push(shapePoint);
+                    lineData.push(shapePoint);
                     isClick = true;
-                    lineData.push(shapePoint);
-                    lineData.push(shapePoint);
                     shapePoint = {};
                     // 처음 그리는 경우
                     if (lineData.length === 2) {
@@ -84,27 +85,25 @@ class Button extends Component {
                             lineData: lineData,
                             naverMap: map
                         });
-                        console.log('이건 길: ', path);
                     } else {
                         path.draw(lineData);
                     }
                     path.setMap(map);
                 } else {
-                    console.log('원을 그린다');
                     // 원을 처음 클릭한 경우
                     if (isFirst) {
-                        console.log('처음 눌렀다');
+                        lineData.push(shapePoint);
+                        lineData.push(shapePoint);
+                        shapePoint = {};
                         isCircle = true;
                         newDrawing = new Shape({
                             position: { startPos },
-                            shapePoint: shapePoint,
+                            lineData: lineData,
                             naverMap: map
                         });
 
                         newDrawing.setMap(map);
-                        console.log('이건 원: ', newDrawing);
                     } else {
-                        console.log('끝낸다');
                         naver.maps.Event.removeListener(moveEvent);
                     }
                     isFirst = !isFirst;
@@ -112,7 +111,7 @@ class Button extends Component {
                 // naver.maps.Event.removeListener(leftClick);
             });
             moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
-                const tempPoint = {};
+                tempPoint = {};
                 tempPoint.x = e.originalEvent.clientX;
                 tempPoint.y = e.originalEvent.clientY;
                 // 직선일 경우
@@ -121,7 +120,8 @@ class Button extends Component {
                     path.draw(lineData);
                 }
                 if (isCircle) {
-                    newDrawing.draw(tempPoint);
+                    lineData[lineData.length - 1] = tempPoint;
+                    newDrawing.draw(lineData);
                 }
             });
             const rightClick = naver.maps.Event.addListener(
