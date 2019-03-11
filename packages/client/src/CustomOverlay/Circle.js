@@ -12,8 +12,5 @@ Circle.prototype.setPath = function() {
     this._path.attr('d', `M 1 ${this._height / 2 + 2} A ${this._width / 2} ${this._height / 2} 0 1 0 1 ${this._height / 2 + 1.9}`)
       .attr('stroke', 'black').attr('stroke-width', '3').attr('fill', 'none');
 };
-Circle.prototype.onRemove = function() {
-    this._element.parentNode.removeChild(this._element);
-};
 
 export default Circle;

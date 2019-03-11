@@ -27,8 +27,4 @@ Line.prototype.setPath = function() {
             .attr('fill', 'none');
 };
 
-Line.prototype.onRemove = function() {
-    this._element.parentNode.removeChild(this._element);
-};
-
 export default Line;
