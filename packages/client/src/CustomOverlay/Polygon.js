@@ -9,17 +9,16 @@ Polygon.prototype = Object.create(Line.prototype);
 Polygon.prototype.constructor = Polygon;
 
 Polygon.prototype.setPath = function() {
-    console.log('polygon입니다');
     const line = d3.line()
                 .x(function(d) { return (d.x); })
                 .y(function(d) { return (d.y); });
 
     const linePoint = line(this._lineData);
-    // linePoint.concat('Z');
-    this._path.attr('d', linePoint)
-            .attr('stroke', 'red')
-            .attr('stroke-width', 1);
+    this._path.attr('d', `${linePoint} Z`)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 3)
+            .attr('fill', 'none');
 };
 
 
-export default Line;
+export default Polygon;
