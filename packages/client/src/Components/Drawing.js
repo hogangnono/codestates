@@ -5,6 +5,7 @@ import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
+import Arrow from '../CustomOverlay/Arrow';
 import Circle from '../CustomOverlay/Circle';
 import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
@@ -67,17 +68,14 @@ class Drawing extends Component {
         const naver = window.naver;
         const { map } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
-        const overlays = [Line, Circle, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
+        const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
 
         let moveEvent;
-        let path;
+        let figure;
         const lineData = [];
         let shapePoint = {};
         let isClick = false;
-        let isFirst = true;
-        let isCircle = false;
-        let newDrawing;
         let tempPoint = {};
 
 
@@ -101,43 +99,25 @@ class Drawing extends Component {
             // 화면상의 절대 좌표
             shapePoint.x = e.originalEvent.clientX;
             shapePoint.y = e.originalEvent.clientY;
-            // 직선을 그릴 경우
-            if (Shape.name === 'Line' || Shape.name === 'Polygon') {
-                lineData.push(shapePoint);
-                lineData.push(shapePoint);
-                isClick = true;
-                shapePoint = {};
-                // 처음 그리는 경우
-                if (lineData.length === 2) {
-                    path = new Shape({
-                        position: startPos,
-                        lineData: lineData,
-                        naverMap: map
-                    });
-                } else {
-                    path.draw(lineData);
-                }
-                path.setMap(map);
-            } else {
-                // 원을 처음 클릭한 경우
-                if (isFirst) {
-                    lineData.push(shapePoint);
-                    lineData.push(shapePoint);
-                    shapePoint = {};
-                    isCircle = true;
-                    newDrawing = new Shape({
-                        position: { startPos },
-                        lineData: lineData,
-                        naverMap: map
-                    });
+            lineData.push(shapePoint);
+            isClick = true;
 
-                    newDrawing.setMap(map);
-                } else {
+            if (lineData.length === 1) {
+                lineData.push(shapePoint);
+                figure = new Shape({
+                    position: startPos,
+                    lineData: lineData,
+                    naverMap: map
+                });
+            } else {
+                if (Shape.name === 'Rect' || Shape.name === 'Circle') {
                     naver.maps.Event.removeListener(moveEvent);
+                } else {
+                    figure.draw(lineData);
                 }
-                isFirst = !isFirst;
             }
-            // naver.maps.Event.removeListener(leftClick);
+            shapePoint = {};
+            figure.setMap(map);
         });
 
 
@@ -148,17 +128,13 @@ class Drawing extends Component {
             // 직선일 경우
             if (isClick) {
                 lineData[lineData.length - 1] = tempPoint;
-                path.draw(lineData);
-            }
-            if (isCircle) {
-                lineData[lineData.length - 1] = tempPoint;
-                newDrawing.draw(lineData);
+                figure.draw(lineData);
             }
         });
 
         const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
             this.checkDrawStatus();
-            if (Shape.name === 'Line' || Shape.name === 'Polygon') {
+            if (Shape.name === 'Line' || Shape.name === 'Polygon' || Shape.name === 'Arrow') {
                 naver.maps.Event.removeListener(moveEvent);
             }
             naver.maps.Event.removeListener(leftClick);
