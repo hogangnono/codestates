@@ -109,11 +109,8 @@ class MyDrawings extends Component {
                     <div className="myDrawingsTitle">{`${name}님이 그린 부동산 호재 그림들`}</div>
                     {fakeData.map(figure => {
                         return (
-                            <div>
-                                <li
-                                    key={'myDrawing' + figure.id}
-                                    className="myDrawingLists"
-                                >
+                            <div key={'myDrawing' + figure.id}>
+                                <li className="myDrawingLists">
                                     <span className="myDrawingEachListTitle">
                                         {`[${fakeFactor[figure.factor_id]}]  `}
                                     </span>

@@ -23,15 +23,7 @@ class DrawContainer extends Component {
         return (
             <div id="toolbox">
                 <div id="tabMenu">
-                    <div
-                        className="eachTabMenu"
-                        style={{
-                            backgroundColor: '#4d55b2',
-                            color: '#fff'
-                        }}
-                    >
-                        {`그리기`}
-                    </div>
+                    <div className="eachTabMenu">그리기</div>
                 </div>
                 <div>
                     <div>

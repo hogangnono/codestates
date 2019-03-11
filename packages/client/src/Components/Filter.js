@@ -49,8 +49,7 @@ class Filter extends Component {
                         style={{
                             color: check7 ? '#fff' : '#4d55b2',
                             backgroundColor: check7 ? '#4d55b2' : '#fff'
-                        }}
-                    >
+                        }}>
                         {`내 정보 보기`}
                     </div>
                     <div

@@ -19,8 +19,6 @@ class Drawing extends Component {
     };
 
     state = {
-        // index: 0,
-        // theNumberOfFigure: [],
         shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
         loadedListener: null,
