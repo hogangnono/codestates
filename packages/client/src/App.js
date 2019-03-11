@@ -289,7 +289,11 @@ class App extends Component {
                         </div>
                         <div
                             className={`loginFavorBtn ${deactiveFilter}`}
-                            onClick={this.showFilter}
+                            onClick={() => {
+                                if (deactiveFilter === '') {
+                                    this.showFilter();
+                                }
+                            }}
                             onKeyPress={this.showFilter}
                             role="button"
                             tabIndex="0"
@@ -298,7 +302,11 @@ class App extends Component {
                         </div>
                         <div
                             className={`loginFavorBtn ${deactiveDraw}`}
-                            onClick={this.showDraw}
+                            onClick={() => {
+                                if (deactiveDraw === '') {
+                                    this.showDraw();
+                                }
+                            }}
                             onKeyPress={this.showDraw}
                             role="button"
                             tabIndex="0"
@@ -318,6 +326,7 @@ class App extends Component {
                             check7={check7}
                             _toggle7={this._toggle7}
                             factorLoad={this.factorLoad}
+                            showFilter={this.showFilter}
                         />
                     </div>
                     <div style={{ display: showDraw ? 'block' : 'none' }}>

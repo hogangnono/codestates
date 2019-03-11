@@ -41,12 +41,6 @@ class LoginModal extends Component {
         });
     };
 
-    handleLogout = () => {
-        const { toggleModal } = this.props;
-        toggleModal();
-        localStorage.removeItem('token');
-    }
-
     render() {
         const { getResultForLogin } = this.state;
         const { name, toggleModal, handleUserNameOnChange } = this.props;
@@ -65,8 +59,7 @@ class LoginModal extends Component {
                     </div>
                     { isLogin ? (
                         <div>
-                            <MyDrawings name={name} />
-                            <button type="button" onClick={this.handleLogout}>로그아웃</button>
+                            <MyDrawings name={name} toggleModal={toggleModal} />
                         </div>
                     ) : (
                         <div className="inputContainer">

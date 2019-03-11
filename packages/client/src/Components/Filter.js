@@ -9,11 +9,12 @@ class Filter extends Component {
     static propTypes = {
         check7: PropTypes.bool.isRequired,
         _toggle7: PropTypes.func.isRequired,
-        factorLoad: PropTypes.func.isRequired
+        factorLoad: PropTypes.func.isRequired,
+        showFilter: PropTypes.func.isRequired
     };
 
     render() {
-        const { check7, factorLoad, _toggle7 } = this.props;
+        const { check7, factorLoad, _toggle7, showFilter } = this.props;
         const factorBox = [
             '상권',
             '신축/재개발',
@@ -51,6 +52,19 @@ class Filter extends Component {
                         }}
                     >
                         {`내 정보 보기`}
+                    </div>
+                    <div
+                        className="myInfoButton"
+                        onClick={showFilter}
+                        onKeyPress={showFilter}
+                        role="button"
+                        tabIndex="0"
+                        style={{
+                            color: check7 ? '#fff' : '#4d55b2',
+                            backgroundColor: check7 ? '#4d55b2' : '#fff'
+                        }}
+                    >
+                        {`닫기`}
                     </div>
                 </div>
             </div>

@@ -20,8 +20,8 @@ class Drawing extends Component {
     handleRequestSave = (parseURL, body) => {
         const { toggleModal, drawingData } = this.props;
         const basicURL = 'http://localhost:3001/';
-        const isLogin = localStorage.getItem('isLogin');
-        if (JSON.parse(isLogin)) {
+        const token = localStorage.getItem('token');
+        if (JSON.parse(token)) {
             if (!drawingData.length) {
                 return alert('그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)');
             }
