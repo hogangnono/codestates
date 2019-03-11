@@ -1,68 +1,65 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Codestates X Hogangnono
 
-## Available Scripts
+호갱노노 여기호재 서비스 웹서버
 
-In the project directory, you can run:
+## 기본 환경 설치
 
-### `npm start`
+<ul>
+<li>node@latest</li>
+<li>yarn@latest</li>
+<li>eslint-hogangnono</li>
+</ul>
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 패키지 설치
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### yarn 설치
 
-### `npm test`
+```javascript
+$ sudo npm install -g yarn
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+클라이언트, 서버 폴더 각각 들어가서 `npm install` or `yarn`을 설치하시고 `npm start` or `yarn start` 두 파일에서 실행시키고 자동으로 브라우저(`localhost:3000`)에서 뜹니다. 
 
-### `npm run build`
+### 프로젝트 패키지 설치
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```javascript
+$ yarn
+```
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### Package Dependencies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+These are installed when running `yarn` or `npm install`
 
-### `npm run eject`
+- [D3](https://d3js.org/)
+- [axios](https://www.npmjs.com/package/axios)
+- [prop-types](https://www.npmjs.com/package/prop-types)
+- [react-icons](https://www.npmjs.com/package/react-icons)
+- [Less](http://lesscss.org/)
+  
+_Note:_   
+Ejected [create-react-app](https://github.com/facebook/create-react-app) and brought in server-side rendering from Less
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Project Description
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Naver 지도 API에서 제공하는 CustomOverlayView 클래스를 이용하여 D3로 SVG 도형 그리기 기능 구현
+- 여러 도형을 Custom Overlay로 하나씩 생성 
+- Naver 지도 API 이벤트 시스템에서 제공하는 addListener와 react event listener를 연결하여 원하는 위치에 도형을 그릴 수 있는 기능 구현
+- 현재 지도의 'Viewport’ bound data (lat, long, center point)에 따라 도형이 나타남.
+  - 드래깅에 따라서 지도에 뜨는 도형 업데이트
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Client Interface
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+![picture](https://i.imgur.com/AtPF74t.png)
+> 호재 버튼을 누르면 필터와 그리기 탭이 있는 인터페이스가 뜹니다.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<br />
+  
+![picture](https://i.imgur.com/PSNMnxe.png)
+> My Button을 누르면 로그인 팝업창이 뜹니다. 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<br />
 
-### Code Splitting
+![picture](https://i.imgur.com/VxSq9w9.png)
+> 기본적으로 주변에 있는 호재 정보와 유저가 저장한 정보를 볼 수 있는 인터페이스가 뜹니다.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

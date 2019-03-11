@@ -1,6 +1,14 @@
 body {
   font-family: Apple SD Gothic Neo, sans-serif;
 }
+.color {
+  color: #4d55b2;
+  background-color: #fff;
+}
+.toggleColor {
+  background-color: #4d55b2;
+  color: #fff;
+}
 #filterContainer {
   position: relative;
   width: 100%;
@@ -52,8 +60,7 @@ input[type="checkbox"] {
 //   box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
 // }
 input[type="checkbox"]:checked ~ .checkedBox {
-  background-color: #4d55b2;
-  color: #fff;
+  .toggleColor;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
 }
 .buttonBox {
@@ -63,25 +70,30 @@ input[type="checkbox"]:checked ~ .checkedBox {
   height: 80px;
 }
 .myInfoButton {
-  width: 80%;
+  position: absolute;
+  width: 42%;
   height: 50px;
-  margin: 0 10%;
+  left: 5%;
   line-height: 50px;
   border-radius: 15px;
   text-align: center;
   border: 1px solid #fff;
   box-sizing: border-box;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  // float: left;
+}
+.last {
+  left: 53%;
+  .color;
 }
 .myInfoButton:hover {
+  .toggleColor;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
 }
 
 .checked {
-  color: #fff;
-  background-color: #4d55b2;
+  .toggleColor;
 }
 .unChecked {
-  color: #4d55b2;
-  background-color: #fff;
+  .color;
 }

@@ -7,11 +7,17 @@ class FilterContainer extends Component {
     static propTypes = {
         MyInfoButton: PropTypes.bool.isRequired,
         myInfoToggle: PropTypes.func.isRequired,
-        factorLoad: PropTypes.func.isRequired
+        factorLoad: PropTypes.func.isRequired,
+        showFilter: PropTypes.func.isRequired
     };
 
     render() {
-        const { MyInfoButton, myInfoToggle, factorLoad } = this.props;
+        const {
+            MyInfoButton,
+            myInfoToggle,
+            factorLoad,
+            showFilter
+        } = this.props;
         return (
             <div id="toolbox">
                 <div id="tabMenu">
@@ -31,6 +37,7 @@ class FilterContainer extends Component {
                             MyInfoButton={MyInfoButton}
                             myInfoToggle={myInfoToggle}
                             factorLoad={factorLoad}
+                            showFilter={showFilter}
                         />
                     </div>
                 </div>

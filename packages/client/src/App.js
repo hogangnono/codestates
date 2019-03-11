@@ -35,6 +35,8 @@ class App extends Component {
             map: undefined,
             showFilter: false,
             showModal: false,
+            deactiveFilter: '',
+            deactiveDraw: 'deactive',
             MyInfoButton: false,
             showDraw: false,
             factors: []
@@ -174,11 +176,58 @@ class App extends Component {
         this.setState({ showDraw: !showDraw });
     };
 
+    showFilter = () => {
+        const { showFilter, deactiveDraw } = this.state;
+
+        if (deactiveDraw === '') {
+            this.setState({
+                showFilter: !showFilter,
+                deactiveDraw: 'deactive'
+            });
+        } else {
+            this.setState({
+                showFilter: !showFilter,
+                deactiveDraw: ''
+            });
+        }
+    };
+
+    showDraw = () => {
+        const { showDraw, drawingData, deactiveFilter } = this.state;
+        if (drawingData.length) {
+            const pressedConfirm = confirm(
+                '저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?'
+            );
+            if (pressedConfirm) {
+                this.setState({ drawingData: [] });
+            } else if (!pressedConfirm) {
+                return;
+            }
+        }
+
+        if (deactiveFilter === '') {
+            this.setState({
+                showDraw: !showDraw,
+                deactiveFilter: 'deactive'
+            });
+        } else {
+            this.setState({
+                showDraw: !showDraw,
+                deactiveFilter: ''
+            });
+        }
+    };
+
     myInfoToggle = () => {
         const { MyInfoButton } = this.state;
         this.setState({ MyInfoButton: !MyInfoButton });
         const a = !MyInfoButton;
         this.factorLoad(undefined, a);
+    };
+
+    updateDrawingData = shapeData => {
+        const { drawingData } = this.state;
+        this.setState({ drawingData: [...drawingData, shapeData] });
     };
 
     mainToggle = (stateName, toggle) => {
@@ -277,19 +326,21 @@ class App extends Component {
             showFilter,
             showDraw,
             showModal,
+            deactiveFilter,
+            deactiveDraw,
             MyInfoButton
         } = this.state;
-        const mainButton = [
-            { name: 'My', stateName: 'showModal', toggleName: showModal },
-            { name: '필터', stateName: 'showFilter', toggleName: showFilter },
-            { name: '그리기', stateName: 'showDraw', toggleName: showDraw }
-        ];
+        // const mainButton = [
+        //     { name: 'My', stateName: 'showModal', toggleName: showModal },
+        //     { name: '필터', stateName: 'showFilter', toggleName: showFilter },
+        //     { name: '그리기', stateName: 'showDraw', toggleName: showDraw }
+        // ];
         return (
             <div id="wrapper">
                 <div id="map">
                     <NearbyList mapLoad={map} />
                     <div id="loginFavorContainer">
-                        {mainButton.map(bt => (
+                        {/* mainButton.map(bt => (
                             <div
                                 className="loginFavorBtn"
                                 onClick={() => this.mainToggle(bt.stateName, bt.toggleName)
@@ -302,16 +353,48 @@ class App extends Component {
                             >
                                 {bt.name}
                             </div>
-                        ))}
+                            )) */}
+                        <div
+                            className="loginFavorBtn"
+                            onClick={this.toggleModal}
+                            onKeyPress={this.toggleModal}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`My`}
+                        </div>
+                        <div
+                            className={`loginFavorBtn ${deactiveFilter}`}
+                            onClick={() => {
+                                if (deactiveFilter === '') {
+                                    this.showFilter();
+                                }
+                            }}
+                            onKeyPress={this.showFilter}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`필터`}
+                        </div>
+                        <div
+                            className={`loginFavorBtn ${deactiveDraw}`}
+                            onClick={() => {
+                                if (deactiveDraw === '') {
+                                    this.showDraw();
+                                }
+                            }}
+                            onKeyPress={this.showDraw}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`그리기`}
+                        </div>
                     </div>
                     {showModal ? (
                         <LoginModal
                             name={name}
                             toggleModal={this.toggleModal}
                             handleUserNameOnChange={this.handleUserNameOnChange}
-                            handleUserNameAndLoginStatus={
-                                this.handleUserNameAndLoginStatus
-                            }
                         />
                     ) : null}
                     <div className={!showFilter ? 'block' : 'none'}>
@@ -319,19 +402,18 @@ class App extends Component {
                             MyInfoButton={MyInfoButton}
                             myInfoToggle={this.myInfoToggle}
                             factorLoad={this.factorLoad}
+                            showFilter={this.showFilter}
                         />
                     </div>
                     <div className={showDraw ? 'block' : 'none'}>
                         <DrawContainer
-                            closeFn={this.toggleDraw}
+                            handleToggle={this.showDraw}
                             mapLoad={map}
-                            drawingData={drawingData}
                             name={name}
-                            toggleModal={this.toggleModal}
                             handleUserNameOnChange={this.handleUserNameOnChange}
-                            handleUserNameAndLoginStatus={
-                                this.handleUserNameAndLoginStatus
-                            }
+                            drawingData={drawingData}
+                            updateDrawingData={this.updateDrawingData}
+                            toggleModal={this.toggleModal}
                         />
                     </div>
                 </div>

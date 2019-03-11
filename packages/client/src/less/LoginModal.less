@@ -2,6 +2,7 @@
 @modalHeight: 40%;
 @modalInnerWidth: 100%;
 @modalInnerHeight: 100%;
+@hogangnonoColor: #4d55b2;
 
 #loginModalContainer {
   position: absolute;
@@ -72,10 +73,23 @@
   height: 50px;
   line-height: 50px;
   text-align: center;
-  color: #666;
+  color: rgb(154, 150, 150);
   font-size: 28px;
   font-weight: bold;
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   z-index: 100;
   cursor: pointer;
+}
+
+#LoginloadingImg {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
 }

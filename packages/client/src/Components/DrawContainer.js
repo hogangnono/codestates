@@ -7,30 +7,32 @@ class DrawContainer extends Component {
     static propTypes = {
         drawingData: PropTypes.array.isRequired,
         mapLoad: PropTypes.object.isRequired,
-        closeFn: PropTypes.func.isRequired
+        handleToggle: PropTypes.func.isRequired,
+        updateDrawingData: PropTypes.func.isRequired,
+        toggleModal: PropTypes.func.isRequired
     };
 
     render() {
-        const { drawingData, mapLoad, closeFn } = this.props;
+        const {
+            drawingData,
+            mapLoad,
+            handleToggle,
+            toggleModal,
+            updateDrawingData
+        } = this.props;
         return (
             <div id="toolbox">
                 <div id="tabMenu">
-                    <div
-                        className="eachTabMenu"
-                        style={{
-                            backgroundColor: '#4d55b2',
-                            color: '#fff'
-                        }}
-                    >
-                        {`그리기`}
-                    </div>
+                    <div className="eachTabMenu">그리기</div>
                 </div>
                 <div>
                     <div>
                         <Drawing
                             map={mapLoad}
                             drawingData={drawingData}
-                            closeFn={closeFn}
+                            updateDrawingData={updateDrawingData}
+                            toggleModal={toggleModal}
+                            handleToggle={handleToggle}
                         />
                     </div>
                 </div>
