@@ -6,6 +6,7 @@ import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Circle from '../CustomOverlay/Circle';
 import Rect from '../CustomOverlay/Rect';
+import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 
 class Drawing extends Component {
@@ -49,7 +50,7 @@ class Drawing extends Component {
                 <Button map={map} Shape={Circle} icons="arrow" drewStatus={this.checkDrawStatus} />
                 <Button map={map} Shape={Rect} icons="square" drewStatus={this.checkDrawStatus} />
                 <Button map={map} Shape={Circle} icons="circle" drewStatus={this.checkDrawStatus} />
-                <Button map={map} Shape={Circle} icons="polygon" drewStatus={this.checkDrawStatus} />
+                <Button map={map} Shape={Polygon} icons="polygon" drewStatus={this.checkDrawStatus} />
                 <div id="myDrawingsContainer">
                     {theNumberOfFigure.map(el => {
                         return (
