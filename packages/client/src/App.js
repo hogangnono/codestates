@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
+// import newToggleBox from '../../category';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import NearbyList from './Components/NearbyList';
@@ -34,7 +35,7 @@ class App extends Component {
             map: undefined,
             showFilter: false,
             showModal: false,
-            check7: false,
+            MyInfoButton: false,
             showDraw: false,
             factors: []
         };
@@ -59,7 +60,7 @@ class App extends Component {
             //     }
             // });
             this.mainPageLoad(map);
-            this.DataDelete();
+            this.deleteDraw();
         });
 
         const userName = localStorage.getItem('token');
@@ -126,6 +127,9 @@ class App extends Component {
                             });
                             overlay.setMap(map);
                             this.drawList[el.id] = overlay;
+                        } else {
+                            this.drawList[el.id].setMap(null);
+                            delete this.drawList[el.id];
                         }
                     });
                 } else if (result.status === 204) {
@@ -133,18 +137,16 @@ class App extends Component {
                 }
             })
             .catch(error => {
-                // if (error.response.status === 500) {
-                //     console.log(error);
-                //     alert('load fail');
-                // } else {
-                //     console.log(error);
-                //     alert('error!');
-                // }
-                // alert(error);
+                if (error.response.status === 500) {
+                    alert('load fail');
+                } else {
+                    alert('error!');
+                }
+                alert(error);
             });
     };
 
-    DataDelete = () => {
+    deleteDraw = () => {
         Object.entries(this.drawList).forEach(([key, value]) => {
             const position = {};
             // reference point
@@ -167,35 +169,49 @@ class App extends Component {
         this.setState({ showModal: !showModal });
     };
 
+    toggleDraw = () => {
+        const { showDraw } = this.state;
+        this.setState({ showDraw: !showDraw });
+    };
+
+    myInfoToggle = () => {
+        const { MyInfoButton } = this.state;
+        this.setState({ MyInfoButton: !MyInfoButton });
+        const a = !MyInfoButton;
+        this.factorLoad(undefined, a);
+    };
+
     mainToggle = (stateName, toggle) => {
         this.setState({ [stateName]: !toggle });
     };
 
-    _toggle7 = () => {
-        const { check7 } = this.state;
-        this.setState({ check7: !check7 });
-        return check7;
-    };
-
-    factorLoad = category => {
+    factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;
-        const toggleCategory = { [category]: !this.newToggleBox[category] };
-        this.newToggleBox = { ...this.newToggleBox, ...toggleCategory };
         const bound = this.bound;
         const factors = [];
         Object.entries(this.drawList).forEach(([key, value]) => {
             value.setMap(null);
             delete this.drawList[key];
         });
-        Object.entries(this.newToggleBox).forEach(([key, value]) => {
-            if (value) {
-                factors.push(key);
-            }
-        });
-        this.setState({
-            factors: factors
-        });
-
+        if (toggle) {
+            const toggle = {};
+            Object.entries(this.newToggleBox).forEach(([key, value]) => {
+                toggle[key] = false;
+            });
+            this.newToggleBox = toggle;
+        }
+        if (category) {
+            const toggleCategory = { [category]: !this.newToggleBox[category] };
+            this.newToggleBox = { ...this.newToggleBox, ...toggleCategory };
+            Object.entries(this.newToggleBox).forEach(([key, value]) => {
+                if (value) {
+                    factors.push(key);
+                }
+            });
+            this.setState({
+                factors: factors
+            });
+        }
         axios
             .post('http://127.0.0.1:3001/user/load', {
                 name,
@@ -204,24 +220,46 @@ class App extends Component {
             })
             .then(async result => {
                 const data = await result.data;
-                // console.log(data);
                 const resultData = await data[0];
-                // const userData = await data[1];
+                const userData = await data[1];
                 if (result.status === 200 || result.status === 201) {
-                    resultData.map(async el => {
-                        const { startPos, endPos, zoomLevel } = JSON.parse(
-                            el.figures
-                        );
-                        if (!(el.id in this.drawList)) {
-                            const overlay = new Circle({
-                                position: { startPos, endPos },
-                                naverMap: map,
-                                zoom: zoomLevel
-                            });
-                            overlay.setMap(map);
-                            this.drawList[el.id] = overlay;
-                        }
-                    });
+                    if (userData && toggle) {
+                        userData.map(async el => {
+                            const { startPos, endPos, zoomLevel } = JSON.parse(
+                                el.figures
+                            );
+                            if (!(el.id in this.drawList)) {
+                                const overlay = new Circle({
+                                    position: { startPos, endPos },
+                                    naverMap: map,
+                                    zoom: zoomLevel
+                                });
+                                overlay.setMap(map);
+                                this.drawList[el.id] = overlay;
+                            } else {
+                                this.drawList[el.id].setMap(null);
+                                delete this.drawList[el.id];
+                            }
+                        });
+                    } else if (resultData && !toggle) {
+                        resultData.map(async el => {
+                            const { startPos, endPos, zoomLevel } = JSON.parse(
+                                el.figures
+                            );
+                            if (!(el.id in this.drawList)) {
+                                const overlay = new Circle({
+                                    position: { startPos, endPos },
+                                    naverMap: map,
+                                    zoom: zoomLevel
+                                });
+                                overlay.setMap(map);
+                                this.drawList[el.id] = overlay;
+                            } else {
+                                this.drawList[el.id].setMap(null);
+                                delete this.drawList[el.id];
+                            }
+                        });
+                    }
                 } else if (result.status === 204) {
                     alert('호재 데이터 정보 없음');
                 }
@@ -239,7 +277,7 @@ class App extends Component {
             showFilter,
             showDraw,
             showModal,
-            check7
+            MyInfoButton
         } = this.state;
         const mainButton = [
             { name: 'My', stateName: 'showModal', toggleName: showModal },
@@ -251,24 +289,18 @@ class App extends Component {
                 <div id="map">
                     <NearbyList mapLoad={map} />
                     <div id="loginFavorContainer">
-                        {mainButton.map(button => (
+                        {mainButton.map(bt => (
                             <div
                                 className="loginFavorBtn"
-                                onClick={() => this.mainToggle(
-                                    button.stateName,
-                                    button.toggleName
-                                )
+                                onClick={() => this.mainToggle(bt.stateName, bt.toggleName)
                                 }
-                                onKeyPress={() => this.mainToggle(
-                                    button.stateName,
-                                    button.toggleName
-                                )
+                                onKeyPress={() => this.mainToggle(bt.stateName, bt.toggleName)
                                 }
                                 role="button"
                                 tabIndex="0"
-                                key={button}
+                                key={bt.name}
                             >
-                                {button.name}
+                                {bt.name}
                             </div>
                         ))}
                     </div>
@@ -282,16 +314,16 @@ class App extends Component {
                             }
                         />
                     ) : null}
-                    <div style={{ display: !showFilter ? 'block' : 'none' }}>
+                    <div className={!showFilter ? 'block' : 'none'}>
                         <FilterContainer
-                            check7={check7}
-                            _toggle7={this._toggle7}
+                            MyInfoButton={MyInfoButton}
+                            myInfoToggle={this.myInfoToggle}
                             factorLoad={this.factorLoad}
                         />
                     </div>
-                    <div style={{ display: showDraw ? 'block' : 'none' }}>
+                    <div className={showDraw ? 'block' : 'none'}>
                         <DrawContainer
-                            closeFn={this.showDraw}
+                            closeFn={this.toggleDraw}
                             mapLoad={map}
                             drawingData={drawingData}
                             name={name}

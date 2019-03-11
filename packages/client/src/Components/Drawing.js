@@ -49,11 +49,7 @@ class Drawing extends Component {
     };
 
     render() {
-        const {
-            drawingData,
-            map,
-            closeFn
-        } = this.props;
+        const { drawingData, map, closeFn } = this.props;
         const { theNumberOfFigure } = this.state;
         // const iconArray = ['line', 'arrow', 'square', 'circle', 'polygon'];
         return (

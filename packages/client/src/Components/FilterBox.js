@@ -20,10 +20,7 @@ class FilterBox extends Component {
             >
                 <label htmlFor="opt-in">
                     <input type="checkbox" id="opt-in" />
-                    <div className="checkedBox">
-#
-                        {factor}
-                    </div>
+                    <div className="checkedBox">{`# ${factor}`}</div>
                 </label>
             </div>
         );
