@@ -154,7 +154,7 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-        console.log('selectedIcon: ', selectedIcon);
+        // console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
@@ -166,12 +166,13 @@ class Drawing extends Component {
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
-                    console.log('Drawing', shape);
-                    console.log(selectedButton === shape);
+                    // console.log('Drawing', shape);
+                    // console.log(selectedButton === shape);
 
                     return (
                         <Button
                             map={map}
+                            key={shape}
                             icons={shape}
                             selectButton={this.selectButton}
                             isSelected={

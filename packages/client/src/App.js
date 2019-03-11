@@ -2,16 +2,18 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import axios from 'axios';
-// import newToggleBox from '../../category';
+// import axios from 'axios';
+import drawData from './api';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
-import NearbyList from './Components/NearbyList';
+// import NearbyList from './Components/NearbyList';
 import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
+import MainButton from './Components/mainButton';
+import NearbyFactorDialog from './Components/NearbyFactorDialog';
 
-import Circle from './CustomOverlay/Circle';
+// import Circle from './CustomOverlay/Circle';
 
 class App extends Component {
     constructor(props) {
@@ -39,16 +41,32 @@ class App extends Component {
             deactiveDraw: 'deactive',
             MyInfoButton: false,
             showDraw: false,
-            factors: []
+            factors: [],
+            NearByFactorItems: []
         };
     }
 
     componentDidMount = async () => {
         const naver = window.naver;
-        const map = await new naver.maps.Map(
-            d3.select('#map').node(),
-            this.mapOption()
-        );
+        const map = await new naver.maps.Map(d3.select('#map').node(), {
+            zoomControl: true,
+            zoomControlOptions: {
+                style: naver.maps.ZoomControlStyle.SMALL,
+                position: naver.maps.Position.LEFT_BOTTOM
+            },
+            logoControl: true,
+            logoControlOptions: {
+                position: naver.maps.Position.BOTTOM_RIGHT
+            },
+            scaleControl: true,
+            scaleControlOptions: {
+                position: naver.maps.Position.BOTTOM_RIGHT
+            },
+            mapDataControl: true,
+            mapDataControlOptions: {
+                position: naver.maps.Position.BOTTOM_RIGHT
+            }
+        });
 
         this.setState({ map });
         this.bound = map.getBounds();
@@ -76,76 +94,10 @@ class App extends Component {
         this.setState({ name: username });
     };
 
-    mapOption = () => {
-        const naver = window.naver;
-        const mapOptions = {
-            zoomControl: true,
-            zoomControlOptions: {
-                style: naver.maps.ZoomControlStyle.SMALL,
-                position: naver.maps.Position.LEFT_BOTTOM
-            },
-            logoControl: true,
-            logoControlOptions: {
-                position: naver.maps.Position.BOTTOM_RIGHT
-            },
-            scaleControl: true,
-            scaleControlOptions: {
-                position: naver.maps.Position.BOTTOM_RIGHT
-            },
-            mapDataControl: true,
-            mapDataControlOptions: {
-                position: naver.maps.Position.BOTTOM_RIGHT
-            }
-        };
-        return mapOptions;
-    };
-
     mainPageLoad = map => {
         const { name, factors } = this.state;
         const bound = this.bound;
-        axios
-            .post('http://127.0.0.1:3001/user/load', {
-                name,
-                factors,
-                bound
-            })
-            .then(async result => {
-                const data = result.data;
-                const resultData = await data[0];
-                // eslint-disable-next-line no-unused-vars
-                const userData = await data[1];
-                // if there is user data
-
-                if (result.status === 200 || result.status === 201) {
-                    resultData.map(el => {
-                        const { startPos, endPos, zoomLevel } = JSON.parse(
-                            el.figures
-                        );
-                        if (!(el.id in this.drawList)) {
-                            const overlay = new Circle({
-                                position: { startPos, endPos },
-                                naverMap: map,
-                                zoom: zoomLevel
-                            });
-                            overlay.setMap(map);
-                            this.drawList[el.id] = overlay;
-                        } else {
-                            this.drawList[el.id].setMap(null);
-                            delete this.drawList[el.id];
-                        }
-                    });
-                } else if (result.status === 204) {
-                    alert('호재 데이터 정보 없음');
-                }
-            })
-            .catch(error => {
-                if (error.response.status === 500) {
-                    alert('load fail');
-                } else {
-                    alert('error!');
-                }
-                alert(error);
-            });
+        drawData(name, bound, factors, false, this.drawList, map);
     };
 
     deleteDraw = () => {
@@ -221,8 +173,8 @@ class App extends Component {
     myInfoToggle = () => {
         const { MyInfoButton } = this.state;
         this.setState({ MyInfoButton: !MyInfoButton });
-        const a = !MyInfoButton;
-        this.factorLoad(undefined, a);
+        const toggle = !MyInfoButton;
+        this.factorLoad(undefined, toggle);
     };
 
     updateDrawingData = shapeData => {
@@ -232,6 +184,10 @@ class App extends Component {
 
     mainToggle = (stateName, toggle) => {
         this.setState({ [stateName]: !toggle });
+    };
+
+    setNearbyFactorItems = items => {
+        console.log('실행되었다.');
     };
 
     factorLoad = (category, toggle = false) => {
@@ -261,61 +217,8 @@ class App extends Component {
                 factors: factors
             });
         }
-        axios
-            .post('http://127.0.0.1:3001/user/load', {
-                name,
-                bound,
-                factors
-            })
-            .then(async result => {
-                const data = await result.data;
-                const resultData = await data[0];
-                const userData = await data[1];
-                if (result.status === 200 || result.status === 201) {
-                    if (userData && toggle) {
-                        userData.map(async el => {
-                            const { startPos, endPos, zoomLevel } = JSON.parse(
-                                el.figures
-                            );
-                            if (!(el.id in this.drawList)) {
-                                const overlay = new Circle({
-                                    position: { startPos, endPos },
-                                    naverMap: map,
-                                    zoom: zoomLevel
-                                });
-                                overlay.setMap(map);
-                                this.drawList[el.id] = overlay;
-                            } else {
-                                this.drawList[el.id].setMap(null);
-                                delete this.drawList[el.id];
-                            }
-                        });
-                    } else if (resultData && !toggle) {
-                        resultData.map(async el => {
-                            const { startPos, endPos, zoomLevel } = JSON.parse(
-                                el.figures
-                            );
-                            if (!(el.id in this.drawList)) {
-                                const overlay = new Circle({
-                                    position: { startPos, endPos },
-                                    naverMap: map,
-                                    zoom: zoomLevel
-                                });
-                                overlay.setMap(map);
-                                this.drawList[el.id] = overlay;
-                            } else {
-                                this.drawList[el.id].setMap(null);
-                                delete this.drawList[el.id];
-                            }
-                        });
-                    }
-                } else if (result.status === 204) {
-                    alert('호재 데이터 정보 없음');
-                }
-            })
-            .catch(error => {
-                alert(error);
-            });
+        // TODO:
+        drawData(name, bound, factors, toggle, this.drawList, map);
     };
 
     render() {
@@ -330,65 +233,43 @@ class App extends Component {
             deactiveDraw,
             MyInfoButton
         } = this.state;
-        // const mainButton = [
-        //     { name: 'My', stateName: 'showModal', toggleName: showModal },
-        //     { name: '필터', stateName: 'showFilter', toggleName: showFilter },
-        //     { name: '그리기', stateName: 'showDraw', toggleName: showDraw }
-        // ];
+        const mainButton = [
+            {
+                className: '',
+                cond: true,
+                name: 'My',
+                onClick: () => this.mainToggle('showModal', showModal)
+            },
+            {
+                className: deactiveFilter,
+                cond: deactiveFilter === '',
+                name: '필터',
+                onClick: () => this.mainToggle('showFilter', showFilter)
+            },
+            {
+                className: deactiveDraw,
+                cond: deactiveDraw === '',
+                name: '그리기',
+                onClick: () => this.mainToggle('showDraw', showDraw)
+            }
+        ];
         return (
             <div id="wrapper">
                 <div id="map">
-                    <NearbyList mapLoad={map} />
+                    {/* <NearbyList mapLoad={map} /> */}
+                    <NearbyFactorDialog
+                        mapLoad={map}
+                        setNearbyFactorItems={this.setNearbyFactorItems}
+                    />
                     <div id="loginFavorContainer">
-                        {/* mainButton.map(bt => (
-                            <div
-                                className="loginFavorBtn"
-                                onClick={() => this.mainToggle(bt.stateName, bt.toggleName)
-                                }
-                                onKeyPress={() => this.mainToggle(bt.stateName, bt.toggleName)
-                                }
-                                role="button"
-                                tabIndex="0"
-                                key={bt.name}
-                            >
-                                {bt.name}
-                            </div>
-                            )) */}
-                        <div
-                            className="loginFavorBtn"
-                            onClick={this.toggleModal}
-                            onKeyPress={this.toggleModal}
-                            role="button"
-                            tabIndex="0"
-                        >
-                            {`My`}
-                        </div>
-                        <div
-                            className={`loginFavorBtn ${deactiveFilter}`}
-                            onClick={() => {
-                                if (deactiveFilter === '') {
-                                    this.showFilter();
-                                }
-                            }}
-                            onKeyPress={this.showFilter}
-                            role="button"
-                            tabIndex="0"
-                        >
-                            {`필터`}
-                        </div>
-                        <div
-                            className={`loginFavorBtn ${deactiveDraw}`}
-                            onClick={() => {
-                                if (deactiveDraw === '') {
-                                    this.showDraw();
-                                }
-                            }}
-                            onKeyPress={this.showDraw}
-                            role="button"
-                            tabIndex="0"
-                        >
-                            {`그리기`}
-                        </div>
+                        {mainButton.map(bt => (
+                            <MainButton
+                                className={bt.className} // 추가되는 클래스명
+                                name={bt.name} // 'my' | 'filer'...
+                                cond={bt.cond} // 클릭 함수 실행 조건
+                                onClick={bt.onClick}
+                            />
+                        ))}
                     </div>
                     {showModal ? (
                         <LoginModal

@@ -11,7 +11,9 @@ exports.signup = async (req, res) => {
         transaction = await User.sequelize.transaction();
         await User.findOrCreate({ where: { name } });
         await transaction.commit();
-        res.status(200).send(`어서오세요! ${name}님!\n로그인에 성공했습니다 :)`);
+        res.status(200).send(
+            `어서오세요! ${name}님!\n로그인에 성공했습니다 :)`
+        );
     } catch (err) {
         await transaction.rollback();
         res.status(500).send('이름 저장에 실패했습니다.');
@@ -123,7 +125,7 @@ exports.load = async (req, res) => {
         try {
             transaction = await User.sequelize.transaction();
             const userId = await User.findOne({ where: { name } }).get('id');
-            console.log(userId);
+            // console.log(userId);
             const result = await Figure.findAll({
                 include: [{ model: Drawing, where: { user_id: userId } }], // include => join을 함
                 where: {
