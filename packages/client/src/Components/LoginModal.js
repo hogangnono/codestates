@@ -4,6 +4,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import MyDrawings from './MyDrawings';
 import * as MakeSecret from '../Module/simpleEncryption';
+import loadingImg from './imgs/loading.gif';
 
 class LoginModal extends Component {
     static propTypes = {
@@ -13,23 +14,18 @@ class LoginModal extends Component {
     };
 
     state = {
-        isLogin: false
-    };
-
-    componentDidMount() {
-        const isLogin = localStorage.getItem('isLogin');
-        if (JSON.parse(isLogin)) {
-            this.setState({ isLogin: true });
-        }
+        getResultForLogin: false // loading image before getting Axios.post login result
     }
 
     handleLogin = () => {
         const { name, toggleModal } = this.props;
+        this.setState({ getResultForLogin: true });
         axios
         .post('http://127.0.0.1:3001/user/', {
             name
         })
         .then(async result => {
+            this.setState({ getResultForLogin: false });
             toggleModal();
             const resultData = await result.data;
             if (result.status === 200 || result.status === 201) {
@@ -37,7 +33,6 @@ class LoginModal extends Component {
             } else if (result.status === 204) {
                 alert('호재 데이터 정보 없음');
             }
-            localStorage.setItem('isLogin', JSON.stringify(true));
             localStorage.setItem('token', JSON.stringify(MakeSecret.Encrypt(name)));
         })
         .catch(error => {
@@ -46,17 +41,10 @@ class LoginModal extends Component {
         });
     };
 
-    handleLogout = () => {
-        const { toggleModal } = this.props;
-        toggleModal();
-        this.setState({ isLogin: false });
-        localStorage.setItem('isLogin', JSON.stringify(false));
-        localStorage.removeItem('token');
-    }
-
     render() {
+        const { getResultForLogin } = this.state;
         const { name, toggleModal, handleUserNameOnChange } = this.props;
-        const { isLogin } = this.state;
+        const isLogin = !!(localStorage.getItem('token'));
         return (
             <div id="loginModalContainer">
                 <div className="loginModal">
@@ -71,8 +59,7 @@ class LoginModal extends Component {
                     </div>
                     { isLogin ? (
                         <div>
-                            <MyDrawings name={name} />
-                            <button type="button" onClick={this.handleLogout}>로그아웃</button>
+                            <MyDrawings name={name} toggleModal={toggleModal} />
                         </div>
                     ) : (
                         <div className="inputContainer">
@@ -95,6 +82,14 @@ class LoginModal extends Component {
                         </div>
                     ) }
                 </div>
+                { getResultForLogin
+                    ? (
+                        <div id="LoginloadingImg">
+                            <img src={loadingImg} alt="" />
+                        </div>
+                    )
+                    : null
+                }
             </div>
         );
     }

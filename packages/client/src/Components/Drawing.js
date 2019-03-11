@@ -11,15 +11,14 @@ import MyDrawingElement from './MyDrawingElement';
 
 class Drawing extends Component {
     static propTypes = {
-        drawingData: PropTypes.array.isRequired,
         map: PropTypes.object.isRequired,
-        closeFn: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired
+        handleToggle: PropTypes.func.isRequired,
+        toggleModal: PropTypes.func.isRequired,
+        drawingData: PropTypes.array.isRequired,
+        updateDrawingData: PropTypes.func.isRequired
     };
 
     state = {
-        index: 0,
-        theNumberOfFigure: [],
         shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
         loadedListener: null,
@@ -27,10 +26,13 @@ class Drawing extends Component {
     };
 
     handleRequestSave = (parseURL, body) => {
-        const { toggleModal } = this.props;
+        const { toggleModal, drawingData } = this.props;
         const basicURL = 'http://localhost:3001/';
-        const isLogin = localStorage.getItem('isLogin');
-        if (JSON.parse(isLogin)) {
+        const token = localStorage.getItem('token');
+        if (JSON.parse(token)) {
+            if (!drawingData.length) {
+                return alert('그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)');
+            }
             axios
                 .post(basicURL + parseURL, body)
                 .then(result => {
@@ -45,14 +47,6 @@ class Drawing extends Component {
         }
     };
 
-    checkDrawStatus = () => {
-        const { index, theNumberOfFigure } = this.state;
-        this.setState({
-            theNumberOfFigure: [...theNumberOfFigure, index + 1],
-            index: index + 1
-        });
-    };
-
     removeListener = () => {
         const naver = window.naver;
         const { leftClick } = this.state;
@@ -64,7 +58,7 @@ class Drawing extends Component {
     createShapeTest = (selectedIcon) => {
         let startPos;
         const naver = window.naver;
-        const { map } = this.props;
+        const { map, updateDrawingData } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Circle, Rect, Circle, Circle]; // Change name of index to actual overlay name of import
         let Shape;
@@ -131,17 +125,19 @@ class Drawing extends Component {
             map,
             'rightclick',
             e => {
-                this.checkDrawStatus();
                 if (Shape.name === 'Line') {
+                    updateDrawingData(lineData);
                     naver.maps.Event.removeListener(moveEvent);
                 } else {
                     const { coord, offset } = e;
                     const endPos = { coord, offset };
-                    new Shape({
+                    const shapData = {
                         position: { startPos, endPos },
                         naverMap: map,
                         zoom: ''
-                    }).setMap(map);
+                    };
+                    new Shape(shapData).setMap(map);
+                    updateDrawingData(shapData);
                 }
                 naver.maps.Event.removeListener(leftClick);
                 naver.maps.Event.removeListener(rightClick);
@@ -165,8 +161,16 @@ class Drawing extends Component {
     };
 
     render() {
-        const { drawingData, map, closeFn } = this.props;
-        const { theNumberOfFigure, selectedButton, shapes, isInShapeCreateMode } = this.state;
+        const {
+            map,
+            handleToggle,
+            drawingData
+        } = this.props;
+        const {
+            selectedButton,
+            shapes,
+            isInShapeCreateMode
+        } = this.state;
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -183,8 +187,11 @@ class Drawing extends Component {
                     );
                 })}
                 <div id="myDrawingsContainer">
-                    {theNumberOfFigure.map(el => {
-                        return <MyDrawingElement key={'Idrew' + el} />;
+                    {drawingData.map((shape, index) => {
+                        const newIndex = index + 1;
+                        return (
+                            <MyDrawingElement key={'Idrew' + newIndex} drawingData={drawingData} />
+                        );
                     })}
                 </div>
                 <div id="saveCloseBtns">
@@ -200,7 +207,7 @@ class Drawing extends Component {
                     <button
                         type="button"
                         className="saveCloseBtn"
-                        onClick={() => closeFn()}
+                        onClick={() => handleToggle()}
                     >
                         {`닫기`}
                     </button>
