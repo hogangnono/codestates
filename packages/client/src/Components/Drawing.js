@@ -69,6 +69,13 @@ class Drawing extends Component {
         const overlays = [Line, Circle, Rect, Circle, Circle]; // Change name of index to actual overlay name of import
         let Shape;
 
+        let moveEvent;
+        let path;
+        const lineData = [];
+        let shapePoint = {};
+        let isClick = false;
+
+
         for (let index = 0; index < icons.length; index++) {
             if (selectedIcon === icons[index]) {
                 Shape = overlays[index];
@@ -86,7 +93,38 @@ class Drawing extends Component {
         const leftClick = naver.maps.Event.addListener(map, 'click', e => {
             const { coord, offset } = e;
             startPos = { coord, offset };
-            naver.maps.Event.removeListener(leftClick);
+            if (Shape.name === 'Line') {
+                isClick = true;
+                // 화면상의 절대 좌표
+                shapePoint.x = e.originalEvent.clientX;
+                shapePoint.y = e.originalEvent.clientY;
+                lineData.push(shapePoint);
+                lineData.push(shapePoint);
+                shapePoint = {};
+                // 처음 그리는 경우
+                if (lineData.length === 2) {
+                    path = new Shape({
+                        position: startPos,
+                        lineData: lineData,
+                        naverMap: map
+                    });
+                } else {
+                    path.draw(lineData);
+                }
+                path.setMap(map);
+            }
+            // naver.maps.Event.removeListener(leftClick);
+        });
+
+        // eslint-disable-next-line prefer-const
+        moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
+            if (isClick) {
+                const tempPoint = {};
+                tempPoint.x = e.originalEvent.clientX;
+                tempPoint.y = e.originalEvent.clientY;
+                lineData[lineData.length - 1] = tempPoint;
+                path.draw(lineData);
+            }
         });
 
         const rightClick = naver.maps.Event.addListener(
@@ -94,14 +132,18 @@ class Drawing extends Component {
             'rightclick',
             e => {
                 this.checkDrawStatus();
-                const { coord, offset } = e;
-                const endPos = { coord, offset };
-                new Shape({
-                    position: { startPos, endPos },
-                    naverMap: map,
-                    zoom: ''
-                }).setMap(map);
-
+                if (Shape.name === 'Line') {
+                    naver.maps.Event.removeListener(moveEvent);
+                } else {
+                    const { coord, offset } = e;
+                    const endPos = { coord, offset };
+                    new Shape({
+                        position: { startPos, endPos },
+                        naverMap: map,
+                        zoom: ''
+                    }).setMap(map);
+                }
+                naver.maps.Event.removeListener(leftClick);
                 naver.maps.Event.removeListener(rightClick);
                 this.setState({ isInShapeCreateMode: false });
             }
