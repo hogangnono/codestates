@@ -26,8 +26,8 @@ class App extends Component {
             기타: false
         };
         this.state = {
-            name: undefined,
-            factor: undefined,
+            name: 'jihye',
+            // factor: '',
             drawingData: [],
             map: undefined,
             showFilter: false,
