@@ -7,7 +7,7 @@ class DrawContainer extends Component {
     static propTypes = {
         drawingData: PropTypes.array.isRequired,
         mapLoad: PropTypes.object.isRequired,
-        closeFn: PropTypes.func.isRequired,
+        handleToggle: PropTypes.func.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired
     };
@@ -16,7 +16,7 @@ class DrawContainer extends Component {
         const {
             drawingData,
             mapLoad,
-            closeFn,
+            handleToggle,
             toggleModal,
             updateDrawingData
         } = this.props;
@@ -40,7 +40,7 @@ class DrawContainer extends Component {
                             drawingData={drawingData}
                             updateDrawingData={updateDrawingData}
                             toggleModal={toggleModal}
-                            closeFn={closeFn}
+                            handleToggle={handleToggle}
                         />
                     </div>
                 </div>

@@ -12,7 +12,7 @@ import MyDrawingElement from './MyDrawingElement';
 class Drawing extends Component {
     static propTypes = {
         map: PropTypes.object.isRequired,
-        closeFn: PropTypes.func.isRequired,
+        handleToggle: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
         drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired
@@ -165,7 +165,7 @@ class Drawing extends Component {
     render() {
         const {
             map,
-            closeFn,
+            handleToggle,
             drawingData
         } = this.props;
         const {
@@ -209,7 +209,7 @@ class Drawing extends Component {
                     <button
                         type="button"
                         className="saveCloseBtn"
-                        onClick={() => closeFn()}
+                        onClick={() => handleToggle()}
                     >
                         {`닫기`}
                     </button>

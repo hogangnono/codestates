@@ -331,7 +331,7 @@ class App extends Component {
                     </div>
                     <div style={{ display: showDraw ? 'block' : 'none' }}>
                         <DrawContainer
-                            closeFn={this.showDraw}
+                            handleToggle={this.showDraw}
                             mapLoad={map}
                             name={name}
                             handleUserNameOnChange={this.handleUserNameOnChange}
