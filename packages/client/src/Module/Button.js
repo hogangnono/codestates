@@ -12,170 +12,60 @@ import '../less/Drawing.less';
 
 class Button extends Component {
     static propTypes = {
-        icons: PropTypes.string.isRequired,
-        map: PropTypes.object.isRequired,
-        Shape: PropTypes.func.isRequired,
-        updateDrawingData: PropTypes.func.isRequired
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            map: props.map, // Set this up as props
-            toggle: true,
-            leftClick: undefined,
-            rightClick: undefined
-        };
-
-        this.setWrapperRef = this.setWrapperRef.bind(this);
-        this.handleClickOutside = this.handleClickOutside.bind(this);
-    }
-
-    componentDidMount() {
-        document.addEventListener('mouseup', this.handleClickOutside);
-    }
-
-    setWrapperRef(node) {
-        this.wrapperRef = node;
-    }
-
-    handleClickOutside(event) {
-        const { toggle } = this.state;
-        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            if (event.button === 2 && toggle !== true) {
-                this.setState({ toggle: !toggle });
-            }
-        }
-    }
-
-    drawingComponent = () => {
-        // let startPos;
-        const naver = window.naver;
-        const { map, Shape, updateDrawingData } = this.props;
-        const { toggle } = this.state;
-        let moveEvent;
-        let startPos;
-        let path;
-        const lineData = [];
-        let shapePoint = {};
-        let isClick = false;
-        if (toggle === true) {
-            const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-                const { coord, offset } = e;
-                startPos = { coord, offset };
-                // 직선을 그릴 경우
-                if (Shape.name === 'Line') {
-                    isClick = true;
-                    // 화면상의 절대 좌표
-                    shapePoint.x = e.originalEvent.clientX;
-                    shapePoint.y = e.originalEvent.clientY;
-                    lineData.push(shapePoint);
-                    lineData.push(shapePoint);
-                    shapePoint = {};
-                    // 처음 그리는 경우
-                    if (lineData.length === 2) {
-                        path = new Shape({
-                            position: startPos,
-                            lineData: lineData,
-                            naverMap: map
-                        });
-                    } else {
-                        path.draw(lineData);
-                    }
-                    path.setMap(map);
-                }
-                // naver.maps.Event.removeListener(leftClick);
-            });
-            moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
-                if (isClick) {
-                    const tempPoint = {};
-                    tempPoint.x = e.originalEvent.clientX;
-                    tempPoint.y = e.originalEvent.clientY;
-                    lineData[lineData.length - 1] = tempPoint;
-                    path.draw(lineData);
-                }
-            });
-            const rightClick = naver.maps.Event.addListener(
-                map,
-                'rightclick',
-                e => {
-                    if (Shape.name === 'Line') {
-                        updateDrawingData({ data: lineData, shapeType: Shape.name }); // send shape data to App.js(this.state.drawingData)
-                        naver.maps.Event.removeListener(moveEvent);
-                    } else {
-                        const { coord, offset } = e;
-                        const endPos = { coord, offset };
-                        const shapeData = {
-                            position: { startPos, endPos },
-                            naverMap: map,
-                            zoom: ''
-                        };
-                        new Shape(shapeData).setMap(map);
-                        updateDrawingData({ data: shapeData, shapeType: 'others' }); // send shape data to App.js(this.state.drawingData)
-                    }
-                    naver.maps.Event.removeListener(leftClick);
-                    naver.maps.Event.removeListener(rightClick);
-                }
-            );
-
-            this.setState({ rightClick: rightClick });
-            this.setState({ leftClick: leftClick });
-        }
-        this.setState({ toggle: !toggle }); // Complete shape and turn off toggle
-    };
-
-    toggleState() {
-        const { toggle } = this.state;
-        this.setState({ toggle: !toggle });
-    }
-
-    removeListener() {
-        const naver = window.naver;
-        const { leftClick } = this.state;
-        const { rightClick } = this.state;
-        naver.maps.Event.removeListener(leftClick);
-        naver.maps.Event.removeListener(rightClick);
-    }
-
-    createShape = () => {
-        const { map } = this.state;
-        this.drawingComponent(map);
-        this.toggleState();
-        this.removeListener();
+        icons: PropTypes.string.isRequired
     };
 
     render() {
-        // const { toggle } = this.state;
-        // const btnClass = toggle ? 'lightPurple' : 'darkPurple';
+        const { selectButton, isSelected, isInShapeCreateMode } = this.props;
         const { icons } = this.props;
+        console.log(icons, ' isInShapeCreateMode: ', isInShapeCreateMode, ', isSelected: ' + isSelected);
+
         return (
             <div>
                 <span
                     role="button"
                     tabIndex="0"
-                    className="drawingTools"
-                    onClick={this.createShape}
-                    onKeyPress={this.createShape}
-                    ref={this.setWrapperRef}
+                    className={
+                        isSelected ? 'selected drawingTools' : 'drawingTools'
+                    }
+                    onKeyPress={() => { }}
+                    onClick={() => {
+                        selectButton(icons);
+                    }}
                 >
                     {icons === 'line' ? (
-                        <FaSlash className="rotateIcon1" />
+                        <FaSlash
+                            className={
+                                isSelected
+                                    ? 'rotateIcon1 selectedIcon'
+                                    : 'rotateIcon1'
+                            }
+                        />
                     ) : icons === 'arrow' ? (
-                        <FaArrowLeft className="rotateIcon2" />
+                        <FaArrowLeft
+                            className={
+                                isSelected
+                                    ? 'rotateIcon2 selectedIcon'
+                                    : 'rotateIcon2'
+                            }
+                        />
                     ) : icons === 'square' ? (
-                        <FaSquareFull />
+                        <FaSquareFull
+                            className={isSelected ? 'selectedIcon' : ''}
+                        />
                     ) : icons === 'circle' ? (
-                        <FaCircle />
-                    ) : (<FaDrawPolygon />)}
+                        <FaCircle
+                            className={isSelected ? 'selectedIcon' : ''}
+                        />
+                    ) : (
+                        <FaDrawPolygon
+                            className={isSelected ? 'selectedIcon' : ''}
+                        />
+                    )}
                 </span>
             </div>
         );
     }
 }
-// <Shape className="rotateIcon1 rotateIcon2" />
-
-// Button.propTypes = {
-//     children: PropTypes.element.isRequired
-// };
 
 export default Button;
