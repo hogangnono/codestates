@@ -16,15 +16,16 @@ class Drawing extends Component {
         map: PropTypes.object.isRequired,
         handleToggle: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-        drawingData: PropTypes.array.isRequired,
-        updateDrawingData: PropTypes.func.isRequired
+        drawingData: PropTypes.array.isRequired
+        // updateDrawingData: PropTypes.func.isRequired
     };
 
     state = {
         shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
         loadedListener: null,
-        isInShapeCreateMode: false
+        isInShapeCreateMode: false,
+        refresh: true
     };
 
     handleRequestSave = (parseURL, body) => {
@@ -33,7 +34,9 @@ class Drawing extends Component {
         const token = localStorage.getItem('token');
         if (JSON.parse(token)) {
             if (!drawingData.length) {
-                return alert('그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)');
+                return alert(
+                    '그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)'
+                );
             }
             axios
                 .post(basicURL + parseURL, body)
@@ -57,10 +60,10 @@ class Drawing extends Component {
         naver.maps.Event.removeListener(rightClick);
     };
 
-    createShapeTest = (selectedIcon) => {
+    createShapeTest = selectedIcon => {
         let startPos;
         const naver = window.naver;
-        const { map, updateDrawingData } = this.props;
+        const { map } = this.props; // delete updateDrawingData
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
@@ -72,7 +75,6 @@ class Drawing extends Component {
         let isClick = false;
         let tempPoint = {};
 
-
         for (let index = 0; index < icons.length; index++) {
             if (selectedIcon === icons[index]) {
                 Shape = overlays[index];
@@ -80,7 +82,6 @@ class Drawing extends Component {
         }
 
         const { loadedListener } = this.state;
-
 
         if (loadedListener !== null) {
             naver.maps.Event.removeListener(loadedListener.leftClick);
@@ -105,15 +106,16 @@ class Drawing extends Component {
                 });
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
+                    updateDrawingData({ ...lineData, shapeType: Shape.name });
                     naver.maps.Event.removeListener(moveEvent);
                 } else {
                     figure.draw(lineData);
+                    updateDrawingData({ ...lineData, shapeType: Shape.name });
                 }
             }
             shapePoint = {};
             figure.setMap(map);
         });
-
 
         moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
             tempPoint = {};
@@ -126,15 +128,16 @@ class Drawing extends Component {
             }
         });
 
+
         const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
-            this.checkDrawStatus();
             if (Shape.name === 'Line' || Shape.name === 'Polygon' || Shape.name === 'Arrow') {
                 naver.maps.Event.removeListener(moveEvent);
-
+                updateDrawingData({ ...lineData, shapeType: Shape.name });
             }
-            naver.maps.Event.removeListener(leftClick);
-            naver.maps.Event.removeListener(rightClick);
-        });
+              naver.maps.Event.removeListener(leftClick);
+              naver.maps.Event.removeListener(rightClick);
+
+        );
         this.setState({
             loadedListener: {
                 leftClick,
@@ -144,13 +147,20 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-        console.log('selectedIcon: ', selectedIcon);
+        // console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
     };
 
+    doNotShowTips = () => {
+        const { refresh } = this.state;
+        sessionStorage.setItem('doNotShowTipsForDrawing', JSON.stringify(true));
+        this.setState({ refresh: !refresh });
+    }
+
     render() {
+
         const {
             map,
             handleToggle,
@@ -161,25 +171,36 @@ class Drawing extends Component {
             shapes,
             isInShapeCreateMode
         } = this.state;
+        const doNotShowTips = JSON.parse(sessionStorage.getItem('doNotShowTipsForDrawing'));
+
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
                     return (
                         <Button
                             map={map}
+                            key={shape}
                             icons={shape}
                             selectButton={this.selectButton}
-                            isSelected={selectedButton === shape && isInShapeCreateMode ? true : false}
+                            isSelected={
+                                selectedButton === shape && isInShapeCreateMode
+                                    ? true
+                                    : false
+                            }
                         />
                     );
                 })}
                 <div id="myDrawingsContainer">
-                    {drawingData.map((shape, index) => {
+                    <MyDrawingElement drawingData={drawingData} />
+                    {/* {drawingData.map((shape, index) => {
                         const newIndex = index + 1;
                         return (
-                            <MyDrawingElement key={'Idrew' + newIndex} drawingData={drawingData} />
+                            <MyDrawingElement
+                                key={'Idrew' + newIndex}
+                                drawingData={drawingData}
+                            />
                         );
-                    })}
+                    })} */}
                 </div>
                 <div id="saveCloseBtns">
                     <button
@@ -199,6 +220,18 @@ class Drawing extends Component {
                         {`닫기`}
                     </button>
                 </div>
+                { doNotShowTips
+                    ? null
+                    : (
+                        <div className="tipModalForDrawing">
+                            <div className="arrowBoxForDrawing">
+                                <p>필터별로 부동산 호재정보를 보고싶다면</p>
+                                <p>그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
+                                <div className="doNotShowTipsForDrawing" onClick={this.doNotShowTips} onKeyDown={this.doNotShowTips} role="button" tabIndex="0">다시 보지 않기</div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         );
     }
