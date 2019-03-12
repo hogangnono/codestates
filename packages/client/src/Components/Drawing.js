@@ -60,7 +60,7 @@ class Drawing extends Component {
     createShapeTest = (selectedIcon) => {
         let startPos;
         const naver = window.naver;
-        const { map, updateDrawingData } = this.props;
+        const { map } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
