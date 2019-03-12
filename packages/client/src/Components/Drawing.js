@@ -106,7 +106,7 @@ class Drawing extends Component {
                 });
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
-                    updateDrawingData({ ...lineData, shapeType: Shape.name });
+                    updateDrawingData({ figure, shapeType: Shape.name });
                     naver.maps.Event.removeListener(moveEvent);
                 } else {
                     figure.draw(lineData);
@@ -224,8 +224,7 @@ class Drawing extends Component {
                     : (
                         <div className="tipModalForDrawing">
                             <div className="arrowBoxForDrawing">
-                                <p>필터별로 부동산 호재정보를 보고싶다면</p>
-                                <p>그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
+                                <p>필터별로 부동산 호재정보를 보고싶다면 그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
                                 <div className="doNotShowTipsForDrawing" onClick={this.doNotShowTips} onKeyDown={this.doNotShowTips} role="button" tabIndex="0">다시 보지 않기</div>
                             </div>
                         </div>
