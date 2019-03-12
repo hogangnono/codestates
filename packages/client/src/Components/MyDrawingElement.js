@@ -11,7 +11,7 @@ class MyDrawingElement extends Component {
 
     deleteShape = () => {
         console.log('삭제버튼을 눌렀습니다!');
-    }
+    };
 
     render() {
         const { drawingData } = this.props;

@@ -16,8 +16,8 @@ class Drawing extends Component {
         map: PropTypes.object.isRequired,
         handleToggle: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-        drawingData: PropTypes.array.isRequired,
-        updateDrawingData: PropTypes.func.isRequired
+        drawingData: PropTypes.array.isRequired
+        // updateDrawingData: PropTypes.func.isRequired
     };
 
     state = {
@@ -34,7 +34,9 @@ class Drawing extends Component {
         const token = localStorage.getItem('token');
         if (JSON.parse(token)) {
             if (!drawingData.length) {
-                return alert('그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)');
+                return alert(
+                    '그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)'
+                );
             }
             axios
                 .post(basicURL + parseURL, body)
@@ -58,10 +60,10 @@ class Drawing extends Component {
         naver.maps.Event.removeListener(rightClick);
     };
 
-    createShapeTest = (selectedIcon) => {
+    createShapeTest = selectedIcon => {
         let startPos;
         const naver = window.naver;
-        const { map, updateDrawingData } = this.props;
+        const { map } = this.props; // delete updateDrawingData
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
@@ -73,7 +75,6 @@ class Drawing extends Component {
         let isClick = false;
         let tempPoint = {};
 
-
         for (let index = 0; index < icons.length; index++) {
             if (selectedIcon === icons[index]) {
                 Shape = overlays[index];
@@ -81,7 +82,6 @@ class Drawing extends Component {
         }
 
         const { loadedListener } = this.state;
-
 
         if (loadedListener !== null) {
             naver.maps.Event.removeListener(loadedListener.leftClick);
@@ -117,7 +117,6 @@ class Drawing extends Component {
             figure.setMap(map);
         });
 
-
         moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
             tempPoint = {};
             tempPoint.x = e.originalEvent.clientX;
@@ -129,14 +128,16 @@ class Drawing extends Component {
             }
         });
 
+
         const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
             if (Shape.name === 'Line' || Shape.name === 'Polygon' || Shape.name === 'Arrow') {
                 naver.maps.Event.removeListener(moveEvent);
                 updateDrawingData({ ...lineData, shapeType: Shape.name });
             }
-            naver.maps.Event.removeListener(leftClick);
-            naver.maps.Event.removeListener(rightClick);
-        });
+              naver.maps.Event.removeListener(leftClick);
+              naver.maps.Event.removeListener(rightClick);
+
+        );
         this.setState({
             loadedListener: {
                 leftClick,
@@ -146,7 +147,7 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-        console.log('selectedIcon: ', selectedIcon);
+        // console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
@@ -159,6 +160,7 @@ class Drawing extends Component {
     }
 
     render() {
+
         const {
             map,
             handleToggle,
@@ -170,15 +172,21 @@ class Drawing extends Component {
             isInShapeCreateMode
         } = this.state;
         const doNotShowTips = JSON.parse(sessionStorage.getItem('doNotShowTipsForDrawing'));
+
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
                     return (
                         <Button
                             map={map}
+                            key={shape}
                             icons={shape}
                             selectButton={this.selectButton}
-                            isSelected={selectedButton === shape && isInShapeCreateMode ? true : false}
+                            isSelected={
+                                selectedButton === shape && isInShapeCreateMode
+                                    ? true
+                                    : false
+                            }
                         />
                     );
                 })}
@@ -187,7 +195,10 @@ class Drawing extends Component {
                     {/* {drawingData.map((shape, index) => {
                         const newIndex = index + 1;
                         return (
-                            <MyDrawingElement key={'Idrew' + newIndex} drawingData={drawingData} />
+                            <MyDrawingElement
+                                key={'Idrew' + newIndex}
+                                drawingData={drawingData}
+                            />
                         );
                     })} */}
                 </div>

@@ -5,14 +5,19 @@ import '../less/Toolbox.less';
 
 class FilterContainer extends Component {
     static propTypes = {
-        check7: PropTypes.bool.isRequired,
-        _toggle7: PropTypes.func.isRequired,
+        MyInfoButton: PropTypes.bool.isRequired,
+        myInfoToggle: PropTypes.func.isRequired,
         factorLoad: PropTypes.func.isRequired,
         showFilter: PropTypes.func.isRequired
     };
 
     render() {
-        const { check7, _toggle7, factorLoad, showFilter } = this.props;
+        const {
+            MyInfoButton,
+            myInfoToggle,
+            factorLoad,
+            showFilter
+        } = this.props;
         return (
             <div id="toolbox">
                 <div id="tabMenu">
@@ -29,8 +34,8 @@ class FilterContainer extends Component {
                 <div>
                     <div>
                         <Filter
-                            check7={check7}
-                            _toggle7={_toggle7}
+                            MyInfoButton={MyInfoButton}
+                            myInfoToggle={myInfoToggle}
                             factorLoad={factorLoad}
                             showFilter={showFilter}
                         />

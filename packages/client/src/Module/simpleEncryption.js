@@ -1,7 +1,7 @@
 /* eslint-disable no-array-constructor */
 /* eslint-disable no-new-wrappers */
 
-export const Encrypt = (theText) => {
+export const Encrypt = theText => {
     let output = new String();
     const Temp = new Array();
     const Temp2 = new Array();
@@ -17,7 +17,7 @@ export const Encrypt = (theText) => {
     return output;
 };
 
-export const Decrypt = (theText) => {
+export const Decrypt = theText => {
     let output = new String();
     const Temp = new Array();
     const Temp2 = new Array();

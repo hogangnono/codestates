@@ -1,14 +1,16 @@
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import axios from 'axios';
+// import axios from 'axios';
+import drawData from './api';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
-import NearbyList from './Components/NearbyList';
 import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
-
-import Circle from './CustomOverlay/Circle';
+// import MainButton from './Components/MainButton';
+import NearbyFactorDialog from './Components/NearbyFactorDialog';
 
 class App extends Component {
     constructor(props) {
@@ -27,48 +29,23 @@ class App extends Component {
         };
         this.state = {
             name: undefined,
-            // factor: '',
+            // factor: undefined,
             drawingData: [],
             map: undefined,
             showFilter: false,
             showModal: false,
-            check7: false,
-            showDraw: false,
             deactiveFilter: '',
-            deactiveDraw: 'deactive'
+            deactiveDraw: 'deactive',
+            MyInfoButton: false,
+            showDraw: false,
+            factors: [],
+            NearByFactorItems: {}
         };
     }
 
     componentDidMount = async () => {
         const naver = window.naver;
-        const map = await new naver.maps.Map(
-            d3.select('#map').node(),
-            this.mapOption()
-        );
-
-        this.setState({ map });
-        this.bound = map.getBounds();
-        this.mainPageLoad(map);
-        naver.maps.Event.addListener(map, 'idle', e => {
-            this.bound = map.getBounds();
-            this.mainPageLoad(map);
-            this.DataDelete();
-        });
-
-        const userName = localStorage.getItem('token');
-        if (userName) {
-            const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
-            this.setState({ name: decryptedName });
-        }
-    };
-
-    handleUserNameOnChange = username => {
-        this.setState({ name: username });
-    };
-
-    mapOption = () => {
-        const naver = window.naver;
-        const mapOptions = {
+        const map = await new naver.maps.Map(d3.select('#map').node(), {
             zoomControl: true,
             zoomControlOptions: {
                 style: naver.maps.ZoomControlStyle.SMALL,
@@ -86,63 +63,46 @@ class App extends Component {
             mapDataControlOptions: {
                 position: naver.maps.Position.BOTTOM_RIGHT
             }
-        };
-        return mapOptions;
+        });
+
+        this.setState({ map });
+        this.bound = map.getBounds();
+        this.mainPageLoad(map);
+        naver.maps.Event.addListener(map, 'idle', e => {
+            this.bound = map.getBounds();
+            // Object.entries(this.newToggleBox).forEach(([key, value]) => {
+            //     if (!value) {
+            //     } else {
+            //         this.mainPageLoad(map);
+            //     }
+            // });
+            this.mainPageLoad(map);
+            this.deleteDraw();
+        });
+
+        const userName = localStorage.getItem('token');
+        if (userName) {
+            const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
+            this.setState({ name: decryptedName });
+        }
+    };
+
+    handleUserNameOnChange = username => {
+        this.setState({ name: username });
     };
 
     mainPageLoad = map => {
-        const { name, factor } = this.state;
+        const { name, factors } = this.state;
         const bound = this.bound;
-        axios
-            .post('http://127.0.0.1:3001/user/load', {
-                name,
-                factor,
-                bound
-            })
-            .then(async result => {
-                const data = result.data;
-                const resultData = await data[0];
-                // eslint-disable-next-line no-unused-vars
-                const userData = await data[1];
-                // if there is user data
-
-                if (result.status === 200 || result.status === 201) {
-                    resultData.map(el => {
-                        const { startPos, endPos, zoomLevel } = JSON.parse(
-                            el.figures
-                        );
-                        if (!(el.id in this.drawList)) {
-                            const overlay = new Circle({
-                                position: { startPos, endPos },
-                                naverMap: map,
-                                zoom: zoomLevel
-                            });
-                            overlay.setMap(map);
-                            this.drawList[el.id] = overlay;
-                        }
-                    });
-                } else if (result.status === 204) {
-                    alert('호재 데이터 정보 없음');
-                }
-            })
-            .catch(error => {
-                // if (error.response.status === 500) {
-                //     console.log(error);
-                //     alert('load fail');
-                // } else {
-                //     console.log(error);
-                //     alert('error!');
-                // }
-                // alert(error);
-            });
+        drawData(name, bound, factors, false, this.drawList, map);
     };
 
-    DataDelete = () => {
+    deleteDraw = () => {
         Object.entries(this.drawList).forEach(([key, value]) => {
             const position = {};
             // reference point
-            position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
-            position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
+            position.x = value._centerPoint.center_lng;
+            position.y = value._centerPoint.center_lat;
             if (
                 position.y < this.bound._min._lat - 0.01
                 || position.y > this.bound._max._lat + 0.01
@@ -153,6 +113,16 @@ class App extends Component {
                 delete this.drawList[key];
             }
         });
+    };
+
+    toggleModal = () => {
+        const { showModal } = this.state;
+        this.setState({ showModal: !showModal });
+    };
+
+    toggleDraw = () => {
+        const { showDraw } = this.state;
+        this.setState({ showDraw: !showDraw });
     };
 
     showFilter = () => {
@@ -174,7 +144,9 @@ class App extends Component {
     showDraw = () => {
         const { showDraw, drawingData, deactiveFilter } = this.state;
         if (drawingData.length) {
-            const pressedConfirm = confirm('저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?');
+            const pressedConfirm = confirm(
+                '저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?'
+            );
             if (pressedConfirm) {
                 this.setState({ drawingData: [] });
             } else if (!pressedConfirm) {
@@ -195,70 +167,55 @@ class App extends Component {
         }
     };
 
-    toggleModal = () => {
-        const { showModal } = this.state;
-        this.setState({ showModal: !showModal });
+    myInfoToggle = () => {
+        const { MyInfoButton } = this.state;
+        this.setState({ MyInfoButton: !MyInfoButton });
+        const toggle = !MyInfoButton;
+        this.factorLoad(undefined, toggle);
     };
 
-    updateDrawingData = (shapeData) => {
+    updateDrawingData = shapeData => {
         const { drawingData } = this.state;
         this.setState({ drawingData: [...drawingData, shapeData] });
-    }
-
-    _toggle7 = () => {
-        const { check7 } = this.state;
-        this.setState({ check7: !check7 });
-        return check7;
     };
 
-    factorLoad = category => {
+    mainToggle = (stateName, toggle) => {
+        this.setState({ [stateName]: !toggle });
+    };
+
+    setNearbyFactorItems = items => {
+        console.log('실행되었다.');
+    };
+
+    factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;
-        const categories = { [category]: !this.newToggleBox[category] };
-        this.newToggleBox = { ...this.newToggleBox, ...categories };
         const bound = this.bound;
         const factors = [];
         Object.entries(this.drawList).forEach(([key, value]) => {
             value.setMap(null);
             delete this.drawList[key];
         });
-        Object.entries(this.newToggleBox).forEach(([key, value]) => {
-            if (value) {
-                factors.push(key);
-            }
-        });
-        axios
-            .post('http://127.0.0.1:3001/user/load', {
-                name,
-                bound,
-                factors
-            })
-            .then(async result => {
-                const data = await result.data;
-                // console.log(data);
-                const resultData = await data[0];
-                // const userData = await data[1];
-                if (result.status === 200 || result.status === 201) {
-                    resultData.map(async el => {
-                        const { startPos, endPos, zoomLevel } = JSON.parse(
-                            el.figures
-                        );
-                        if (!(el.id in this.drawList)) {
-                            const overlay = new Circle({
-                                position: { startPos, endPos },
-                                naverMap: map,
-                                zoom: zoomLevel
-                            });
-                            overlay.setMap(map);
-                            this.drawList[el.id] = overlay;
-                        }
-                    });
-                } else if (result.status === 204) {
-                    alert('호재 데이터 정보 없음');
-                }
-            })
-            .catch(error => {
-                alert(error);
+        if (toggle) {
+            const toggle = {};
+            Object.entries(this.newToggleBox).forEach(([key, value]) => {
+                toggle[key] = false;
             });
+            this.newToggleBox = toggle;
+        }
+        if (category) {
+            const toggleCategory = { [category]: !this.newToggleBox[category] };
+            this.newToggleBox = { ...this.newToggleBox, ...toggleCategory };
+            Object.entries(this.newToggleBox).forEach(([key, value]) => {
+                if (value) {
+                    factors.push(key);
+                }
+            });
+            this.setState({
+                factors: factors
+            });
+        }
+        // TODO:
+        drawData(name, bound, factors, toggle, this.drawList, map);
     };
 
     render() {
@@ -269,15 +226,48 @@ class App extends Component {
             showFilter,
             showDraw,
             showModal,
-            check7,
             deactiveFilter,
-            deactiveDraw
+            deactiveDraw,
+            MyInfoButton
         } = this.state;
+        // const mainButton = [
+        //     {
+        //         className: '',
+        //         cond: true,
+        //         name: 'My',
+        //         onClick: () => this.mainToggle('showModal', showModal)
+        //     },
+        //     {
+        //         className: deactiveFilter,
+        //         cond: deactiveFilter === '',
+        //         name: '필터',
+        //         onClick: () => this.mainToggle('showFilter', showFilter)
+        //     },
+        //     {
+        //         className: deactiveDraw,
+        //         cond: deactiveDraw === '',
+        //         name: '그리기',
+        //         onClick: () => this.mainToggle('showDraw', showDraw)
+        //     }
+        // ];
         return (
             <div id="wrapper">
                 <div id="map">
-                    <NearbyList mapLoad={map} />
+                    {/* <NearbyList mapLoad={map} /> */}
+                    <NearbyFactorDialog
+                        mapLoad={map}
+                        setNearbyFactorItems={this.setNearbyFactorItems}
+                    />
                     <div id="loginFavorContainer">
+                        {/* mainButton.map(bt => (
+                            <MainButton
+                                className={bt.className} // 추가되는 클래스명
+                                name={bt.name} // 'my' | 'filer'...
+                                cond={bt.cond} // 클릭 함수 실행 조건
+                                onClick={bt.onClick}
+                                key={bt.name}
+                            />
+                        )) */}
                         <div
                             className="loginFavorBtn"
                             onClick={this.toggleModal}
@@ -321,15 +311,15 @@ class App extends Component {
                             handleUserNameOnChange={this.handleUserNameOnChange}
                         />
                     ) : null}
-                    <div style={{ display: !showFilter ? 'block' : 'none' }}>
+                    <div className={!showFilter ? 'block' : 'none'}>
                         <FilterContainer
-                            check7={check7}
-                            _toggle7={this._toggle7}
+                            MyInfoButton={MyInfoButton}
+                            myInfoToggle={this.myInfoToggle}
                             factorLoad={this.factorLoad}
                             showFilter={this.showFilter}
                         />
                     </div>
-                    <div style={{ display: showDraw ? 'block' : 'none' }}>
+                    <div className={showDraw ? 'block' : 'none'}>
                         <DrawContainer
                             handleToggle={this.showDraw}
                             mapLoad={map}

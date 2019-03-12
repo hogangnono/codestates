@@ -13,16 +13,15 @@ class FilterBox extends Component {
         return (
             <div
                 className="filterBtn"
-                onClick={() => {
-                    factorLoad(factor);
-                }}
+                onClick={() => factorLoad(factor)}
                 onKeyPress={() => factorLoad(factor)}
                 role="button"
                 tabIndex="0"
             >
-                #
-                {' '}
-                {factor}
+                <label htmlFor="opt-in">
+                    <input type="checkbox" id="opt-in" />
+                    <div className="checkedBox">{`# ${factor}`}</div>
+                </label>
             </div>
         );
     }

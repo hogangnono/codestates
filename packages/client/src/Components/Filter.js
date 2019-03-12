@@ -1,5 +1,3 @@
-/* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import '../less/Filter.less';
 import PropTypes from 'prop-types';
@@ -7,8 +5,8 @@ import FilterBox from './FilterBox';
 
 class Filter extends Component {
     static propTypes = {
-        check7: PropTypes.bool.isRequired,
-        _toggle7: PropTypes.func.isRequired,
+        MyInfoButton: PropTypes.bool.isRequired,
+        myInfoToggle: PropTypes.func.isRequired,
         factorLoad: PropTypes.func.isRequired,
         showFilter: PropTypes.func.isRequired
     };
@@ -24,8 +22,14 @@ class Filter extends Component {
     }
 
     render() {
-        const { check7, factorLoad, _toggle7, showFilter } = this.props;
+        const { 
+            MyInfoButton,
+            factorLoad,
+            myInfoToggle,
+            showFilter
+        } = this.props;
         const doNotShowTips = JSON.parse(sessionStorage.getItem('doNotShowTipsForFilter'));
+
         const factorBox = [
             '상권',
             '신축/재개발',
@@ -37,46 +41,40 @@ class Filter extends Component {
             '기타'
         ];
         return (
-            <div id="filterAndTipContainer">
-                <div id="filterContainer">
-                    <div className="filterBox">
-                        {factorBox.map(factor => {
-                            return (
-                                <FilterBox
-                                    factorLoad={factorLoad}
-                                    factor={factor}
-                                    key={factor}
-                                />
-                            );
-                        })}
-                    </div>
+            <div id="filterContainer">
+                <div className="filterBox">
+                    {factorBox.map(factor => {
+                        return (
+                            <FilterBox
+                                factorLoad={factorLoad}
+                                factor={factor}
+                                key={factor}
+                            />
+                        );
+                    })}
+                </div>
 
-                    <div className="buttonBox">
-                        <div
-                            className="myInfoButton"
-                            onClick={_toggle7}
-                            onKeyPress={_toggle7}
-                            role="button"
-                            tabIndex="0"
-                            style={{
-                                color: check7 ? '#fff' : '#4d55b2',
-                                backgroundColor: check7 ? '#4d55b2' : '#fff'
-                            }}>
-                            {`내 정보 보기`}
-                        </div>
-                        <div
-                            className="myInfoButton"
-                            onClick={showFilter}
-                            onKeyPress={showFilter}
-                            role="button"
-                            tabIndex="0"
-                            style={{
-                                color: check7 ? '#fff' : '#4d55b2',
-                                backgroundColor: check7 ? '#4d55b2' : '#fff'
-                            }}
-                        >
-                            {`닫기`}
-                        </div>
+                <div className="buttonBox">
+                    <div
+                        className={
+                            'myInfoButton '
+                            + (MyInfoButton ? 'checked' : 'unChecked')
+                        }
+                        onClick={myInfoToggle}
+                        onKeyPress={myInfoToggle}
+                        role="button"
+                        tabIndex="0"
+                    >
+                        {`내 정보`}
+                    </div>
+                    <div
+                        className="myInfoButton last"
+                        onClick={showFilter}
+                        onKeyPress={showFilter}
+                        role="button"
+                        tabIndex="0"
+                    >
+                        {`닫기`}
                     </div>
                 </div>
                 { doNotShowTips
