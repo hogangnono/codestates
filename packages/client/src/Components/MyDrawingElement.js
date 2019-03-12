@@ -15,9 +15,8 @@ class MyDrawingElement extends Component {
 
     render() {
         const { drawingData } = this.props;
-        // console.log('drawingData', drawingData);
         return (
-            <>
+            <div>
                 {drawingData.map((shapeData, index) => {
                     const newIndex = index + 1;
                     return (
@@ -30,7 +29,7 @@ class MyDrawingElement extends Component {
                         </div>
                     );
                 })}
-            </>
+            </div>
         );
     }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import drawData from './loadHandle';
+// import * as constants from './constants';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
@@ -182,7 +183,6 @@ class App extends Component {
         this.setState({
             NearByFactorItems: items
         });
-        console.log(items);
     };
 
     factorLoad = (category, toggle = false) => {
@@ -201,8 +201,13 @@ class App extends Component {
             this.newToggleBox = toggle;
         }
         if (category) {
-            const toggleCategory = { [category]: !this.newToggleBox[category] };
-            this.newToggleBox = { ...this.newToggleBox, ...toggleCategory };
+            const toggleCategory = {
+                [category]: !this.newToggleBox[category]
+            };
+            this.newToggleBox = {
+                ...this.newToggleBox,
+                ...toggleCategory
+            };
             Object.entries(this.newToggleBox).forEach(([key, value]) => {
                 if (value) {
                     factors.push(key);
@@ -212,8 +217,13 @@ class App extends Component {
                 factors: factors
             });
         }
+        const nearbyData = async val => {
+            await this.setState({
+                NearByFactorItems: val
+            });
+        };
         // TODO:
-        drawData(name, bound, factors, toggle, this.drawList, map);
+        drawData(name, bound, factors, toggle, this.drawList, map, nearbyData);
     };
 
     render() {

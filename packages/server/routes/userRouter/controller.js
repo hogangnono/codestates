@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
     let transaction;
     try {
         transaction = await User.sequelize.transaction();
-        await User.findOrCreate({ where: { name } });
+        await User.findOrCreate({ where: { name }, transaction });
         await transaction.commit();
         res.status(200).send(
             `어서오세요! ${name}님!\n로그인에 성공했습니다 :)`
@@ -27,11 +27,13 @@ exports.load = async (req, res) => {
     const data = [];
     const factorIdArray = [];
     // not filtering
+    console.log(factors);
     if (factors && factors.length) {
         try {
             transaction = await User.sequelize.transaction();
             const factorId = await Factor.findAll({
-                where: { name: { [Op.in]: factors }, transaction }
+                where: { name: { [Op.in]: factors } },
+                transaction
             });
             factorId.forEach(idTable => {
                 factorIdArray.push(idTable.dataValues.id);
@@ -166,7 +168,8 @@ exports.load = async (req, res) => {
 /* Save data */
 exports.save = async (req, res) => {
     let transaction;
-    const { name, data } = req.body;
+    const { name, data, shapeType } = req.body;
+    console.log(shapeType);
     try {
         transaction = await Drawing.sequelize.transaction();
         if (Array.isArray(data)) {

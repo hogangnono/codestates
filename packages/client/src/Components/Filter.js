@@ -67,7 +67,7 @@ class Filter extends Component {
                         role="button"
                         tabIndex="0"
                     >
-                        {`내 정보`}
+                        {`내 호재`}
                     </div>
                     <div
                         className="myInfoButton last"

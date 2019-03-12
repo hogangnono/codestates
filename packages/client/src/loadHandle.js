@@ -25,7 +25,6 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                 const { shape, startPos, lineData, zoomLevel } = JSON.parse(
                     el.figures
                 );
-                const factorNearby = {};
                 const {
                     description,
                     factor_id,
@@ -33,8 +32,10 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                     center_lng,
                     id
                 } = el;
-                factorNearby.description = description;
-                factorNearby.factor_id = factor_id;
+                const factorNearby = {
+                    description: description,
+                    factor_id: factor_id
+                };
                 nearbyFactors.push(factorNearby);
                 if (nearbyFactors.length) {
                     nearbyData(nearbyFactors);
@@ -49,7 +50,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                     const overlay = new drawShape({
                         position: startPos,
                         centerPoint: { center_lat, center_lng },
-                        lineData: lineData,
+                        lineData,
                         naverMap: map,
                         zoom: zoomLevel
                     });
