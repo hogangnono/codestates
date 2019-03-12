@@ -165,14 +165,11 @@ exports.save = async (req, res) => {
     try {
         transaction = await Drawing.sequelize.transaction();
         if (Array.isArray(data)) {
-            console.log('1');
             const userID = await User.findOne({ where: { name } }).get('id');
-            console.log('2. userID', userID);
             const drawingId = await Drawing.create(
                 { user_id: userID },
                 transaction
             ).get('id');
-            console.log('3. drawingId', drawingId);
             const dataWithDrawingId = data.map(figure => {
                 const returnFigure = {
                     ...figure,
@@ -180,11 +177,7 @@ exports.save = async (req, res) => {
                 };
                 return returnFigure;
             });
-            console.log('4. dataWithDrawingId', dataWithDrawingId);
-
             await Figure.bulkCreate(dataWithDrawingId);
-            console.log('5. bulk 성공! ');
-
             await transaction.commit();
             res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
         }
