@@ -12,18 +12,13 @@ import '../less/Drawing.less';
 
 class Button extends Component {
     static propTypes = {
-        icons: PropTypes.string.isRequired
+        icons: PropTypes.string.isRequired,
+        selectButton: PropTypes.func.isRequired,
+        isSelected: PropTypes.bool.isRequired
     };
 
     render() {
-        const { selectButton, isSelected } = this.props;
-        const { icons } = this.props;
-        // console.log(
-        //     icons,
-        //     ' isInShapeCreateMode: ',
-        //     isInShapeCreateMode,
-        //     ', isSelected: ' + isSelected
-        // );
+        const { selectButton, isSelected, icons } = this.props;
 
         return (
             <div>

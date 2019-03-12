@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import '../less/NearbyFactorItem.less';
 
 export default class NearbyFactorItem extends Component {
+    static propTypes = {
+        el: PropTypes.number.isRequired,
+        setNearbyFactorItems: PropTypes.func.isRequired
+    };
+
     render() {
         const { el, setNearbyFactorItems } = this.props;
         return (

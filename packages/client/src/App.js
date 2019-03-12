@@ -6,14 +6,11 @@ import * as d3 from 'd3';
 import drawData from './api';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
-// import NearbyList from './Components/NearbyList';
 import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
-import MainButton from './Components/mainButton';
+// import MainButton from './Components/MainButton';
 import NearbyFactorDialog from './Components/NearbyFactorDialog';
-
-// import Circle from './CustomOverlay/Circle';
 
 class App extends Component {
     constructor(props) {
@@ -42,7 +39,7 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: []
+            NearByFactorItems: {}
         };
     }
 
@@ -104,8 +101,8 @@ class App extends Component {
         Object.entries(this.drawList).forEach(([key, value]) => {
             const position = {};
             // reference point
-            position.x = (value._startPos.coord.x + value._endPos.coord.x) / 2;
-            position.y = (value._startPos.coord.y + value._endPos.coord.y) / 2;
+            position.x = value._centerPoint.center_lng;
+            position.y = value._centerPoint.center_lat;
             if (
                 position.y < this.bound._min._lat - 0.01
                 || position.y > this.bound._max._lat + 0.01
@@ -233,26 +230,26 @@ class App extends Component {
             deactiveDraw,
             MyInfoButton
         } = this.state;
-        const mainButton = [
-            {
-                className: '',
-                cond: true,
-                name: 'My',
-                onClick: () => this.mainToggle('showModal', showModal)
-            },
-            {
-                className: deactiveFilter,
-                cond: deactiveFilter === '',
-                name: '필터',
-                onClick: () => this.mainToggle('showFilter', showFilter)
-            },
-            {
-                className: deactiveDraw,
-                cond: deactiveDraw === '',
-                name: '그리기',
-                onClick: () => this.mainToggle('showDraw', showDraw)
-            }
-        ];
+        // const mainButton = [
+        //     {
+        //         className: '',
+        //         cond: true,
+        //         name: 'My',
+        //         onClick: () => this.mainToggle('showModal', showModal)
+        //     },
+        //     {
+        //         className: deactiveFilter,
+        //         cond: deactiveFilter === '',
+        //         name: '필터',
+        //         onClick: () => this.mainToggle('showFilter', showFilter)
+        //     },
+        //     {
+        //         className: deactiveDraw,
+        //         cond: deactiveDraw === '',
+        //         name: '그리기',
+        //         onClick: () => this.mainToggle('showDraw', showDraw)
+        //     }
+        // ];
         return (
             <div id="wrapper">
                 <div id="map">
@@ -262,14 +259,50 @@ class App extends Component {
                         setNearbyFactorItems={this.setNearbyFactorItems}
                     />
                     <div id="loginFavorContainer">
-                        {mainButton.map(bt => (
+                        {/* mainButton.map(bt => (
                             <MainButton
                                 className={bt.className} // 추가되는 클래스명
                                 name={bt.name} // 'my' | 'filer'...
                                 cond={bt.cond} // 클릭 함수 실행 조건
                                 onClick={bt.onClick}
+                                key={bt.name}
                             />
-                        ))}
+                        )) */}
+                        <div
+                            className="loginFavorBtn"
+                            onClick={this.toggleModal}
+                            onKeyPress={this.toggleModal}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`My`}
+                        </div>
+                        <div
+                            className={`loginFavorBtn ${deactiveFilter}`}
+                            onClick={() => {
+                                if (deactiveFilter === '') {
+                                    this.showFilter();
+                                }
+                            }}
+                            onKeyPress={this.showFilter}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`필터`}
+                        </div>
+                        <div
+                            className={`loginFavorBtn ${deactiveDraw}`}
+                            onClick={() => {
+                                if (deactiveDraw === '') {
+                                    this.showDraw();
+                                }
+                            }}
+                            onKeyPress={this.showDraw}
+                            role="button"
+                            tabIndex="0"
+                        >
+                            {`그리기`}
+                        </div>
                     </div>
                     {showModal ? (
                         <LoginModal

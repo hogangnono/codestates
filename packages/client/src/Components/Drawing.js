@@ -5,8 +5,10 @@ import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
+import Arrow from '../CustomOverlay/Arrow';
 import Circle from '../CustomOverlay/Circle';
 import Rect from '../CustomOverlay/Rect';
+import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 
 class Drawing extends Component {
@@ -14,8 +16,8 @@ class Drawing extends Component {
         map: PropTypes.object.isRequired,
         handleToggle: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-        drawingData: PropTypes.array.isRequired,
-        updateDrawingData: PropTypes.func.isRequired
+        drawingData: PropTypes.array.isRequired
+        // updateDrawingData: PropTypes.func.isRequired
     };
 
     state = {
@@ -60,16 +62,17 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let startPos;
         const naver = window.naver;
-        const { map, updateDrawingData } = this.props;
+        const { map } = this.props; // delete updateDrawingData
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
-        const overlays = [Line, Circle, Rect, Circle, Circle]; // Change name of index to actual overlay name of import
+        const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
 
         let moveEvent;
-        let path;
+        let figure;
         const lineData = [];
         let shapePoint = {};
         let isClick = false;
+        let tempPoint = {};
 
         for (let index = 0; index < icons.length; index++) {
             if (selectedIcon === icons[index]) {
@@ -87,37 +90,38 @@ class Drawing extends Component {
         const leftClick = naver.maps.Event.addListener(map, 'click', e => {
             const { coord, offset } = e;
             startPos = { coord, offset };
-            if (Shape.name === 'Line') {
-                isClick = true;
-                // 화면상의 절대 좌표
-                shapePoint.x = e.originalEvent.clientX;
-                shapePoint.y = e.originalEvent.clientY;
+            // 화면상의 절대 좌표
+            shapePoint.x = e.originalEvent.clientX;
+            shapePoint.y = e.originalEvent.clientY;
+            lineData.push(shapePoint);
+            isClick = true;
+
+            if (lineData.length === 1) {
                 lineData.push(shapePoint);
-                lineData.push(shapePoint);
-                shapePoint = {};
-                // 처음 그리는 경우
-                if (lineData.length === 2) {
-                    path = new Shape({
-                        position: startPos,
-                        lineData: lineData,
-                        naverMap: map
-                    });
+                figure = new Shape({
+                    position: startPos,
+                    lineData: lineData,
+                    naverMap: map
+                });
+            } else {
+                if (Shape.name === 'Rect' || Shape.name === 'Circle') {
+                    naver.maps.Event.removeListener(moveEvent);
                 } else {
-                    path.draw(lineData);
+                    figure.draw(lineData);
                 }
-                path.setMap(map);
             }
-            // naver.maps.Event.removeListener(leftClick);
+            shapePoint = {};
+            figure.setMap(map);
         });
 
-        // eslint-disable-next-line prefer-const
         moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
+            tempPoint = {};
+            tempPoint.x = e.originalEvent.clientX;
+            tempPoint.y = e.originalEvent.clientY;
+            // 직선일 경우
             if (isClick) {
-                const tempPoint = {};
-                tempPoint.x = e.originalEvent.clientX;
-                tempPoint.y = e.originalEvent.clientY;
                 lineData[lineData.length - 1] = tempPoint;
-                path.draw(lineData);
+                figure.draw(lineData);
             }
         });
 
@@ -125,26 +129,18 @@ class Drawing extends Component {
             map,
             'rightclick',
             e => {
-                if (Shape.name === 'Line') {
-                    updateDrawingData(lineData);
+                this.checkDrawStatus();
+                if (
+                    Shape.name === 'Line'
+                    || Shape.name === 'Polygon'
+                    || Shape.name === 'Arrow'
+                ) {
                     naver.maps.Event.removeListener(moveEvent);
-                } else {
-                    const { coord, offset } = e;
-                    const endPos = { coord, offset };
-                    const shapData = {
-                        position: { startPos, endPos },
-                        naverMap: map,
-                        zoom: ''
-                    };
-                    new Shape(shapData).setMap(map);
-                    updateDrawingData(shapData);
                 }
                 naver.maps.Event.removeListener(leftClick);
                 naver.maps.Event.removeListener(rightClick);
-                this.setState({ isInShapeCreateMode: false });
             }
         );
-
         this.setState({
             loadedListener: {
                 leftClick,
@@ -166,9 +162,6 @@ class Drawing extends Component {
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
-                    // console.log('Drawing', shape);
-                    // console.log(selectedButton === shape);
-
                     return (
                         <Button
                             map={map}

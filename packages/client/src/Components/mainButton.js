@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class MainButton extends Component {
+    static propTypes = {
+        name: PropTypes.string.isRequired,
+        onClick: PropTypes.func.isRequired,
+        className: PropTypes.func.isRequired,
+        cond: PropTypes.bool.isRequired
+    };
+
     render() {
         const { name, onClick, className, cond } = this.props;
 
