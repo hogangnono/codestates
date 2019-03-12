@@ -173,7 +173,6 @@ exports.save = async (req, res) => {
                 transaction
             ).get('id');
             console.log('3. drawingId', drawingId);
-            
             const dataWithDrawingId = data.map(figure => {
                 const returnFigure = {
                     ...figure,
