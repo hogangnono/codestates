@@ -1,6 +1,12 @@
+@boxShadow: 0 0 5px rgba(0, 0, 0, 0.1);
+@hogangnonoColor: #4d55b2;
+
 body {
   font-family: Apple SD Gothic Neo, sans-serif;
   color: #333;
+}
+#filterAndTipContainer {
+  position: relative;
 }
 #filterContainer {
   position: relative;
@@ -41,9 +47,70 @@ body {
   text-align: center;
   border: 1px solid #fff;
   box-sizing: border-box;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: @boxShadow;
 }
 .active {
-  color: #4d55b2;
+  color: @hogangnonoColor;
   border-bottom: 2px solid #aaa;
+}
+.tipModalForFilter {
+  position: absolute;
+  top: 620px;
+  width: 100%;
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  .arrowBoxForFilter {
+    position: relative;
+    background: @hogangnonoColor;
+    height: 60px;
+    border-radius: 10px;
+    color: #fff;
+    padding: 12px;
+    display: table-cell;
+    vertical-align: middle;
+    p {
+      margin: 2px;
+      font-weight: 300;
+    }
+    .doNotShowTipsForFilter {
+      float: right;
+      text-align: center;
+      padding: 3px;
+      margin: 5px 0px;
+      font-weight: bold;
+      width: 100px;
+      border-radius: 10px;
+      background-color: #fff;
+      color: @hogangnonoColor;
+    }
+    @keyframes floating {
+      from { transform: translate(0,  0px); }
+      80%  { transform: translate(0, 10px); }
+      to   { transform: translate(0, -0px); }    
+    }
+  }
+  .arrowBoxForFilter:after, .arrowBoxForFilter:before {
+    bottom: 80%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .arrowBoxForFilter:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: @hogangnonoColor;
+    border-width: 30px;
+    margin-left: -30px;
+  }
+  .arrowBoxForFilter:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-width: 36px;
+    margin-left: -36px;
+  }
 }

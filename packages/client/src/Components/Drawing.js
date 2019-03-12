@@ -22,7 +22,8 @@ class Drawing extends Component {
         shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
         loadedListener: null,
-        isInShapeCreateMode: false
+        isInShapeCreateMode: false,
+        refresh: true
     };
 
     handleRequestSave = (parseURL, body) => {
@@ -160,6 +161,12 @@ class Drawing extends Component {
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
     };
 
+    doNotShowTips = () => {
+        const { refresh } = this.state;
+        sessionStorage.setItem('doNotShowTipsForDrawing', JSON.stringify(true));
+        this.setState({ refresh: !refresh });
+    }
+
     render() {
         const {
             map,
@@ -171,6 +178,7 @@ class Drawing extends Component {
             shapes,
             isInShapeCreateMode
         } = this.state;
+        const doNotShowTips = JSON.parse(sessionStorage.getItem('doNotShowTipsForDrawing'));
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -212,6 +220,18 @@ class Drawing extends Component {
                         {`닫기`}
                     </button>
                 </div>
+                { doNotShowTips
+                    ? null
+                    : (
+                        <div className="tipModalForDrawing">
+                            <div className="arrowBoxForDrawing">
+                                <p>필터별로 부동산 호재정보를 보고싶다면</p>
+                                <p>그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
+                                <div className="doNotShowTipsForDrawing" onClick={this.doNotShowTips} onKeyDown={this.doNotShowTips} role="button" tabIndex="0">다시 보지 않기</div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         );
     }
