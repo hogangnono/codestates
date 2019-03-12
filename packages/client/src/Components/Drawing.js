@@ -63,7 +63,7 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let startPos;
         const naver = window.naver;
-        const { map } = this.props; // delete updateDrawingData
+        const { map, updateDrawingData } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
@@ -134,10 +134,9 @@ class Drawing extends Component {
                 naver.maps.Event.removeListener(moveEvent);
                 updateDrawingData({ ...lineData, shapeType: Shape.name });
             }
-              naver.maps.Event.removeListener(leftClick);
-              naver.maps.Event.removeListener(rightClick);
-
-        );
+            naver.maps.Event.removeListener(leftClick);
+            naver.maps.Event.removeListener(rightClick);
+        });
         this.setState({
             loadedListener: {
                 leftClick,
