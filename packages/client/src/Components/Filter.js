@@ -22,7 +22,7 @@ class Filter extends Component {
     }
 
     render() {
-        const { 
+        const {
             MyInfoButton,
             factorLoad,
             myInfoToggle,
