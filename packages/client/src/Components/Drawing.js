@@ -24,7 +24,8 @@ class Drawing extends Component {
         shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
         loadedListener: null,
-        isInShapeCreateMode: false
+        isInShapeCreateMode: false,
+        refresh: true
     };
 
     handleRequestSave = (parseURL, body) => {
@@ -105,9 +106,11 @@ class Drawing extends Component {
                 });
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
+                    updateDrawingData({ ...lineData, shapeType: Shape.name });
                     naver.maps.Event.removeListener(moveEvent);
                 } else {
                     figure.draw(lineData);
+                    updateDrawingData({ ...lineData, shapeType: Shape.name });
                 }
             }
             shapePoint = {};
@@ -125,21 +128,15 @@ class Drawing extends Component {
             }
         });
 
-        const rightClick = naver.maps.Event.addListener(
-            map,
-            'rightclick',
-            e => {
-                this.checkDrawStatus();
-                if (
-                    Shape.name === 'Line'
-                    || Shape.name === 'Polygon'
-                    || Shape.name === 'Arrow'
-                ) {
-                    naver.maps.Event.removeListener(moveEvent);
-                }
-                naver.maps.Event.removeListener(leftClick);
-                naver.maps.Event.removeListener(rightClick);
+
+        const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
+            if (Shape.name === 'Line' || Shape.name === 'Polygon' || Shape.name === 'Arrow') {
+                naver.maps.Event.removeListener(moveEvent);
+                updateDrawingData({ ...lineData, shapeType: Shape.name });
             }
+              naver.maps.Event.removeListener(leftClick);
+              naver.maps.Event.removeListener(rightClick);
+
         );
         this.setState({
             loadedListener: {
@@ -156,9 +153,26 @@ class Drawing extends Component {
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
     };
 
+    doNotShowTips = () => {
+        const { refresh } = this.state;
+        sessionStorage.setItem('doNotShowTipsForDrawing', JSON.stringify(true));
+        this.setState({ refresh: !refresh });
+    }
+
     render() {
-        const { map, handleToggle, drawingData } = this.props;
-        const { selectedButton, shapes, isInShapeCreateMode } = this.state;
+
+        const {
+            map,
+            handleToggle,
+            drawingData
+        } = this.props;
+        const {
+            selectedButton,
+            shapes,
+            isInShapeCreateMode
+        } = this.state;
+        const doNotShowTips = JSON.parse(sessionStorage.getItem('doNotShowTipsForDrawing'));
+
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -177,7 +191,8 @@ class Drawing extends Component {
                     );
                 })}
                 <div id="myDrawingsContainer">
-                    {drawingData.map((shape, index) => {
+                    <MyDrawingElement drawingData={drawingData} />
+                    {/* {drawingData.map((shape, index) => {
                         const newIndex = index + 1;
                         return (
                             <MyDrawingElement
@@ -185,7 +200,7 @@ class Drawing extends Component {
                                 drawingData={drawingData}
                             />
                         );
-                    })}
+                    })} */}
                 </div>
                 <div id="saveCloseBtns">
                     <button
@@ -205,6 +220,18 @@ class Drawing extends Component {
                         {`닫기`}
                     </button>
                 </div>
+                { doNotShowTips
+                    ? null
+                    : (
+                        <div className="tipModalForDrawing">
+                            <div className="arrowBoxForDrawing">
+                                <p>필터별로 부동산 호재정보를 보고싶다면</p>
+                                <p>그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
+                                <div className="doNotShowTipsForDrawing" onClick={this.doNotShowTips} onKeyDown={this.doNotShowTips} role="button" tabIndex="0">다시 보지 않기</div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         );
     }

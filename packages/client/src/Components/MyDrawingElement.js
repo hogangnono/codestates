@@ -14,14 +14,23 @@ class MyDrawingElement extends Component {
     };
 
     render() {
+        const { drawingData } = this.props;
+        console.log('drawingData', drawingData);
         return (
-            <div className="drewShape">
-                <span>도형을 그렸다!</span>
-                <IoMdTrash
-                    className="deleteDrawingDataIcon"
-                    onClick={this.deleteShape}
-                />
-            </div>
+            <>
+                { drawingData.map((shapeData, index) => {
+                    const newIndex = index + 1;
+                    return (
+                        <div className="drewShape" key={newIndex}>
+                            <span>{shapeData.shapeType}</span>
+                            <IoMdTrash
+                                className="deleteDrawingDataIcon"
+                                onClick={this.deleteShape}
+                            />
+                        </div>
+                    );
+                })}
+            </>
         );
     }
 }
