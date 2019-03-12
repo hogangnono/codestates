@@ -1,90 +1,74 @@
 import * as d3 from 'd3';
-
 var Shape = function(options) {
-    // current map ratio
+    // 현재 맵의 축적 또는 저장될 당시의 축적
     this._zoom = options.zoom || options.naverMap.getZoom();
     this._map = options.naverMap;
-    this.setPosition(options.position);
+    this._startPos = {};
+    // 선분의 꼭지점
+    this._lineData = options.lineData;
+    this.draw();
     this.setMap(options.map || null);
 };
 
 Shape.prototype = new window.naver.maps.OverlayView();
 Shape.prototype.constructor = Shape;
 
-Shape.prototype.setPosition = function(position) {
-    this._startPos = position.startPos;
-    this._endPos = position.endPos;
-    this.draw();
-};
-
-Shape.prototype.getPosition = function() {
-    const start = {};
-    start.x = Math.min(this._startPos.coord.x, this._endPos.coord.x);
-    start.y = Math.max(this._startPos.coord.y, this._endPos.coord.y);
-    return start;
-};
-
 Shape.prototype.onAdd = function() {
-    // make a div that contain shape and whole info
+    // make a div that contain Shape and whole info
     const div = document.createElement('div');
-    // make a input that contaion description of shape
-    var input = document.createElement('div');
-    input.innerHTML = '<input type="text" placeholder="호재를 입력해주세요"></input>';
-    input.addEventListener('click', e => {
-        e.target.focus();
-    });
-    // make deletebutton
-    const deleteButton = document.createElement('div');
-    deleteButton.className = 'deleteButton';
-    deleteButton.addEventListener('click', e => {
-        this.onRemove();
-    });
 
-    // make svg that contain shape
+    // make svg that contain Shape
     this.svg = d3.create('svg');
     this.addShape();
     div.appendChild(this.svg.node());
-    div.appendChild(deleteButton);
-    div.appendChild(input);
     this._element = div;
     const overlayLayer = this.getPanes().overlayLayer;
     overlayLayer.appendChild(this._element);
 };
 
 Shape.prototype.addShape = function() {
+    this._path = this.svg.append('path');
 };
 
 
-Shape.prototype.draw = function() {
+Shape.prototype.draw = function(lineData) {
     if (!this.getMap()) {
         return;
     }
-    const projection = this.getProjection();
-    const position = this.getPosition();
-    const pixelPosition = projection.fromCoordToOffset(position);
+    if (lineData) {
+        this._lineData = lineData;
+    }
+
+    this.setShape();
+
+    /* Set div */
     this._element.style.position = 'absolute';
+    // 지도를 이동했을때 새로운 영역의 왼쪽 상단의 좌표를 확인
+    const bound = this.map.getBounds();
+    const boundCoord = {};
+    // lan, lng값을 가짐
+    boundCoord.x = bound._min.x;
+    boundCoord.y = bound._max.y;
+    // coord 값을 offset 값으로 변경
+    const projection = this.map.getProjection();
+    const boundOffset = projection.fromCoordToOffset(boundCoord);
+    // 새로운 영역 위치에 div를 생성
+    this._element.style.top = `${boundOffset.y}px`;
+    this._element.style.left = `${boundOffset.x}px`;
+    this._element.style.width = `${window.innerWidth}px`;
+    this._element.style.height = `${window.innerHeight}px`;
 
-    // place thd div where user click
-    this._element.style.top = `${pixelPosition.y}px`;
-    this._element.style.left = `${pixelPosition.x}px`;
+    this.setSvg();
+    this.setPath();
+};
 
-    // set the ratio
-    const ratio = this._map.getZoom() - this._zoom;
+Shape.prototype.setShape = function() {
+};
 
-    // calculate the div width and height(Subtraction of two coordinates) with zoom ratio
-    const width = Math.abs(this._endPos.offset.x - this._startPos.offset.x);
-    const height = Math.abs(this._endPos.offset.y - this._startPos.offset.y);
-    const widthRatio = width * 2 ** ratio;
-    const heightRatio = height * 2 ** ratio;
+Shape.prototype.setSvg = function() {
+};
 
-    // match the div and svg size
-    this._element.style.width = `${widthRatio}px`;
-    this._element.style.height = `${heightRatio}px`;
-
-    const svg = this._element.childNodes[0];
-    svg.style.width = `${widthRatio}px`;
-    svg.style.height = `${heightRatio}px`;
-
+Shape.prototype.setPath = function() {
 };
 
 Shape.prototype.onRemove = function() {

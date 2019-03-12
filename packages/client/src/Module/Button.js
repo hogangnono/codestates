@@ -16,9 +16,8 @@ class Button extends Component {
     };
 
     render() {
-        const { selectButton, isSelected, isInShapeCreateMode } = this.props;
+        const { selectButton, isSelected } = this.props;
         const { icons } = this.props;
-        console.log(icons, ' isInShapeCreateMode: ', isInShapeCreateMode, ', isSelected: ' + isSelected);
 
         return (
             <div>
