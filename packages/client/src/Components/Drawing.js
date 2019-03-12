@@ -106,9 +106,11 @@ class Drawing extends Component {
                 });
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
+                    updateDrawingData({ ...lineData, shapeType: Shape.name });
                     naver.maps.Event.removeListener(moveEvent);
                 } else {
                     figure.draw(lineData);
+                    updateDrawingData({ ...lineData, shapeType: Shape.name });
                 }
             }
             shapePoint = {};
@@ -128,10 +130,9 @@ class Drawing extends Component {
         });
 
         const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
-            this.checkDrawStatus();
             if (Shape.name === 'Line' || Shape.name === 'Polygon' || Shape.name === 'Arrow') {
                 naver.maps.Event.removeListener(moveEvent);
-
+                updateDrawingData({ ...lineData, shapeType: Shape.name });
             }
             naver.maps.Event.removeListener(leftClick);
             naver.maps.Event.removeListener(rightClick);
@@ -182,12 +183,13 @@ class Drawing extends Component {
                     );
                 })}
                 <div id="myDrawingsContainer">
-                    {drawingData.map((shape, index) => {
+                    <MyDrawingElement drawingData={drawingData} />
+                    {/* {drawingData.map((shape, index) => {
                         const newIndex = index + 1;
                         return (
                             <MyDrawingElement key={'Idrew' + newIndex} drawingData={drawingData} />
                         );
-                    })}
+                    })} */}
                 </div>
                 <div id="saveCloseBtns">
                     <button

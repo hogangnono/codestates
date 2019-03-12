@@ -26,7 +26,6 @@ class Filter extends Component {
     render() {
         const { check7, factorLoad, _toggle7, showFilter } = this.props;
         const doNotShowTips = JSON.parse(sessionStorage.getItem('doNotShowTipsForFilter'));
-        console.log('doNotShowTips', doNotShowTips);
         const factorBox = [
             '상권',
             '신축/재개발',
