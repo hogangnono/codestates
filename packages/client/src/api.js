@@ -1,9 +1,10 @@
 import axios from 'axios';
 import Circle from './CustomOverlay/Circle';
+import API_USER_LOAD_PATH from './constants';
 
 const drawData = (name, bound, factors, toggle, drawList, map) => {
     axios
-        .post('http://127.0.0.1:3001/user/load', {
+        .post(API_USER_LOAD_PATH, {
             name,
             bound,
             factors

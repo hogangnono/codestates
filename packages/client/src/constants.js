@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const newToggleBox = {
     상권: false,
     '신축/재개발': false,
