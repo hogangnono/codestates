@@ -1,9 +1,6 @@
-/* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-// import axios from 'axios';
-import drawData from './api';
+import drawData from './loadHandle';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
@@ -29,7 +26,6 @@ class App extends Component {
         };
         this.state = {
             name: undefined,
-            // factor: undefined,
             drawingData: [],
             map: undefined,
             showFilter: false,
@@ -39,7 +35,7 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: {}
+            NearByFactorItems: []
         };
     }
 
@@ -70,12 +66,6 @@ class App extends Component {
         this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
-            // Object.entries(this.newToggleBox).forEach(([key, value]) => {
-            //     if (!value) {
-            //     } else {
-            //         this.mainPageLoad(map);
-            //     }
-            // });
             this.mainPageLoad(map);
             this.deleteDraw();
         });
@@ -94,7 +84,12 @@ class App extends Component {
     mainPageLoad = map => {
         const { name, factors } = this.state;
         const bound = this.bound;
-        drawData(name, bound, factors, false, this.drawList, map);
+        const nearbyData = async val => {
+            await this.setState({
+                NearByFactorItems: val
+            });
+        };
+        drawData(name, bound, factors, false, this.drawList, map, nearbyData);
     };
 
     deleteDraw = () => {
@@ -184,7 +179,10 @@ class App extends Component {
     };
 
     setNearbyFactorItems = items => {
-        console.log('실행되었다.');
+        this.setState({
+            NearByFactorItems: items
+        });
+        console.log(items);
     };
 
     factorLoad = (category, toggle = false) => {
@@ -228,7 +226,8 @@ class App extends Component {
             showModal,
             deactiveFilter,
             deactiveDraw,
-            MyInfoButton
+            MyInfoButton,
+            NearByFactorItems
         } = this.state;
         // const mainButton = [
         //     {
@@ -253,10 +252,9 @@ class App extends Component {
         return (
             <div id="wrapper">
                 <div id="map">
-                    {/* <NearbyList mapLoad={map} /> */}
                     <NearbyFactorDialog
                         mapLoad={map}
-                        setNearbyFactorItems={this.setNearbyFactorItems}
+                        NearByFactorItems={NearByFactorItems}
                     />
                     <div id="loginFavorContainer">
                         {/* mainButton.map(bt => (

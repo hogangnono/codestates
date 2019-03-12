@@ -16,8 +16,8 @@ class Drawing extends Component {
         map: PropTypes.object.isRequired,
         handleToggle: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-        drawingData: PropTypes.array.isRequired
-        // updateDrawingData: PropTypes.func.isRequired
+        drawingData: PropTypes.array.isRequired,
+        updateDrawingData: PropTypes.func.isRequired
     };
 
     state = {
@@ -63,7 +63,7 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let startPos;
         const naver = window.naver;
-        const { map } = this.props; // delete updateDrawingData
+        const { map, updateDrawingData } = this.props; // delete updateDrawingData
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
@@ -128,15 +128,21 @@ class Drawing extends Component {
             }
         });
 
-
-        const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
-            if (Shape.name === 'Line' || Shape.name === 'Polygon' || Shape.name === 'Arrow') {
-                naver.maps.Event.removeListener(moveEvent);
-                updateDrawingData({ ...lineData, shapeType: Shape.name });
+        const rightClick = naver.maps.Event.addListener(
+            map,
+            'rightclick',
+            e => {
+                if (
+                    Shape.name === 'Line'
+                    || Shape.name === 'Polygon'
+                    || Shape.name === 'Arrow'
+                ) {
+                    naver.maps.Event.removeListener(moveEvent);
+                    updateDrawingData({ ...lineData, shapeType: Shape.name });
+                }
+                naver.maps.Event.removeListener(leftClick);
+                naver.maps.Event.removeListener(rightClick);
             }
-              naver.maps.Event.removeListener(leftClick);
-              naver.maps.Event.removeListener(rightClick);
-
         );
         this.setState({
             loadedListener: {
@@ -157,21 +163,14 @@ class Drawing extends Component {
         const { refresh } = this.state;
         sessionStorage.setItem('doNotShowTipsForDrawing', JSON.stringify(true));
         this.setState({ refresh: !refresh });
-    }
+    };
 
     render() {
-
-        const {
-            map,
-            handleToggle,
-            drawingData
-        } = this.props;
-        const {
-            selectedButton,
-            shapes,
-            isInShapeCreateMode
-        } = this.state;
-        const doNotShowTips = JSON.parse(sessionStorage.getItem('doNotShowTipsForDrawing'));
+        const { map, handleToggle, drawingData } = this.props;
+        const { selectedButton, shapes, isInShapeCreateMode } = this.state;
+        const doNotShowTips = JSON.parse(
+            sessionStorage.getItem('doNotShowTipsForDrawing')
+        );
 
         return (
             <div id="drawingComponentContainer">
@@ -220,18 +219,23 @@ class Drawing extends Component {
                         {`닫기`}
                     </button>
                 </div>
-                { doNotShowTips
-                    ? null
-                    : (
-                        <div className="tipModalForDrawing">
-                            <div className="arrowBoxForDrawing">
-                                <p>필터별로 부동산 호재정보를 보고싶다면</p>
-                                <p>그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
-                                <div className="doNotShowTipsForDrawing" onClick={this.doNotShowTips} onKeyDown={this.doNotShowTips} role="button" tabIndex="0">다시 보지 않기</div>
+                {doNotShowTips ? null : (
+                    <div className="tipModalForDrawing">
+                        <div className="arrowBoxForDrawing">
+                            <p>필터별로 부동산 호재정보를 보고싶다면</p>
+                            <p>그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
+                            <div
+                                className="doNotShowTipsForDrawing"
+                                onClick={this.doNotShowTips}
+                                onKeyDown={this.doNotShowTips}
+                                role="button"
+                                tabIndex="0"
+                            >
+                                {'다시 보지 않기'}
                             </div>
                         </div>
-                    )
-                }
+                    </div>
+                )}
             </div>
         );
     }
