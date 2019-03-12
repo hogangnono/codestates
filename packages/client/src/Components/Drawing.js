@@ -63,11 +63,7 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let startPos;
         const naver = window.naver;
-<<<<<<< HEAD
-        const { map } = this.props;
-=======
         const { map } = this.props; // delete updateDrawingData
->>>>>>> 14f865e230c06b0e7fadd130bb317bc3fbe41a4a
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
@@ -138,8 +134,8 @@ class Drawing extends Component {
                 naver.maps.Event.removeListener(moveEvent);
                 updateDrawingData({ ...lineData, shapeType: Shape.name });
             }
-              naver.maps.Event.removeListener(leftClick);
-              naver.maps.Event.removeListener(rightClick);
+            naver.maps.Event.removeListener(leftClick);
+            naver.maps.Event.removeListener(rightClick);
 
         );
         this.setState({
@@ -224,7 +220,7 @@ class Drawing extends Component {
                         {`닫기`}
                     </button>
                 </div>
-                { doNotShowTips
+                {doNotShowTips
                     ? null
                     : (
                         <div className="tipModalForDrawing">
