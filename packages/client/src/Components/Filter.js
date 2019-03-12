@@ -22,7 +22,7 @@ class Filter extends Component {
     }
 
     render() {
-        const { 
+        const {
             MyInfoButton,
             factorLoad,
             myInfoToggle,
@@ -77,7 +77,7 @@ class Filter extends Component {
                         {`닫기`}
                     </div>
                 </div>
-                { doNotShowTips
+                {doNotShowTips
                     ? null
                     : (
                         <div className="tipModalForFilter">

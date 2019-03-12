@@ -106,11 +106,11 @@ class Drawing extends Component {
                 });
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
-                    updateDrawingData({ ...lineData, shapeType: Shape.name });
+                    // updateDrawingData({ ...lineData, shapeType: Shape.name });
                     naver.maps.Event.removeListener(moveEvent);
                 } else {
                     figure.draw(lineData);
-                    updateDrawingData({ ...lineData, shapeType: Shape.name });
+                    // updateDrawingData({ ...lineData, shapeType: Shape.name });
                 }
             }
             shapePoint = {};
@@ -132,17 +132,17 @@ class Drawing extends Component {
         const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
             if (Shape.name === 'Line' || Shape.name === 'Polygon' || Shape.name === 'Arrow') {
                 naver.maps.Event.removeListener(moveEvent);
-                updateDrawingData({ ...lineData, shapeType: Shape.name });
+                // updateDrawingData({ ...lineData, shapeType: Shape.name });
             }
             naver.maps.Event.removeListener(leftClick);
             naver.maps.Event.removeListener(rightClick);
 
-        );
-        this.setState({
-            loadedListener: {
-                leftClick,
-                rightClick
-            }
+            this.setState({
+                loadedListener: {
+                    leftClick,
+                    rightClick
+                }
+            });
         });
     };
 
