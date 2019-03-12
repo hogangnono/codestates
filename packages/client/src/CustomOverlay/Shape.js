@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 var Shape = function(options) {
+    this._centerPoint = options.centerPoint;
     // 현재 맵의 축적 또는 저장될 당시의 축적
     this._zoom = options.zoom || options.naverMap.getZoom();
     this._map = options.naverMap;
@@ -29,7 +30,6 @@ Shape.prototype.onAdd = function() {
 Shape.prototype.addShape = function() {
     this._path = this.svg.append('path');
 };
-
 
 Shape.prototype.draw = function(lineData) {
     if (!this.getMap()) {
@@ -62,14 +62,11 @@ Shape.prototype.draw = function(lineData) {
     this.setPath();
 };
 
-Shape.prototype.setShape = function() {
-};
+Shape.prototype.setShape = function() {};
 
-Shape.prototype.setSvg = function() {
-};
+Shape.prototype.setSvg = function() {};
 
-Shape.prototype.setPath = function() {
-};
+Shape.prototype.setPath = function() {};
 
 Shape.prototype.onRemove = function() {
     this._element.parentNode.removeChild(this._element);

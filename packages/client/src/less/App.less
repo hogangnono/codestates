@@ -40,6 +40,9 @@ body {
           "\B9D1\C740   \ACE0\B515", Malgun Gothic, ng, sans-serif;
         cursor: pointer;
       }
+      .loginFavorBtn:focus {
+        outline: 0;
+      }
       .deactive {
         width: 40px;
         height: 40px;
@@ -68,16 +71,23 @@ button {
   z-index: 9999;
 }
 
-button:active {
-  background-color: purple;
-  color: @color;
-}
-.lightPurple {
-  background-color: rgb(190, 50, 190);
-  color: @color;
-}
+// button:active {
+//   background-color: purple;
+//   color: @color;
+// }
+// .lightPurple {
+//   background-color: rgb(190, 50, 190);
+//   color: @color;
+// }
 
-.darkPurple {
-  background-color: purple;
-  color: @color;
+// .darkPurple {
+//   background-color: purple;
+//   color: @color;
+// }
+
+.block {
+  display: block;
+}
+.none {
+  display: none;
 }

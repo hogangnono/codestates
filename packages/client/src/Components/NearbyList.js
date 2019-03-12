@@ -27,7 +27,7 @@ class NearbyList extends Component {
             return <div />;
         }
         return (
-            <div id="nearbyListContainer">
+            <div className="nearbyListContainer">
                 <div
                     className="nearbyMenu"
                     style={{
