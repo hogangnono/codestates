@@ -50,11 +50,11 @@ Shape.prototype.draw = function(lineData) {
     this._element.style.top = `${pixelPosition.y}px`;
     this._element.style.left = `${pixelPosition.x}px`;
     // set the ratio
-    const ratio = this._map.getZoom() - this._zoom;
+    this._ratio = this._map.getZoom() - this._zoom;
 
     // calculate the div width and height(Subtraction of two coordinates) with zoom ratio
-    this._widthRatio = this._width * 2 ** ratio;
-    this._heightRatio = this._height * 2 ** ratio;
+    this._widthRatio = this._width * 2 ** this._ratio;
+    this._heightRatio = this._height * 2 ** this._ratio;
 
     // match the div and svg size
     this._element.style.width = `${this._widthRatio}px`;
