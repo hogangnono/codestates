@@ -1,16 +1,14 @@
-/* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-// import axios from 'axios';
-import drawData from './api';
+import drawData from './loadHandle';
+// import * as constants from './constants';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 // import MainButton from './Components/MainButton';
-import NearbyFactorDialog from './Components/NearbyFactorDialog';
+// import NearbyFactorDialog from './Components/NearbyFactorDialog';
 
 class App extends Component {
     constructor(props) {
@@ -29,7 +27,6 @@ class App extends Component {
         };
         this.state = {
             name: undefined,
-            // factor: undefined,
             drawingData: [],
             map: undefined,
             showFilter: false,
@@ -39,7 +36,7 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: {}
+            NearByFactorItems: []
         };
     }
 
@@ -67,19 +64,13 @@ class App extends Component {
 
         this.setState({ map });
         this.bound = map.getBounds();
-        this.mainPageLoad(map);
+        // this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
-            // Object.entries(this.newToggleBox).forEach(([key, value]) => {
-            //     if (!value) {
-            //     } else {
-            //         this.mainPageLoad(map);
-            //     }
-            // });
             this.mainPageLoad(map);
             this.deleteDraw();
-        });
 
+        });
         const userName = localStorage.getItem('token');
         if (userName) {
             const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
@@ -94,7 +85,12 @@ class App extends Component {
     mainPageLoad = map => {
         const { name, factors } = this.state;
         const bound = this.bound;
-        drawData(name, bound, factors, false, this.drawList, map);
+        const nearbyData = async val => {
+            await this.setState({
+                NearByFactorItems: val
+            });
+        };
+        drawData(name, bound, factors, false, this.drawList, map, nearbyData);
     };
 
     deleteDraw = () => {
@@ -184,7 +180,9 @@ class App extends Component {
     };
 
     setNearbyFactorItems = items => {
-        console.log('실행되었다.');
+        this.setState({
+            NearByFactorItems: items
+        });
     };
 
     factorLoad = (category, toggle = false) => {
@@ -203,8 +201,13 @@ class App extends Component {
             this.newToggleBox = toggle;
         }
         if (category) {
-            const toggleCategory = { [category]: !this.newToggleBox[category] };
-            this.newToggleBox = { ...this.newToggleBox, ...toggleCategory };
+            const toggleCategory = {
+                [category]: !this.newToggleBox[category]
+            };
+            this.newToggleBox = {
+                ...this.newToggleBox,
+                ...toggleCategory
+            };
             Object.entries(this.newToggleBox).forEach(([key, value]) => {
                 if (value) {
                     factors.push(key);
@@ -214,8 +217,13 @@ class App extends Component {
                 factors: factors
             });
         }
+        const nearbyData = async val => {
+            await this.setState({
+                NearByFactorItems: val
+            });
+        };
         // TODO:
-        drawData(name, bound, factors, toggle, this.drawList, map);
+        drawData(name, bound, factors, toggle, this.drawList, map, nearbyData);
     };
 
     render() {
@@ -228,7 +236,8 @@ class App extends Component {
             showModal,
             deactiveFilter,
             deactiveDraw,
-            MyInfoButton
+            MyInfoButton,
+            NearByFactorItems
         } = this.state;
         // const mainButton = [
         //     {
@@ -253,11 +262,11 @@ class App extends Component {
         return (
             <div id="wrapper">
                 <div id="map">
-                    {/* <NearbyList mapLoad={map} /> */}
                     <NearbyFactorDialog
                         mapLoad={map}
-                        setNearbyFactorItems={this.setNearbyFactorItems}
+                        NearByFactorItems={NearByFactorItems}
                     />
+
                     <div id="loginFavorContainer">
                         {/* mainButton.map(bt => (
                             <MainButton

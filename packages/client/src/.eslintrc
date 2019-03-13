@@ -2,6 +2,7 @@
   "extends": "hogangnono/react",
   "rules": {
     "linebreak-style": 0,
+    "react/jsx-one-expression-per-line": 0,
     "react/jsx-filename-extension": [
       1,
       {

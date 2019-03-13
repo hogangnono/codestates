@@ -13,13 +13,13 @@ class Filter extends Component {
 
     state = {
         refresh: true
-    }
+    };
 
     doNotShowTips = () => {
         const { refresh } = this.state;
         sessionStorage.setItem('doNotShowTipsForFilter', JSON.stringify(true));
         this.setState({ refresh: !refresh });
-    }
+    };
 
     render() {
         const {
@@ -28,7 +28,9 @@ class Filter extends Component {
             myInfoToggle,
             showFilter
         } = this.props;
-        const doNotShowTips = JSON.parse(sessionStorage.getItem('doNotShowTipsForFilter'));
+        const doNotShowTips = JSON.parse(
+            sessionStorage.getItem('doNotShowTipsForFilter')
+        );
 
         const factorBox = [
             '상권',
@@ -65,7 +67,7 @@ class Filter extends Component {
                         role="button"
                         tabIndex="0"
                     >
-                        {`내 정보`}
+                        {`내 호재`}
                     </div>
                     <div
                         className="myInfoButton last"
@@ -77,18 +79,25 @@ class Filter extends Component {
                         {`닫기`}
                     </div>
                 </div>
-                {doNotShowTips
-                    ? null
-                    : (
-                        <div className="tipModalForFilter">
-                            <div className="arrowBoxForFilter">
-                                <p>부동산 호재 정보를 그리려면</p>
-                                <p>필터를 닫고 그리기 메뉴를 선택해주세요!</p>
-                                <div className="doNotShowTipsForFilter" onClick={this.doNotShowTips} onKeyDown={this.doNotShowTips} role="button" tabIndex="0">다시 보지 않기</div>
+                {doNotShowTips ? null : (
+                    <div className="tipModalForFilter">
+                        <div className="arrowBoxForFilter">
+                            <p>
+                                부동산 호재 정보를 그리려면 필터를 닫고 그리기
+                                메뉴를 선택해주세요!
+                            </p>
+                            <div
+                                className="doNotShowTipsForFilter"
+                                onClick={this.doNotShowTips}
+                                onKeyDown={this.doNotShowTips}
+                                role="button"
+                                tabIndex="0"
+                            >
+                                다시 보지 않기
                             </div>
                         </div>
-                    )
-                }
+                    </div>
+                )}
             </div>
         );
     }
