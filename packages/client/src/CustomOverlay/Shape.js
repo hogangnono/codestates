@@ -1,9 +1,9 @@
 import * as d3 from 'd3';
 var Shape = function(options) {
-    this._centerPoint = options.centerPoint;
-    // 현재 맵의 축적 또는 저장될 당시의 축적
+    // 현재 지도의 축적 또는 저장될 당시의 축적
     this._zoom = options.zoom || options.naverMap.getZoom();
     this._map = options.naverMap;
+    // div 또는 svg의 시작 위치를 저장
     this._startPos = {};
     // 선분의 꼭지점
     this._lineData = options.lineData;
@@ -46,13 +46,12 @@ Shape.prototype.draw = function(lineData) {
     const pixelPosition = projection.fromCoordToOffset(position);
 
     this._element.style.position = 'absolute';
-    // place thd div where user click
+    // div의 위치를 offset으로 변경해 붙임
     this._element.style.top = `${pixelPosition.y}px`;
     this._element.style.left = `${pixelPosition.x}px`;
-    // set the ratio
-    this._ratio = this._map.getZoom() - this._zoom;
 
-    // calculate the div width and height(Subtraction of two coordinates) with zoom ratio
+    // 도형을 생성할때의 지도 비율과 현재 지도 비율을 비교해 비율을 계산
+    this._ratio = this._map.getZoom() - this._zoom;
     this._widthRatio = this._width * 2 ** this._ratio;
     this._heightRatio = this._height * 2 ** this._ratio;
 
