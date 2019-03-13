@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
 // import { FaLine } from 'react-icons/fa';
+import axios from 'axios';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Arrow from '../CustomOverlay/Arrow';
@@ -230,11 +231,10 @@ class Drawing extends Component {
             ]
         };
 
-        axios
-            .post(
-                'https://hooks.slack.com/services/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',
-                JSON.stringify(options)
-            )
+        axios.post(
+            'https://hooks.slack.com/services/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',
+            JSON.stringify(options)
+        )
             .then(response => {
                 console.log('SUCCEEDED: Sent slack webhook: \n', response.data);
             })
@@ -301,19 +301,8 @@ class Drawing extends Component {
                 {doNotShowTips ? null : (
                     <div className="tipModalForDrawing">
                         <div className="arrowBoxForDrawing">
-                            <p>
-                                필터별로 부동산 호재정보를 보고싶다면 그리기
-                                모드를 닫고 필터 메뉴를 선택해주세요!
-                            </p>
-                            <div
-                                className="doNotShowTipsForDrawing"
-                                onClick={this.doNotShowTips}
-                                onKeyDown={this.doNotShowTips}
-                                role="button"
-                                tabIndex="0"
-                            >
-                                다시 보지 않기
-                            </div>
+                            <p>필터별로 부동산 호재정보를 보고싶다면 그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
+                            <div className="doNotShowTipsForDrawing" onClick={this.doNotShowTips} onKeyDown={this.doNotShowTips} role="button" tabIndex="0">다시 보지 않기</div>
                         </div>
                     </div>
                 )}
