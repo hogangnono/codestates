@@ -12,11 +12,12 @@ Circle.prototype.setPath = function() {
     this._path
         .attr(
             'd',
-            `M 1 ${this._heightRatio / 2 + 2} A ${this._widthRatio / 2} ${this._heightRatio
-                / 2} 0 1 0 1 ${this._heightRatio / 2 + 1.9}`
+            `M 1 ${this._heightRatio / 2 + 2} A ${this._widthRatio / 2 - 3} ${this._heightRatio
+                / 2 - 3} 0 1 0 1 ${this._heightRatio / 2 + 1.9}`
         )
         .attr('stroke', 'black')
         .attr('stroke-width', '3')
-        .attr('fill', 'none');
+        .attr('fill', 'black')
+        .attr('opacity', 0.7);
 };
 export default Circle;
