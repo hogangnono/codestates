@@ -61,7 +61,7 @@ class Drawing extends Component {
     };
 
     createShapeTest = selectedIcon => {
-        let startPos;
+        let position;
         const naver = window.naver;
         const { map, updateDrawingData } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
@@ -71,9 +71,7 @@ class Drawing extends Component {
         let moveEvent;
         let figure;
         const lineData = [];
-        let shapePoint = {};
         let isClick = false;
-        let tempPoint = {};
 
         for (let index = 0; index < icons.length; index++) {
             if (selectedIcon === icons[index]) {
@@ -90,17 +88,13 @@ class Drawing extends Component {
 
         const leftClick = naver.maps.Event.addListener(map, 'click', e => {
             const { coord, offset } = e;
-            startPos = { coord, offset };
-            // 화면상의 절대 좌표
-            shapePoint.x = e.originalEvent.clientX;
-            shapePoint.y = e.originalEvent.clientY;
-            lineData.push(shapePoint);
+            position = { coord, offset };
+            lineData.push(position);
             isClick = true;
 
             if (lineData.length === 1) {
-                lineData.push(shapePoint);
+                lineData.push(position);
                 figure = new Shape({
-                    position: startPos,
                     lineData: lineData,
                     naverMap: map
                 });
@@ -108,22 +102,21 @@ class Drawing extends Component {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
                     updateDrawingData({ ...lineData, shapeType: Shape.name });
                     naver.maps.Event.removeListener(moveEvent);
+                    naver.maps.Event.removeListener(leftClick);
                 } else {
-                    figure.draw(lineData);
                     updateDrawingData({ ...lineData, shapeType: Shape.name });
+                    figure.draw(lineData);
                 }
             }
-            shapePoint = {};
             figure.setMap(map);
         });
 
         moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
-            tempPoint = {};
-            tempPoint.x = e.originalEvent.clientX;
-            tempPoint.y = e.originalEvent.clientY;
-            // 직선일 경우
+            const { coord, offset } = e;
+            position = { coord, offset };
+            // 클릭이 되었을 경우
             if (isClick) {
-                lineData[lineData.length - 1] = tempPoint;
+                lineData[lineData.length - 1] = position;
                 figure.draw(lineData);
             }
         });
