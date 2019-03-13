@@ -10,16 +10,16 @@ import Circle from '../CustomOverlay/Circle';
 import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
-import saveAction from '../Module/saveAction';
+import saveHandle from '../Module/saveHandle';
 
 class Drawing extends Component {
     static propTypes = {
-        map: PropTypes.object.isRequired,
+        map: PropTypes.object,
         handleToggle: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
         drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired
+        name: PropTypes.string
     };
 
     state = {
@@ -32,8 +32,7 @@ class Drawing extends Component {
 
     handleRequestSave = data => {
         const { name, toggleModal } = this.props;
-        console.log('data in handleRequestSave :', data);
-        saveAction(name, data, toggleModal);
+        saveHandle(name, data, toggleModal);
     };
 
     removeListener = () => {
@@ -249,7 +248,6 @@ class Drawing extends Component {
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
         );
-        console.log(drawingData);
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -284,8 +282,8 @@ class Drawing extends Component {
                         type="button"
                         className="saveCloseBtn"
                         onClick={() => {
-                            this.handleRequestSave('/user/save', drawingData);
-                            this.postSlackApi('hogangnono');
+                            this.handleRequestSave(drawingData);
+                            // this.postSlackApi('hogangnono');
                         }}
                     >
                         {`저장`}
