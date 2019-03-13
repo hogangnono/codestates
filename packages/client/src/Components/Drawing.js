@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import '../less/Drawing.less';
 import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
-import axios from 'axios';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Arrow from '../CustomOverlay/Arrow';

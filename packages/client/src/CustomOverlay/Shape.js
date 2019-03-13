@@ -276,14 +276,14 @@ Shape.prototype.onAdd = function () {
     this.svg = d3.create('svg');
     const svgNode = this.svg.node();
     svgNode.onclick = function () {
-        // console.log('You clicked on this SVG! ', event);
-        // console.log(event.target.parentNode.children[1].children[0]); // modal-content
+        console.log('You clicked on this SVG! ', event);
+        console.log(event.target.parentNode.parentNode.children[1]); // modal-content
         // console.log(event.target.parentNode.children[1].children[0].children[1].children[1]); // delete button
-        const modal = event.target.parentNode.children[1];
+        const modal = event.target.parentNode.parentNode.children[1];
         modal.style.display = 'block';
-        const modalContent = event.target.parentNode.children[1].children[0];
-        modalContent.style.top = '-125px';
-        modalContent.style.left = '0px';
+        // const modalContent = event.target.parentNode.parentNode.children[1].children[0];
+        // modalContent.style.top = '-125px';
+        // modalContent.style.left = '0px';
 
     };
 
