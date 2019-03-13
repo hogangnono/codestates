@@ -1,6 +1,6 @@
 .NearbyFactorDialog {
   position: absolute;
-  background: #ffffff;
+  background-color: #fff;
   top: 20px;
   left: 20px;
   z-index: 1;
@@ -21,5 +21,22 @@
     font-family: Apple SD Gothic Neo, sans-serif;
     background-color: #4d55b2;
   }
+  .titleBox {
+    display: flex;
+    width: 100%;
+    padding: 10px 0;
+    color: #aaa;
+    font-size: 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    .factorTitle {
+      width: 25%;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .descriptionTitle {
+      width: 75%;
+    }
+  }
+
   color: white;
 }

@@ -27,11 +27,13 @@ exports.load = async (req, res) => {
     const data = [];
     const factorIdArray = [];
     // not filtering
+    console.log(factors);
     if (factors && factors.length) {
         try {
             transaction = await User.sequelize.transaction();
             const factorId = await Factor.findAll({
-                where: { name: { [Op.in]: factors } }
+                where: { name: { [Op.in]: factors } },
+                transaction
             });
             factorId.forEach(idTable => {
                 factorIdArray.push(idTable.dataValues.id);
@@ -51,7 +53,8 @@ exports.load = async (req, res) => {
                             bound._max._lng + 0.01
                         ]
                     }
-                }
+                },
+                transaction
             });
             await transaction.commit();
             data.push(result);
@@ -78,7 +81,8 @@ exports.load = async (req, res) => {
                             bound._max._lng + 0.01
                         ]
                     }
-                }
+                },
+                transaction
             });
             await transaction.commit();
             data.push(result);
@@ -124,10 +128,15 @@ exports.load = async (req, res) => {
     if (name) {
         try {
             transaction = await User.sequelize.transaction();
-            const userId = await User.findOne({ where: { name } }).get('id');
+            const userId = await User.findOne({
+                where: { name },
+                transaction
+            }).get('id');
             // console.log(userId);
             const result = await Figure.findAll({
-                include: [{ model: Drawing, where: { user_id: userId } }], // include => join을 함
+                include: [
+                    { model: Drawing, where: { user_id: userId }, transaction }
+                ], // include => join을 함
                 where: {
                     center_lat: {
                         [Op.between]: [
@@ -141,7 +150,8 @@ exports.load = async (req, res) => {
                             bound._max._lng + 0.01
                         ]
                     }
-                }
+                },
+                transaction
             });
             await transaction.commit();
             data.push(result);
@@ -165,7 +175,10 @@ exports.save = async (req, res) => {
     try {
         transaction = await Drawing.sequelize.transaction();
         if (Array.isArray(data)) {
-            const userID = await User.findOne({ where: { name } }).get('id');
+            const userID = await User.findOne({
+                where: { name },
+                transaction
+            }).get('id');
             const drawingId = await Drawing.create(
                 { user_id: userID },
                 transaction
