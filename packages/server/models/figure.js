@@ -8,8 +8,10 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            center_lat: DataTypes.DOUBLE,
-            center_lng: DataTypes.DOUBLE,
+            start_lat: DataTypes.DOUBLE,
+            start_lng: DataTypes.DOUBLE,
+            end_lat: DataTypes.DOUBLE,
+            end_lng: DataTypes.DOUBLE,
             figures: DataTypes.STRING,
             description: DataTypes.STRING,
             css: DataTypes.STRING,

@@ -8,7 +8,7 @@ import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 // import MainButton from './Components/MainButton';
-// import NearbyFactorDialog from './Components/NearbyFactorDialog';
+import NearbyFactorDialog from './Components/NearbyFactorDialog';
 
 class App extends Component {
     constructor(props) {
