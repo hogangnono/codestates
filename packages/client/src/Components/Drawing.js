@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
+import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
@@ -249,7 +250,6 @@ class Drawing extends Component {
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
         );
-        console.log(drawingData);
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
