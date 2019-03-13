@@ -24,24 +24,18 @@ Line.prototype.setShape = function() {
         this._max.offset.y = this._lineData[0].offset.y;
     } else {
         if (this._min.coord.x > this._lineData[this._lineData.length - 1].coord.x) {
-            console.log('coord x 작음');
             this._min.coord.x = this._lineData[this._lineData.length - 1].coord.x;
             this._min.offset.x = this._lineData[this._lineData.length - 1].offset.x;
         }
         if (this._min.coord.y > this._lineData[this._lineData.length - 1].coord.y) {
-            console.log('coord y 작음');
             this._min.coord.y = this._lineData[this._lineData.length - 1].coord.y;
             this._min.offset.y = this._lineData[this._lineData.length - 1].offset.y;
         }
         if (this._max.coord.x < this._lineData[this._lineData.length - 1].coord.x) {
-            console.log('coord x 큼');
-
             this._max.coord.x = this._lineData[this._lineData.length - 1].coord.x;
             this._max.offset.x = this._lineData[this._lineData.length - 1].offset.x;
         }
         if (this._max.coord.y < this._lineData[this._lineData.length - 1].coord.y) {
-            console.log('coord y 큼');
-
             this._max.coord.y = this._lineData[this._lineData.length - 1].coord.y;
             this._max.offset.y = this._lineData[this._lineData.length - 1].offset.y;
         }
@@ -53,13 +47,13 @@ Line.prototype.setShape = function() {
     this._startPos.y = this._max.coord.y;
 };
 
-Line.prototype.setSvg = function(widthRatio, heightRatio) {
+Line.prototype.setSvg = function() {
     /* Set svg */
     const svg = this._element.childNodes[0];
     svg.style.position = 'absolute';
     // svg를 원 크기에 맞게 생성
-    svg.style.width = `${widthRatio}px`;
-    svg.style.height = `${heightRatio}px`;
+    svg.style.width = `${this._widthRatio}px`;
+    svg.style.height = `${this._heightRatio}px`;
     svg.style.backgroundColor = 'orange';
 };
 
@@ -70,10 +64,14 @@ Line.prototype.setPath = function() {
     // const pixelPosition = projection.fromCoordToOffset(position);
 
     // eslint-disable-next-line guard-for-in
+    const s = projection.fromCoordToOffset(this._lineData[0].coord);
+
     for (let i = 0; i < this._lineData.length; i++) {
-        this._newlineData[i] = projection.fromCoordToOffset(this._lineData[i].coord);
+        const obj = {};
+        obj.x = projection.fromCoordToOffset(this._lineData[i].coord).x - s.x;
+        obj.y = projection.fromCoordToOffset(this._lineData[i].coord).y - s.y;
+        this._newlineData[i] = obj;
     }
-    console.log(this._newlineData);
     const line = d3.line()
                 .x(function(d) { return (d.x); })
                 .y(function(d) { return (d.y); });

@@ -59,7 +59,6 @@ Shape.prototype.draw = function(lineData) {
     // match the div and svg size
     this._element.style.width = `${this._widthRatio}px`;
     this._element.style.height = `${this._heightRatio}px`;
-
     this.setSvg();
     this.setPath();
 };
