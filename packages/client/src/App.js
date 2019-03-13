@@ -27,7 +27,8 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: []
+            NearByFactorItems: [],
+            NearByFilteringItems: []
         };
     }
 
@@ -59,7 +60,7 @@ class App extends Component {
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
-            // this.deleteDraw();
+            //this.deleteDraw();
         });
         const userName = localStorage.getItem('token');
         if (userName) {
@@ -168,21 +169,19 @@ class App extends Component {
         this.setState({ [stateName]: !toggle });
     };
 
-    setNearbyFactorItems = items => {
-        this.setState({
-            NearByFactorItems: items
-        });
-    };
 
     factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;
         const bound = this.bound;
         const factors = [];
         let nearbyData;
+
+        // 기존 지도에 있던 정보를 지워줌
         Object.entries(this.drawList).forEach(([key, value]) => {
             value.setMap(null);
             delete this.drawList[key];
         });
+        // 유저 호재 보기
         if (toggle) {
             const toggleObj = {};
             Object.entries(this.newToggleBox).forEach(([key, value]) => {
@@ -190,6 +189,7 @@ class App extends Component {
             });
             this.newToggleBox = toggleObj;
         }
+        // 필터링 하기
         if (category) {
             const toggleCategory = {
                 [category]: !this.newToggleBox[category]
