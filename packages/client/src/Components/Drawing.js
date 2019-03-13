@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
-// import { FaLine } from 'react-icons/fa';
+import axios from 'axios';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Arrow from '../CustomOverlay/Arrow';
@@ -164,56 +164,61 @@ class Drawing extends Component {
         this.setState({ refresh: !refresh });
     };
 
-    postSlackApi = (name, text = 1) => {
+    postSlackApi = (name, text = '호재 알림입니다.') => {
+        const a = [];
+        text.forEach(el => {
+            a.push(el.description);
+        });
         const options = {
-            // text: `${JSON.stringify(text)}`,
-            text: `${text}`,
+            mrkdwn: true,
             attachments: [
                 {
-                    title: 'The Further Adventures of Slackbot',
-                    fields: [
-                        {
-                            title: 'Volume',
-                            value: '1',
-                            short: true
-                        },
-                        {
-                            title: 'Issue',
-                            value: '3',
-                            short: true
-                        }
-                    ],
-                    author_name: 'Stanford S. Strickland',
-                    author_icon:
-                        'http://a.slack-edge.com/7f18https://a.slack-edge.com/a8304/img/api/homepage_custom_integrations-2x.png',
-                    image_url: 'http://i.imgur.com/OJkaVOI.jpg?1'
+                    title: `${name}님의 호재 정보입니다.`,
+                    color: '#4d55b2'
+                    // fields: [
+                    //     {
+                    //         title: 'Volume',
+                    //         value: '1',
+                    //         short: true
+                    //     },
+                    //     {
+                    //         title: 'Issue',
+                    //         value: '3',
+                    //         short: true
+                    //     }
+                    // ],
+                    // author_name: `${name}`
+                    // author_icon:
+                    //     'http://a.slack-edge.com/7f18https://a.slack-edge.com/a8304/img/api/homepage_custom_integrations-2x.png',
+                    // image_url: 'http://i.imgur.com/OJkaVOI.jpg?1'
                 },
                 {
-                    title: 'Synopsis',
-                    text:
-                        'After @episod pushed exciting changes to a devious new branch back in Issue 1, Slackbot notifies @don about an unexpected deploy...'
+                    title: 'Description',
+                    text: `${a[0]}`,
+                    color: '#4d55b2'
                 },
                 {
-                    fallback: 'Would you recommend it to customers?',
-                    title: 'Would you recommend it to customers?',
-                    callback_id: 'comic_1234_xyz',
-                    color: '#3AA3E3',
+                    fallback: '호재 정보를 database 에 저장하시겠습니까?',
+                    title: '호재 정보를 database 에 저장하시겠습니까??',
+                    // callback_id: 'comic_1234_xyz',
+                    // color: '#3AA3E3',
+                    color: '#4d55b2',
                     attachment_type: 'default',
                     actions: [
                         {
-                            name: 'game',
+                            name: 'Accept',
                             text: 'Accept',
                             type: 'button',
                             value: 'Accept'
                         },
                         {
-                            name: 'game',
+                            name: 'Hold',
                             text: 'Hold',
                             type: 'button',
                             value: 'Hold'
                         },
                         {
-                            name: 'game',
+                            name: 'Refuse',
                             text: 'Refuse',
                             style: 'danger',
                             type: 'button',
@@ -244,12 +249,16 @@ class Drawing extends Component {
     };
 
     render() {
-        const { map, handleToggle, drawingData } = this.props;
+        const {
+            map,
+            handleToggle,
+            drawingData,
+            NearByFactorItems
+        } = this.props;
         const { selectedButton, shapes, isInShapeCreateMode } = this.state;
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
         );
-        console.log(drawingData);
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -284,8 +293,8 @@ class Drawing extends Component {
                         type="button"
                         className="saveCloseBtn"
                         onClick={() => {
-                            this.handleRequestSave('/user/save', drawingData);
-                            this.postSlackApi('hogangnono');
+                            // this.handleRequestSave('/user/save', drawingData);
+                            this.postSlackApi('hogangnono', NearByFactorItems);
                         }}
                     >
                         {`저장`}

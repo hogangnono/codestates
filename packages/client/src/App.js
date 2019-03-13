@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import drawData from './loadHandle';
-// import * as constants from './constants';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 // import MainButton from './Components/MainButton';
-// import NearbyFactorDialog from './Components/NearbyFactorDialog';
+import NearbyFactorDialog from './Components/NearbyFactorDialog';
 
 class App extends Component {
     constructor(props) {
@@ -64,12 +63,11 @@ class App extends Component {
 
         this.setState({ map });
         this.bound = map.getBounds();
-        // this.mainPageLoad(map);
+        this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
             this.deleteDraw();
-
         });
         const userName = localStorage.getItem('token');
         if (userName) {
@@ -337,6 +335,7 @@ class App extends Component {
                             drawingData={drawingData}
                             updateDrawingData={this.updateDrawingData}
                             toggleModal={this.toggleModal}
+                            NearByFactorItems={NearByFactorItems}
                         />
                     </div>
                 </div>

@@ -21,17 +21,10 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             const overlays = [Line, Arrow, Rect, Circle, Polygon];
             const nearbyFactors = [];
             let drawShape;
+            console.log('in load handle', resultData);
             const drawing = el => {
-                const { shape, startPos, lineData, zoomLevel } = JSON.parse(
-                    el.figures
-                );
-                const {
-                    description,
-                    factor_id,
-                    center_lat,
-                    center_lng,
-                    id
-                } = el;
+                const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
+                const { description, factor_id, id } = el;
                 const factorNearby = {
                     description: description,
                     factor_id: factor_id
@@ -40,7 +33,6 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                 if (nearbyFactors.length) {
                     nearbyData(nearbyFactors);
                 }
-
                 if (!(id in drawList)) {
                     for (let i = 0; i < overlays.length; i++) {
                         if (shape === overlays[i].name) {
@@ -48,8 +40,6 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                         }
                     }
                     const overlay = new drawShape({
-                        position: startPos,
-                        centerPoint: { center_lat, center_lng },
                         lineData,
                         naverMap: map,
                         zoom: zoomLevel
