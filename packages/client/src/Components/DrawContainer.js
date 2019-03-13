@@ -9,7 +9,8 @@ class DrawContainer extends Component {
         mapLoad: PropTypes.object.isRequired,
         handleToggle: PropTypes.func.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired
+        toggleModal: PropTypes.func.isRequired,
+        name: PropTypes.string.isRequired
     };
 
     render() {
@@ -18,7 +19,8 @@ class DrawContainer extends Component {
             mapLoad,
             handleToggle,
             toggleModal,
-            updateDrawingData
+            updateDrawingData,
+            name
         } = this.props;
         return (
             <div id="toolbox">
@@ -29,6 +31,7 @@ class DrawContainer extends Component {
                     <div>
                         <Drawing
                             map={mapLoad}
+                            name={name}
                             drawingData={drawingData}
                             updateDrawingData={updateDrawingData}
                             toggleModal={toggleModal}

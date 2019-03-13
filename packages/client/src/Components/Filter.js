@@ -82,8 +82,10 @@ class Filter extends Component {
                 {doNotShowTips ? null : (
                     <div className="tipModalForFilter">
                         <div className="arrowBoxForFilter">
-                            <p>부동산 호재 정보를 그리려면</p>
-                            <p>필터를 닫고 그리기 메뉴를 선택해주세요!</p>
+                            <p>
+                                부동산 호재 정보를 그리려면 필터를 닫고 그리기
+                                메뉴를 선택해주세요!
+                            </p>
                             <div
                                 className="doNotShowTipsForFilter"
                                 onClick={this.doNotShowTips}
@@ -91,7 +93,7 @@ class Filter extends Component {
                                 role="button"
                                 tabIndex="0"
                             >
-                                {'다시 보지 않기'}
+                                다시 보지 않기
                             </div>
                         </div>
                     </div>
