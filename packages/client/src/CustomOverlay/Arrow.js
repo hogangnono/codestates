@@ -1,4 +1,3 @@
-import * as d3 from 'd3';
 import Line from './Line';
 
 var Arrow = function(options) {
@@ -23,16 +22,13 @@ Arrow.prototype.addShape = function() {
     .style('stroke', 'none');
     this._path = this.svg.append('path');
 };
-Arrow.prototype.setPath = function() {
-    const line = d3.line()
-    .x(function(d) { return (d.x); })
-    .y(function(d) { return (d.y); });
 
-    this._path.attr('d', line(this._lineData))
-        .attr('stroke', 'black')
-        .attr('stroke-width', 3)
-        .attr('fill', 'none')
-        .attr('marker-end', 'url(#triangle)');
+Arrow.prototype.addAttribute = function(line) {
+    this._path.attr('d', line(this._newlineData))
+            .attr('stroke', 'black')
+            .attr('stroke-width', 3)
+            .attr('fill', 'none')
+            .attr('marker-end', 'url(#triangle)');
 };
 
 export default Arrow;

@@ -8,7 +8,7 @@ import Circle from '../CustomOverlay/Circle';
 import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
-import saveHandle from '../Module/saveAction';
+import saveHandle from '../Module/saveHandle';
 import * as post from '../postSlackApi';
 
 class Drawing extends Component {
@@ -73,7 +73,7 @@ class Drawing extends Component {
             position = { coord, offset };
             lineData.push(position);
             isClick = true;
-
+            // 처음 클릭시
             if (lineData.length === 1) {
                 lineData.push(position);
                 figure = new Shape({
@@ -108,10 +108,10 @@ class Drawing extends Component {
         });
 
         moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
-            const { coord, offset } = e;
-            position = { coord, offset };
-            // 클릭이 되었을 경우
+            // 클릭 후 이동시
             if (isClick) {
+                const { coord, offset } = e;
+                position = { coord, offset };
                 lineData[lineData.length - 1] = position;
                 figure.draw(lineData);
             }
