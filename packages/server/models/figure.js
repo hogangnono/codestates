@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             start_lng: DataTypes.DOUBLE,
             end_lat: DataTypes.DOUBLE,
             end_lng: DataTypes.DOUBLE,
-            figures: DataTypes.STRING,
+            figures: DataTypes.TEXT,
             description: DataTypes.STRING,
             css: DataTypes.STRING,
             factor_id: DataTypes.INTEGER,
