@@ -20,7 +20,8 @@ class DrawContainer extends Component {
             handleToggle,
             toggleModal,
             updateDrawingData,
-            name
+            name,
+            NearByFactorItems
         } = this.props;
         return (
             <div id="toolbox">
@@ -36,6 +37,7 @@ class DrawContainer extends Component {
                             updateDrawingData={updateDrawingData}
                             toggleModal={toggleModal}
                             handleToggle={handleToggle}
+                            NearByFactorItems={NearByFactorItems}
                         />
                     </div>
                 </div>

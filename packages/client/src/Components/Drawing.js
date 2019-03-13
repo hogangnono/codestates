@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
-import axios from 'axios';
-// import { FaLine } from 'react-icons/fa';
-import axios from 'axios';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Arrow from '../CustomOverlay/Arrow';
@@ -12,6 +9,7 @@ import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 import saveHandle from '../Module/saveHandle';
+import * as post from '../postSlackApi';
 
 class Drawing extends Component {
     static propTypes = {
@@ -165,87 +163,13 @@ class Drawing extends Component {
         this.setState({ refresh: !refresh });
     };
 
-    postSlackApi = (name, text = 1) => {
-        const options = {
-            // text: `${JSON.stringify(text)}`,
-            text: `${text}`,
-            attachments: [
-                {
-                    title: 'The Further Adventures of Slackbot',
-                    fields: [
-                        {
-                            title: 'Volume',
-                            value: '1',
-                            short: true
-                        },
-                        {
-                            title: 'Issue',
-                            value: '3',
-                            short: true
-                        }
-                    ],
-                    author_name: 'Stanford S. Strickland',
-                    author_icon:
-                        'http://a.slack-edge.com/7f18https://a.slack-edge.com/a8304/img/api/homepage_custom_integrations-2x.png',
-                    image_url: 'http://i.imgur.com/OJkaVOI.jpg?1'
-                },
-                {
-                    title: 'Synopsis',
-                    text:
-                        'After @episod pushed exciting changes to a devious new branch back in Issue 1, Slackbot notifies @don about an unexpected deploy...'
-                },
-                {
-                    fallback: 'Would you recommend it to customers?',
-                    title: 'Would you recommend it to customers?',
-                    callback_id: 'comic_1234_xyz',
-                    color: '#3AA3E3',
-                    attachment_type: 'default',
-                    actions: [
-                        {
-                            name: 'game',
-                            text: 'Accept',
-                            type: 'button',
-                            value: 'Accept'
-                        },
-                        {
-                            name: 'game',
-                            text: 'Hold',
-                            type: 'button',
-                            value: 'Hold'
-                        },
-                        {
-                            name: 'game',
-                            text: 'Refuse',
-                            style: 'danger',
-                            type: 'button',
-                            value: 'Refuse',
-                            confirm: {
-                                title: 'Are you sure?',
-                                text: '정말 거절하시겠습니까?',
-                                ok_text: 'Yes',
-                                dismiss_text: 'No'
-                            }
-                        }
-                    ]
-                }
-            ]
-        };
-
-        axios
-            .post(
-                'https://hooks.slack.com/services/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',
-                JSON.stringify(options)
-            )
-            .then(response => {
-                console.log('SUCCEEDED: Sent slack webhook: \n', response.data);
-            })
-            .catch(error => {
-                console.log('FAILED: Send slack webhook', error);
-            });
-    };
-
     render() {
-        const { map, handleToggle, drawingData } = this.props;
+        const {
+            map,
+            handleToggle,
+            drawingData,
+            NearByFactorItems
+        } = this.props;
         const { selectedButton, shapes, isInShapeCreateMode } = this.state;
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
@@ -269,15 +193,6 @@ class Drawing extends Component {
                 })}
                 <div id="myDrawingsContainer">
                     <MyDrawingElement drawingData={drawingData} />
-                    {/* {drawingData.map((shape, index) => {
-                        const newIndex = index + 1;
-                        return (
-                            <MyDrawingElement
-                                key={'Idrew' + newIndex}
-                                drawingData={drawingData}
-                            />
-                        );
-                    })} */}
                 </div>
                 <div id="saveCloseBtns">
                     <button
@@ -285,7 +200,7 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
-                            // this.postSlackApi('hogangnono');
+                            post.slackApi('hogangnono', NearByFactorItems);
                         }}
                     >
                         {`저장`}

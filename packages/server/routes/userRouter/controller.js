@@ -27,7 +27,6 @@ exports.load = async (req, res) => {
     const data = [];
     const factorIdArray = [];
     // not filtering
-    console.log(factors);
     if (factors && factors.length) {
         try {
             transaction = await User.sequelize.transaction();
@@ -41,18 +40,36 @@ exports.load = async (req, res) => {
             const result = await Figure.findAll({
                 where: {
                     factor_id: { [Op.in]: factorIdArray },
-                    center_lat: {
-                        [Op.between]: [
-                            bound._min._lat - 0.01,
-                            bound._max._lat + 0.01
-                        ]
-                    },
-                    center_lng: {
-                        [Op.between]: [
-                            bound._min._lng - 0.01,
-                            bound._max._lng + 0.01
-                        ]
-                    }
+                    [Op.or]: [
+                        {
+                            start_lat: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            },
+                            start_lng: {
+                                [Op.between]: [
+                                    bound._min._lng - 0.01,
+                                    bound._max._lng + 0.01
+                                ]
+                            }
+                        },
+                        {
+                            end_lat: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            },
+                            end_lng: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            }
+                        }
+                    ]
                 },
                 transaction
             });
@@ -69,18 +86,36 @@ exports.load = async (req, res) => {
             transaction = await User.sequelize.transaction();
             const result = await Figure.findAll({
                 where: {
-                    center_lat: {
-                        [Op.between]: [
-                            bound._min._lat - 0.01,
-                            bound._max._lat + 0.01
-                        ]
-                    },
-                    center_lng: {
-                        [Op.between]: [
-                            bound._min._lng - 0.01,
-                            bound._max._lng + 0.01
-                        ]
-                    }
+                    [Op.or]: [
+                        {
+                            start_lat: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            },
+                            start_lng: {
+                                [Op.between]: [
+                                    bound._min._lng - 0.01,
+                                    bound._max._lng + 0.01
+                                ]
+                            }
+                        },
+                        {
+                            end_lat: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            },
+                            end_lng: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            }
+                        }
+                    ]
                 },
                 transaction
             });
@@ -91,39 +126,7 @@ exports.load = async (req, res) => {
             await transaction.rollback();
             res.status(400).send('데이터 요청에 실패했습니다.');
         }
-    } else {
-        // filtering factor
-        // try {
-        //     transaction = await User.sequelize.transaction();
-        //     const factorId = await Factor.findOne({
-        //         where: { name: factor }
-        //     }).get('id');
-        //     const result = await Figure.findAll({
-        //         where: {
-        //             factor_id: factorId,
-        //             center_lat: {
-        //                 [Op.between]: [
-        //                     bound._min._lat - 0.01,
-        //                     bound._max._lat + 0.01
-        //                 ]
-        //             },
-        //             center_lng: {
-        //                 [Op.between]: [
-        //                     bound._min._lng - 0.01,
-        //                     bound._max._lng + 0.01
-        //                 ]
-        //             }
-        //         }
-        //     });
-        //     await transaction.commit();
-        //     data.push(result);
-        // } catch (err) {
-        //     console.log('/load ERROR :: Reason :: ', err);
-        //     await transaction.rollback();
-        //     res.status(400).send('데이터 요청에 실패했습니다.');
-        // }
     }
-
     // when user login
     if (name) {
         try {
@@ -138,24 +141,41 @@ exports.load = async (req, res) => {
                     { model: Drawing, where: { user_id: userId }, transaction }
                 ], // include => join을 함
                 where: {
-                    center_lat: {
-                        [Op.between]: [
-                            bound._min._lat - 0.01,
-                            bound._max._lat + 0.01
-                        ]
-                    },
-                    center_lng: {
-                        [Op.between]: [
-                            bound._min._lng - 0.01,
-                            bound._max._lng + 0.01
-                        ]
-                    }
+                    [Op.or]: [
+                        {
+                            start_lat: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            },
+                            start_lng: {
+                                [Op.between]: [
+                                    bound._min._lng - 0.01,
+                                    bound._max._lng + 0.01
+                                ]
+                            }
+                        },
+                        {
+                            end_lat: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            },
+                            end_lng: {
+                                [Op.between]: [
+                                    bound._min._lat - 0.01,
+                                    bound._max._lat + 0.01
+                                ]
+                            }
+                        }
+                    ]
                 },
                 transaction
             });
             await transaction.commit();
             data.push(result);
-            // console.log('aaaaaaaaaa', data, 'aaaaaaaaa');
         } catch (err) {
             console.log('/load ERROR :: Reason :: ', err);
             await transaction.rollback();

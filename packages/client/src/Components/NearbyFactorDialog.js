@@ -17,17 +17,19 @@ export default class NearbyFactorDialog extends Component {
                     <div className="factorTitle">호재</div>
                     <div className="descriptionTitle">설명</div>
                 </div>
-                {NearByFactorItems.length ? (
-                    NearByFactorItems.map(el => (
-                        <NearbyFactorItem
-                            description={el.description}
-                            factor_id={el.factor_id}
-                            key={el.description}
-                        />
-                    ))
-                ) : (
-                    <div>loading</div>
-                )}
+                <div className="scrollBox">
+                    {NearByFactorItems.length ? (
+                        NearByFactorItems.map((factorItem, i) => (
+                            <NearbyFactorItem
+                                description={factorItem.description}
+                                factor_id={factorItem.factor_id}
+                                key={factorItem.description + i}
+                            />
+                        ))
+                    ) : (
+                        <div>loading</div>
+                    )}
+                </div>
             </div>
         );
     }
