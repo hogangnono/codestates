@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
-import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
 import axios from 'axios';
 import Button from '../Module/Button';
@@ -115,6 +114,7 @@ class Drawing extends Component {
                 const { coord, offset } = e;
                 position = { coord, offset };
                 lineData[lineData.length - 1] = position;
+                this.setState({ isInShapeCreateMode: false });
                 figure.draw(lineData);
             }
         });
