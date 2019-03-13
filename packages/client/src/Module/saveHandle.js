@@ -12,7 +12,7 @@ const saveHandle = (name, data, callBack) => {
     data.map(oneShape => {
         const figuresData = {};
         figuresData.shape = oneShape.shapeType;
-        figuresData.lineData = JSON.stringify(oneShape.figure._lineData);
+        figuresData.lineData = oneShape.figure._lineData;
         figuresData.zoomLevel = oneShape.figure._zoom;
         console.log('figuresData', figuresData);
 
@@ -26,7 +26,7 @@ const saveHandle = (name, data, callBack) => {
         processedData.description = 'test_description';
         processedData.css = 'test_lessCss';
         processedData.factor_id = 3;
-
+        // console.log(processedData);
         dataSet.push(processedData);
     });
     const reqBody = {
@@ -44,12 +44,14 @@ const saveHandle = (name, data, callBack) => {
         }
 
         return axios
-                .post(API_USER_SAVE_PATH, reqBody)
-                .then(result => alert('성공적으로 저장되었습니다.'))
-                .catch(err => {
-                    alert('도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.');
-                    console.log('Result for axios.post(/save) :::::::\n', err);
-                });
+            .post(API_USER_SAVE_PATH, reqBody)
+            .then(result => alert('성공적으로 저장되었습니다.'))
+            .catch(err => {
+                alert(
+                    '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
+                );
+                console.log('Result for axios.post(/save) :::::::\n', err);
+            });
     } else {
         alert('저장을 위해선 로그인이 필요합니다 :)');
         callBack();

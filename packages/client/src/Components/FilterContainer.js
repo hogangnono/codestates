@@ -21,15 +21,7 @@ class FilterContainer extends Component {
         return (
             <div id="toolbox">
                 <div id="tabMenu">
-                    <div
-                        className="eachTabMenu"
-                        style={{
-                            backgroundColor: '#4d55b2',
-                            color: '#fff'
-                        }}
-                    >
-                        {`필터`}
-                    </div>
+                    <div className="eachTabMenu">필터</div>
                 </div>
                 <div>
                     <div>

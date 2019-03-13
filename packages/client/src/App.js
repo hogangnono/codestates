@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import drawData from './loadHandle';
-// import * as constants from './constants';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
+import * as constants from './constants';
 // import MainButton from './Components/MainButton';
 import NearbyFactorDialog from './Components/NearbyFactorDialog';
 
@@ -15,16 +15,7 @@ class App extends Component {
         super(props);
         this.bound = undefined;
         this.drawList = {};
-        this.newToggleBox = {
-            상권: false,
-            '신축/재개발': false,
-            교육: false,
-            업무지구: false,
-            주택단지: false,
-            '도로개통/확장': false,
-            지하철개통: false,
-            기타: false
-        };
+        this.newToggleBox = constants.newToggleBox;
         this.state = {
             name: undefined,
             drawingData: [],
@@ -65,12 +56,11 @@ class App extends Component {
 
         this.setState({ map });
         this.bound = map.getBounds();
-        // this.mainPageLoad(map);
+        this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
-            // this.mainPageLoad(map);
-            // this.deleteDraw();
-
+            this.mainPageLoad(map);
+            //this.deleteDraw();
         });
         const userName = localStorage.getItem('token');
         if (userName) {
@@ -167,8 +157,7 @@ class App extends Component {
     myInfoToggle = () => {
         const { MyInfoButton } = this.state;
         this.setState({ MyInfoButton: !MyInfoButton });
-        const toggle = !MyInfoButton;
-        this.factorLoad(undefined, toggle);
+        this.factorLoad(undefined, !MyInfoButton);
     };
 
     updateDrawingData = shapeData => {
@@ -185,6 +174,8 @@ class App extends Component {
         const { name, map } = this.state;
         const bound = this.bound;
         const factors = [];
+        let nearbyData;
+
         // 기존 지도에 있던 정보를 지워줌
         Object.entries(this.drawList).forEach(([key, value]) => {
             value.setMap(null);
@@ -192,11 +183,11 @@ class App extends Component {
         });
         // 유저 호재 보기
         if (toggle) {
-            const toggle = {};
+            const toggleObj = {};
             Object.entries(this.newToggleBox).forEach(([key, value]) => {
-                toggle[key] = false;
+                toggleObj[key] = false;
             });
-            this.newToggleBox = toggle;
+            this.newToggleBox = toggleObj;
         }
         // 필터링 하기
         if (category) {
@@ -215,12 +206,12 @@ class App extends Component {
             this.setState({
                 factors: factors
             });
+            nearbyData = async val => {
+                await this.setState({
+                    NearByFactorItems: val
+                });
+            };
         }
-        const nearbyData = async val => {
-            await this.setState({
-                NearByFilteringItems: val
-            });
-        };
         // TODO:
         drawData(name, bound, factors, toggle, this.drawList, map, nearbyData);
     };
@@ -336,6 +327,7 @@ class App extends Component {
                             drawingData={drawingData}
                             updateDrawingData={this.updateDrawingData}
                             toggleModal={this.toggleModal}
+                            NearByFactorItems={NearByFactorItems}
                         />
                     </div>
                 </div>
