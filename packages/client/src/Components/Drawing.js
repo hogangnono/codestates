@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
-import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
@@ -10,14 +9,16 @@ import Circle from '../CustomOverlay/Circle';
 import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
+import saveAction from '../Module/saveAction';
 
 class Drawing extends Component {
     static propTypes = {
         map: PropTypes.object.isRequired,
         handleToggle: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-        drawingData: PropTypes.array.isRequired
-        // updateDrawingData: PropTypes.func.isRequired
+        drawingData: PropTypes.array.isRequired,
+        updateDrawingData: PropTypes.func.isRequired,
+        name: PropTypes.string.isRequired
     };
 
     state = {
@@ -28,28 +29,10 @@ class Drawing extends Component {
         refresh: true
     };
 
-    handleRequestSave = (parseURL, body) => {
-        const { toggleModal, drawingData } = this.props;
-        const basicURL = 'http://localhost:3001/';
-        const token = localStorage.getItem('token');
-        if (JSON.parse(token)) {
-            if (!drawingData.length) {
-                return alert(
-                    '그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)'
-                );
-            }
-            axios
-                .post(basicURL + parseURL, body)
-                .then(result => {
-                    console.log('저장성공!');
-                })
-                .catch(err => {
-                    console.log('err: ', err);
-                });
-        } else {
-            alert('저장을 위해선 로그인이 필요합니다 :)');
-            toggleModal();
-        }
+    handleRequestSave = (data) => {
+        const { name, toggleModal } = this.props;
+        console.log('data in handleRequestSave :', data);
+        saveAction(name, data, toggleModal);
     };
 
     removeListener = () => {
@@ -63,7 +46,7 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let startPos;
         const naver = window.naver;
-        const { map } = this.props; // delete updateDrawingData
+        const { map, updateDrawingData } = this.props; // delete updateDrawingData
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
@@ -106,11 +89,13 @@ class Drawing extends Component {
                 });
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
-                    updateDrawingData({ ...lineData, shapeType: Shape.name });
+                    console.log('React 또는 Circle', figure);
+                    updateDrawingData({ figure, lineData, shapeType: Shape.name });
                     naver.maps.Event.removeListener(moveEvent);
                 } else {
                     figure.draw(lineData);
-                    updateDrawingData({ ...lineData, shapeType: Shape.name });
+                    console.log('React 도 아니고 Circle도 아닌 것의 figure', { figure, lineData, shapeType: Shape.name });
+                    updateDrawingData({ figure, lineData, shapeType: Shape.name });
                 }
             }
             shapePoint = {};
@@ -132,12 +117,12 @@ class Drawing extends Component {
         const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
             if (Shape.name === 'Line' || Shape.name === 'Polygon' || Shape.name === 'Arrow') {
                 naver.maps.Event.removeListener(moveEvent);
-                updateDrawingData({ ...lineData, shapeType: Shape.name });
+                console.log('Line 또는 Polygon 또는 Arrow', { figure, lineData, shapeType: Shape.name });
+                updateDrawingData({ figure, lineData, shapeType: Shape.name });
             }
-              naver.maps.Event.removeListener(leftClick);
-              naver.maps.Event.removeListener(rightClick);
-
-        );
+            naver.maps.Event.removeListener(leftClick);
+            naver.maps.Event.removeListener(rightClick);
+        });
         this.setState({
             loadedListener: {
                 leftClick,
@@ -207,7 +192,7 @@ class Drawing extends Component {
                         type="button"
                         className="saveCloseBtn"
                         onClick={() => {
-                            this.handleRequestSave('user/save', drawingData);
+                            this.handleRequestSave(drawingData);
                         }}
                     >
                         {`저장`}
@@ -225,8 +210,7 @@ class Drawing extends Component {
                     : (
                         <div className="tipModalForDrawing">
                             <div className="arrowBoxForDrawing">
-                                <p>필터별로 부동산 호재정보를 보고싶다면</p>
-                                <p>그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
+                                <p>필터별로 부동산 호재정보를 보고싶다면 그리기 모드를 닫고 필터 메뉴를 선택해주세요!</p>
                                 <div className="doNotShowTipsForDrawing" onClick={this.doNotShowTips} onKeyDown={this.doNotShowTips} role="button" tabIndex="0">다시 보지 않기</div>
                             </div>
                         </div>
