@@ -5,22 +5,29 @@ import NearbyFactorItem from './NearbyFactorItem';
 
 export default class NearbyFactorDialog extends Component {
     static propTypes = {
-        setNearbyFactorItems: PropTypes.func.isRequired
+        NearByFactorItems: PropTypes.array.isRequired
     };
 
     render() {
-        const a = [1, 2, 3, 4, 5, 6, 7, 8];
-        const { setNearbyFactorItems } = this.props;
+        const { NearByFactorItems } = this.props;
         return (
             <div className="NearbyFactorDialog">
                 <div className="nearbyMenu">주변 호재</div>
-                {a.map(el => (
-                    <NearbyFactorItem
-                        el={el}
-                        setNearbyFactorItems={setNearbyFactorItems}
-                        key={el}
-                    />
-                ))}
+                <div className="titleBox">
+                    <div className="factorTitle">호재</div>
+                    <div className="descriptionTitle">설명</div>
+                </div>
+                {NearByFactorItems.length ? (
+                    NearByFactorItems.map(el => (
+                        <NearbyFactorItem
+                            description={el.description}
+                            factor_id={el.factor_id}
+                            key={el.description}
+                        />
+                    ))
+                ) : (
+                    <div>loading</div>
+                )}
             </div>
         );
     }
