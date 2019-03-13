@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
     let transaction;
     try {
         transaction = await User.sequelize.transaction();
-        await User.findOrCreate({ where: { name } });
+        await User.findOrCreate({ where: { name }, transaction });
         await transaction.commit();
         res.status(200).send(
             `어서오세요! ${name}님!\n로그인에 성공했습니다 :)`
@@ -159,6 +159,9 @@ exports.load = async (req, res) => {
 exports.save = async (req, res) => {
     let transaction;
     const { name, data } = req.body;
+    console.log('===================');
+    console.log('req.body \n', req.body);
+    console.log('===================');
     try {
         transaction = await Drawing.sequelize.transaction();
         if (Array.isArray(data)) {
@@ -167,7 +170,6 @@ exports.save = async (req, res) => {
                 { user_id: userID },
                 transaction
             ).get('id');
-
             const dataWithDrawingId = data.map(figure => {
                 const returnFigure = {
                     ...figure,
@@ -175,7 +177,6 @@ exports.save = async (req, res) => {
                 };
                 return returnFigure;
             });
-
             await Figure.bulkCreate(dataWithDrawingId);
             await transaction.commit();
             res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
