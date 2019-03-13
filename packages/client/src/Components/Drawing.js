@@ -84,7 +84,6 @@ class Drawing extends Component {
                 });
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
-                    console.log('React 또는 Circle', figure);
                     updateDrawingData({
                         figure,
                         lineData,
@@ -94,16 +93,6 @@ class Drawing extends Component {
                     naver.maps.Event.removeListener(leftClick);
                 } else {
                     figure.draw(lineData);
-                    console.log('React 도 아니고 Circle도 아닌 것의 figure', {
-                        figure,
-                        lineData,
-                        shapeType: Shape.name
-                    });
-                    updateDrawingData({
-                        figure,
-                        lineData,
-                        shapeType: Shape.name
-                    });
                 }
             }
             figure.setMap(map);
@@ -123,18 +112,12 @@ class Drawing extends Component {
             map,
             'rightclick',
             e => {
-                console.log('오른쪽 버튼을 클릭하지');
                 if (
                     Shape.name === 'Line'
                     || Shape.name === 'Polygon'
                     || Shape.name === 'Arrow'
                 ) {
                     naver.maps.Event.removeListener(moveEvent);
-                    console.log('Line 또는 Polygon 또는 Arrow', {
-                        figure,
-                        lineData,
-                        shapeType: Shape.name
-                    });
                     updateDrawingData({
                         figure,
                         lineData,
