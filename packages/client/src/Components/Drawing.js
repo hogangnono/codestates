@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import '../less/Drawing.less';
 import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
-import axios from 'axios';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Arrow from '../CustomOverlay/Arrow';
@@ -71,6 +70,7 @@ class Drawing extends Component {
         }
 
         const leftClick = naver.maps.Event.addListener(map, 'click', e => {
+            console.log('왼쪽버튼을 클릭하지');
             const { coord, offset } = e;
             position = { coord, offset };
             lineData.push(position);
@@ -123,6 +123,7 @@ class Drawing extends Component {
             map,
             'rightclick',
             e => {
+                console.log('오른쪽 버튼을 클릭하지');
                 if (
                     Shape.name === 'Line'
                     || Shape.name === 'Polygon'
@@ -139,8 +140,8 @@ class Drawing extends Component {
                         lineData,
                         shapeType: Shape.name
                     });
+                    naver.maps.Event.removeListener(leftClick);
                 }
-                naver.maps.Event.removeListener(leftClick);
                 naver.maps.Event.removeListener(rightClick);
             }
         );
