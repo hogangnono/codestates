@@ -58,13 +58,18 @@ Shape.prototype.draw = function(lineData) {
     // match the div and svg size
     this._element.style.width = `${this._widthRatio}px`;
     this._element.style.height = `${this._heightRatio}px`;
-    this.setSvg();
+
+    /* Set svg */
+    const svg = this._element.childNodes[0];
+    svg.style.position = 'absolute';
+    // svg를 원 크기에 맞게 생성
+    svg.style.width = `${this._widthRatio}px`;
+    svg.style.height = `${this._heightRatio}px`;
+
     this.setPath();
 };
 
 Shape.prototype.setShape = function() {};
-
-Shape.prototype.setSvg = function() {};
 
 Shape.prototype.setPath = function() {};
 

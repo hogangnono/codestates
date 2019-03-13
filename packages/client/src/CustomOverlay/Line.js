@@ -12,38 +12,34 @@ Line.prototype = Object.create(Shape.prototype);
 Line.prototype.constructor = Line;
 
 Line.prototype.setShape = function() {
-
     if (!this._min || !this._max) {
-        this._min = { coord: {}, offset: {} };
-        this._max = { coord: {}, offset: {} };
-        this._min.coord.x = this._lineData[0].coord.x;
-        this._min.coord.y = this._lineData[0].coord.y;
-        this._min.offset.x = this._lineData[0].offset.x;
-        this._min.offset.y = this._lineData[0].offset.y;
-
-        this._max.coord.x = this._lineData[0].coord.x;
-        this._max.coord.y = this._lineData[0].coord.y;
-        this._max.offset.x = this._lineData[0].offset.x;
-        this._max.offset.y = this._lineData[0].offset.y;
+        // deep copy
+        this._min = JSON.parse(JSON.stringify(this._lineData[0]));
+        this._max = JSON.parse(JSON.stringify(this._lineData[0]));
     } else {
-        if (this._min.coord.x > this._lineData[this._lineData.length - 1].coord.x) {
-            this._min.coord.x = this._lineData[this._lineData.length - 1].coord.x;
-            this._min.offset.x = this._lineData[this._lineData.length - 1].offset.x;
-            this._widthDiff = Math.abs(this._lineData[0].offset.x - this._min.offset.x);
-
+        const min = this._min;
+        const max = this._max;
+        const temp = this._lineData[this._lineData.length - 1];
+        // 왼쪽으로 이동시
+        if (min.coord.x > temp.coord.x) {
+            min.coord.x = temp.coord.x;
+            min.offset.x = temp.offset.x;
+            this._widthDiff = Math.abs(this._lineData[0].offset.x - min.offset.x);
         }
-        if (this._min.coord.y > this._lineData[this._lineData.length - 1].coord.y) {
-            this._min.coord.y = this._lineData[this._lineData.length - 1].coord.y;
-            this._min.offset.y = this._lineData[this._lineData.length - 1].offset.y;
+        // 아래로 이동시
+        if (min.coord.y > temp.coord.y) {
+            min.coord.y = temp.coord.y;
+            min.offset.y = temp.offset.y;
         }
-        if (this._max.coord.x < this._lineData[this._lineData.length - 1].coord.x) {
-            this._max.coord.x = this._lineData[this._lineData.length - 1].coord.x;
-            this._max.offset.x = this._lineData[this._lineData.length - 1].offset.x;
+        // 오른쪽으로 이동시
+        if (max.coord.x < temp.coord.x) {
+            max.coord.x = temp.coord.x;
+            max.offset.x = temp.offset.x;
         }
-        // 위로 올라갈 경우
-        if (this._max.coord.y < this._lineData[this._lineData.length - 1].coord.y) {
-            this._max.coord.y = this._lineData[this._lineData.length - 1].coord.y;
-            this._max.offset.y = this._lineData[this._lineData.length - 1].offset.y;
+        // 위로 이동시
+        if (max.coord.y < temp.coord.y) {
+            max.coord.y = temp.coord.y;
+            max.offset.y = temp.offset.y;
             this._heightDiff = Math.abs(this._lineData[0].offset.y - this._max.offset.y);
         }
     }
@@ -54,18 +50,7 @@ Line.prototype.setShape = function() {
     this._startPos.y = this._max.coord.y;
 };
 
-Line.prototype.setSvg = function() {
-    /* Set svg */
-    const svg = this._element.childNodes[0];
-    svg.style.position = 'absolute';
-    // svg를 원 크기에 맞게 생성
-    svg.style.width = `${this._widthRatio}px`;
-    svg.style.height = `${this._heightRatio}px`;
-};
-
-
 Line.prototype.setPath = function() {
-
     const projection = this.getProjection();
     const s = projection.fromCoordToOffset(this._lineData[0].coord);
     for (let i = 0; i < this._lineData.length; i++) {
@@ -77,7 +62,10 @@ Line.prototype.setPath = function() {
     const line = d3.line()
                 .x(function(d) { return (d.x); })
                 .y(function(d) { return (d.y); });
+    this.addAttribute(line);
+};
 
+Line.prototype.addAttribute = function(line) {
     this._path.attr('d', line(this._newlineData))
             .attr('stroke', 'black')
             .attr('stroke-width', 3)

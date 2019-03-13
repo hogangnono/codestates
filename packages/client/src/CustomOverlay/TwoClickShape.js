@@ -17,15 +17,6 @@ TwoClickShape.prototype.setShape = function() {
 
 };
 
-TwoClickShape.prototype.setSvg = function() {
-    /* Set svg */
-    const svg = this._element.childNodes[0];
-    svg.style.position = 'absolute';
-    // svg를 원 크기에 맞게 생성
-    svg.style.width = `${this._widthRatio}px`;
-    svg.style.height = `${this._heightRatio}px`;
-};
-
 TwoClickShape.prototype.setPath = function() {
 };
 
