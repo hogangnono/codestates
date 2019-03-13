@@ -6,11 +6,11 @@ import '../less/Toolbox.less';
 class DrawContainer extends Component {
     static propTypes = {
         drawingData: PropTypes.array.isRequired,
-        mapLoad: PropTypes.object.isRequired,
+        mapLoad: PropTypes.object,
         handleToggle: PropTypes.func.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired
+        name: PropTypes.string
     };
 
     render() {

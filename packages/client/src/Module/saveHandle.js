@@ -1,29 +1,40 @@
 import axios from 'axios';
 import { API_USER_SAVE_PATH } from '../constants';
 
-const saveAction = (name, data, callBack) => {
-    console.log('saveAction 함수가 호출되었습니다.');
+const saveHandle = (name, data, callBack) => {
+    console.log('===================');
+    console.log('saveHandle 함수가 호출되었습니다.');
     const token = JSON.parse(localStorage.getItem('token'));
-    console.log('token : ', data);
+    console.log('data in saveHandle : ', data);
 
     const dataSet = [];
 
     data.map(oneShape => {
+        const figuresData = {};
+        figuresData.shape = oneShape.shapeType;
+        figuresData.lineData = JSON.stringify(oneShape.figure._lineData);
+        figuresData.zoomLevel = oneShape.figure._zoom;
+        console.log('figuresData', figuresData);
+
         const processedData = {};
-        processedData.center_lat = oneShape.figure.mapCenter.x;
-        processedData.center_lng = oneShape.figure.mapCenter.y;
-        processedData.figures = 'test';
+        const _lineData = oneShape.figure._lineData;
+        processedData.start_lat = _lineData[0].coord._lat;
+        processedData.start_lng = _lineData[0].coord._lng;
+        processedData.end_lat = _lineData[_lineData.length - 1].coord._lat;
+        processedData.end_lng = _lineData[_lineData.length - 1].coord._lat;
+        processedData.figures = JSON.stringify(figuresData);
         processedData.description = 'test_description';
-        processedData.css = 'lessCss';
+        processedData.css = 'test_lessCss';
         processedData.factor_id = 3;
 
         dataSet.push(processedData);
     });
-
     const reqBody = {
         name: name,
         data: dataSet
     };
+    console.log('reqBOdy:n', reqBody);
+    console.log('===================');
 
     if (token) {
         if (!data.length) {
@@ -45,4 +56,4 @@ const saveAction = (name, data, callBack) => {
     }
 };
 
-export default saveAction;
+export default saveHandle;
