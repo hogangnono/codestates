@@ -41,22 +41,24 @@ Shape.prototype.draw = function(lineData) {
 
     this.setShape();
 
-    /* Set div */
+    const projection = this.getProjection();
+    const position = this._startPos;
+    const pixelPosition = projection.fromCoordToOffset(position);
+
     this._element.style.position = 'absolute';
-    // 지도를 이동했을때 새로운 영역의 왼쪽 상단의 좌표를 확인
-    const bound = this.map.getBounds();
-    const boundCoord = {};
-    // lan, lng값을 가짐
-    boundCoord.x = bound._min.x;
-    boundCoord.y = bound._max.y;
-    // coord 값을 offset 값으로 변경
-    const projection = this.map.getProjection();
-    const boundOffset = projection.fromCoordToOffset(boundCoord);
-    // 새로운 영역 위치에 div를 생성
-    this._element.style.top = `${boundOffset.y}px`;
-    this._element.style.left = `${boundOffset.x}px`;
-    this._element.style.width = `${window.innerWidth}px`;
-    this._element.style.height = `${window.innerHeight}px`;
+    // place thd div where user click
+    this._element.style.top = `${pixelPosition.y}px`;
+    this._element.style.left = `${pixelPosition.x}px`;
+    // set the ratio
+    const ratio = this._map.getZoom() - this._zoom;
+
+    // calculate the div width and height(Subtraction of two coordinates) with zoom ratio
+    this._widthRatio = this._width * 2 ** ratio;
+    this._heightRatio = this._height * 2 ** ratio;
+
+    // match the div and svg size
+    this._element.style.width = `${this._widthRatio}px`;
+    this._element.style.height = `${this._heightRatio}px`;
 
     this.setSvg();
     this.setPath();

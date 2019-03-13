@@ -8,7 +8,7 @@ import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 // import MainButton from './Components/MainButton';
-import NearbyFactorDialog from './Components/NearbyFactorDialog';
+// import NearbyFactorDialog from './Components/NearbyFactorDialog';
 
 class App extends Component {
     constructor(props) {
@@ -64,13 +64,13 @@ class App extends Component {
 
         this.setState({ map });
         this.bound = map.getBounds();
-        this.mainPageLoad(map);
+        // this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
             this.deleteDraw();
-        });
 
+        });
         const userName = localStorage.getItem('token');
         if (userName) {
             const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
@@ -266,6 +266,7 @@ class App extends Component {
                         mapLoad={map}
                         NearByFactorItems={NearByFactorItems}
                     />
+
                     <div id="loginFavorContainer">
                         {/* mainButton.map(bt => (
                             <MainButton
