@@ -21,7 +21,6 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             const overlays = [Line, Arrow, Rect, Circle, Polygon];
             const nearbyFactors = [];
             let drawShape;
-            console.log('in load handle', resultData);
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
                 const { description, factor_id, id } = el;
@@ -30,7 +29,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                     factor_id: factor_id
                 };
                 nearbyFactors.push(factorNearby);
-                if (nearbyFactors.length) {
+                if (nearbyFactors.length && !name) {
                     nearbyData(nearbyFactors);
                 }
                 if (!(id in drawList)) {

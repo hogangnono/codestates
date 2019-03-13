@@ -9,6 +9,7 @@ TwoClickShape.prototype.constructor = TwoClickShape;
 
 TwoClickShape.prototype.setShape = function() {
     // 새로운 시작점을 정해줌 (lineData[0] 찍은 위치, lineData[1]는 현재 마우스 위치)
+    console.log(this._lineData);
     this._startPos.x = Math.min(
         this._lineData[0].coord.x,
         this._lineData[1].coord.x
