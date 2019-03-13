@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import '../less/Drawing.less';
 import axios from 'axios';
 // import { FaLine } from 'react-icons/fa';
-import axios from 'axios';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Arrow from '../CustomOverlay/Arrow';
@@ -71,6 +70,7 @@ class Drawing extends Component {
         }
 
         const leftClick = naver.maps.Event.addListener(map, 'click', e => {
+            console.log('왼쪽버튼을 클릭하지');
             const { coord, offset } = e;
             position = { coord, offset };
             lineData.push(position);
@@ -84,7 +84,6 @@ class Drawing extends Component {
                 });
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle') {
-                    console.log('React 또는 Circle', figure);
                     updateDrawingData({
                         figure,
                         lineData,
@@ -94,16 +93,6 @@ class Drawing extends Component {
                     naver.maps.Event.removeListener(leftClick);
                 } else {
                     figure.draw(lineData);
-                    console.log('React 도 아니고 Circle도 아닌 것의 figure', {
-                        figure,
-                        lineData,
-                        shapeType: Shape.name
-                    });
-                    updateDrawingData({
-                        figure,
-                        lineData,
-                        shapeType: Shape.name
-                    });
                 }
             }
             figure.setMap(map);
@@ -129,18 +118,13 @@ class Drawing extends Component {
                     || Shape.name === 'Arrow'
                 ) {
                     naver.maps.Event.removeListener(moveEvent);
-                    console.log('Line 또는 Polygon 또는 Arrow', {
-                        figure,
-                        lineData,
-                        shapeType: Shape.name
-                    });
                     updateDrawingData({
                         figure,
                         lineData,
                         shapeType: Shape.name
                     });
+                    naver.maps.Event.removeListener(leftClick);
                 }
-                naver.maps.Event.removeListener(leftClick);
                 naver.maps.Event.removeListener(rightClick);
             }
         );
