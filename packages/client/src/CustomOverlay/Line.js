@@ -50,23 +50,25 @@ Line.prototype.setShape = function() {
     this._startPos.y = this._max.coord.y;
 };
 
-Line.prototype.setPath = function() {
+Line.prototype.setPath = function(flag) {
     const projection = this.getProjection();
     const s = projection.fromCoordToOffset(this._lineData[0].coord);
+    const newlineData = [];
+
     for (let i = 0; i < this._lineData.length; i++) {
         const obj = {};
         obj.x = projection.fromCoordToOffset(this._lineData[i].coord).x - s.x + this._widthDiff * 2 ** this._ratio;
         obj.y = projection.fromCoordToOffset(this._lineData[i].coord).y - s.y + this._heightDiff * 2 ** this._ratio;
-        this._newlineData[i] = obj;
+        newlineData.push(obj);
     }
     const line = d3.line()
                 .x(function(d) { return (d.x); })
                 .y(function(d) { return (d.y); });
-    this.addAttribute(line);
+    this.addAttribute(line, newlineData);
 };
 
-Line.prototype.addAttribute = function(line) {
-    this._path.attr('d', line(this._newlineData))
+Line.prototype.addAttribute = function(line, newlineData) {
+    this._path.attr('d', line(newlineData))
             .attr('stroke', 'black')
             .attr('stroke-width', 3)
             .attr('fill', 'none');

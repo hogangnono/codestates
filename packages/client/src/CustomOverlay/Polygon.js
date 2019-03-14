@@ -7,8 +7,8 @@ var Polygon = function(options) {
 Polygon.prototype = Object.create(Line.prototype);
 Polygon.prototype.constructor = Polygon;
 
-Polygon.prototype.addAttribute = function(line) {
-    this._path.attr('d', `${line(this._newlineData)} Z`)
+Polygon.prototype.addAttribute = function(line, newlineData) {
+    this._path.attr('d', `${line(newlineData)} Z`)
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
             .attr('fill', 'black')

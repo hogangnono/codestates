@@ -23,8 +23,8 @@ Arrow.prototype.addShape = function() {
     this._path = this.svg.append('path');
 };
 
-Arrow.prototype.addAttribute = function(line) {
-    this._path.attr('d', line(this._newlineData))
+Arrow.prototype.addAttribute = function(line, newlineData) {
+    this._path.attr('d', line(newlineData))
             .attr('stroke', 'black')
             .attr('stroke-width', 3)
             .attr('fill', 'none')

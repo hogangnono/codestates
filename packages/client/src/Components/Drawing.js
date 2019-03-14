@@ -69,7 +69,6 @@ class Drawing extends Component {
         }
 
         const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-            console.log('왼쪽버튼을 클릭하지');
             const { coord, offset } = e;
             position = { coord, offset };
             lineData.push(position);
@@ -117,6 +116,9 @@ class Drawing extends Component {
                     || Shape.name === 'Polygon'
                     || Shape.name === 'Arrow'
                 ) {
+                    // 해당 포인트를 지워줌
+                    lineData.pop();
+                    figure.draw(lineData);
                     naver.maps.Event.removeListener(moveEvent);
                     updateDrawingData({
                         figure,

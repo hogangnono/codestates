@@ -38,7 +38,6 @@ Shape.prototype.draw = function(lineData) {
     if (lineData) {
         this._lineData = lineData;
     }
-
     this.setShape();
 
     const projection = this.getProjection();
