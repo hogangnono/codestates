@@ -22,8 +22,8 @@ class App extends Component {
             map: undefined,
             showFilter: false,
             showModal: false,
-            deactiveFilter: '',
-            deactiveDraw: 'deactive',
+            activeFilter: 'active',
+            activeDraw: '',
             MyInfoButton: false,
             showDraw: false,
             factors: [],
@@ -113,23 +113,23 @@ class App extends Component {
     };
 
     showFilter = () => {
-        const { showFilter, deactiveDraw } = this.state;
+        const { showFilter, activeDraw } = this.state;
 
-        if (deactiveDraw === '') {
+        if (activeDraw === '') {
             this.setState({
                 showFilter: !showFilter,
-                deactiveDraw: 'deactive'
+                activeDraw: ''
             });
         } else {
             this.setState({
                 showFilter: !showFilter,
-                deactiveDraw: ''
+                activeDraw: 'active'
             });
         }
     };
 
     showDraw = () => {
-        const { showDraw, drawingData, deactiveFilter } = this.state;
+        const { showDraw, drawingData, activeFilter } = this.state;
         if (drawingData.length) {
             const pressedConfirm = confirm(
                 '저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?'
@@ -141,15 +141,15 @@ class App extends Component {
             }
         }
 
-        if (deactiveFilter === '') {
+        if (activeFilter === '') {
             this.setState({
                 showDraw: !showDraw,
-                deactiveFilter: 'deactive'
+                activeFilter: ''
             });
         } else {
             this.setState({
                 showDraw: !showDraw,
-                deactiveFilter: ''
+                activeFilter: 'active'
             });
         }
     };
@@ -160,9 +160,14 @@ class App extends Component {
         this.factorLoad(undefined, !MyInfoButton);
     };
 
-    updateDrawingData = shapeData => {
+    updateDrawingData = (shapeData, order = false, index) => {
         const { drawingData } = this.state;
         this.setState({ drawingData: [...drawingData, shapeData] });
+        if (order) {
+            const newDrawingData = [...drawingData];
+            newDrawingData.splice(index, 1);
+            this.setState({ drawingData: newDrawingData });
+        }
     };
 
     deleteDrawingData = index => {
@@ -227,8 +232,8 @@ class App extends Component {
             showFilter,
             showDraw,
             showModal,
-            deactiveFilter,
-            deactiveDraw,
+            activeFilter,
+            activeDraw,
             MyInfoButton,
             NearByFactorItems
         } = this.state;
@@ -280,9 +285,9 @@ class App extends Component {
                             {`My`}
                         </div>
                         <div
-                            className={`loginFavorBtn ${deactiveFilter}`}
+                            className={`loginFavorBtn ${activeFilter}`}
                             onClick={() => {
-                                if (deactiveFilter === '') {
+                                if (activeFilter === '') {
                                     this.showFilter();
                                 }
                             }}
@@ -293,9 +298,9 @@ class App extends Component {
                             {`필터`}
                         </div>
                         <div
-                            className={`loginFavorBtn ${deactiveDraw}`}
+                            className={`loginFavorBtn ${activeDraw}`}
                             onClick={() => {
-                                if (deactiveDraw === '') {
+                                if (activeDraw === '') {
                                     this.showDraw();
                                 }
                             }}
