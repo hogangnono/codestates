@@ -26,6 +26,7 @@ class Drawing extends Component {
         selectedButton: null,
         loadedListener: null,
         isInShapeCreateMode: false,
+        showDescriptionModal: false,
         refresh: true
     };
 
@@ -41,6 +42,13 @@ class Drawing extends Component {
         naver.maps.Event.removeListener(leftClick);
         naver.maps.Event.removeListener(rightClick);
     };
+
+    handleShowingDescriptionModal = (event) => {
+        const { drawingData } = this.props;
+        console.log('event.target : ', event.target);
+        console.log('drawingData.figure._element', drawingData[0].figure._element);
+        // this.setState({ showDescriptionModal: });
+    }
 
     createShapeTest = selectedIcon => {
         let position;
@@ -154,7 +162,8 @@ class Drawing extends Component {
             map,
             handleToggle,
             drawingData,
-            NearByFactorItems
+            NearByFactorItems,
+            updateDrawingData
         } = this.props;
         const { selectedButton, shapes, isInShapeCreateMode } = this.state;
         const doNotShowTips = JSON.parse(
@@ -178,7 +187,7 @@ class Drawing extends Component {
                     );
                 })}
                 <div id="myDrawingsContainer">
-                    <MyDrawingElement drawingData={drawingData} />
+                    <MyDrawingElement drawingData={drawingData} updateDrawingData={updateDrawingData} />
                 </div>
                 <div id="saveCloseBtns">
                     <button
