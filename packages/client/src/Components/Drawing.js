@@ -77,6 +77,8 @@ class Drawing extends Component {
             if (lineData.length === 1) {
                 lineData.push(position);
                 figure = new Shape({
+                    fill: 'fill',
+                    color: 'green',
                     lineData: lineData,
                     naverMap: map
                 });
@@ -138,6 +140,7 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
+        console.log('선택되었어!');
         // console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
@@ -149,6 +152,10 @@ class Drawing extends Component {
         sessionStorage.setItem('doNotShowTipsForDrawing', JSON.stringify(true));
         this.setState({ refresh: !refresh });
     };
+
+    fillOrnot = (val) => {
+        console.log(val);
+    }
 
     render() {
         const {
@@ -178,6 +185,24 @@ class Drawing extends Component {
                         />
                     );
                 })}
+                <div>
+                    <div onClick={() => this.fillOrnot('fill')}
+                        onKeyPress={this.fillOrnot}
+                        role="button"
+                        tabIndex="0">채우기</div>
+                    <div onClick={() => this.fillOrnot('none')}
+                        onKeyPress={this.fillOrnot}
+                        role="button"
+                        tabIndex="0">비우기</div>
+                    <div role="button"># 상권</div>
+                    <div role="button"># 신축/재개발</div>
+                    <div role="button"># 교육</div>
+                    <div role="button"># 업무지구</div>
+                    <div role="button"># 주택단지</div>
+                    <div role="button"># 도로개통/확장</div>
+                    <div role="button"># 지하철개통</div>
+                    <div role="button"># 개통</div>
+                </div>
                 <div id="myDrawingsContainer">
                     <MyDrawingElement drawingData={drawingData} />
                 </div>

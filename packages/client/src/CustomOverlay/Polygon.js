@@ -9,10 +9,16 @@ Polygon.prototype.constructor = Polygon;
 
 Polygon.prototype.addAttribute = function(line, newlineData) {
     this._path.attr('d', `${line(newlineData)} Z`)
-            .attr('stroke', 'black')
-            .attr('stroke-width', 1)
-            .attr('fill', 'black')
-            .attr('opacity', 0.7);
+            .attr('stroke', this._color)
+            .attr('stroke-width', 3)
+            .attr('fill', this._color)
+            .attr('stroke-opacity', 1);
+
+    if (this._fill) {
+        this._path.attr('fill', this._color).attr('fill-opacity', 0.6);
+    } else {
+        this._path.attr('fill', 'none');
+    }
 };
 
 export default Polygon;

@@ -7,6 +7,8 @@ var Shape = function(options) {
     this._startPos = {};
     // 선분의 꼭지점
     this._lineData = options.lineData;
+    this._fill = options.fill;
+    this._color = options.color;
     this.draw();
     this.setMap(options.map || null);
 };

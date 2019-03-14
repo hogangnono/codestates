@@ -69,7 +69,7 @@ Line.prototype.setPath = function(flag) {
 
 Line.prototype.addAttribute = function(line, newlineData) {
     this._path.attr('d', line(newlineData))
-            .attr('stroke', 'black')
+            .attr('stroke', this._color)
             .attr('stroke-width', 3)
             .attr('fill', 'none');
 };
