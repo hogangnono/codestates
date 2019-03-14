@@ -60,7 +60,7 @@ class App extends Component {
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
-            //this.deleteDraw();
+            // this.deleteDraw();
         });
         const userName = localStorage.getItem('token');
         if (userName) {
@@ -168,7 +168,6 @@ class App extends Component {
     mainToggle = (stateName, toggle) => {
         this.setState({ [stateName]: !toggle });
     };
-
 
     factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;

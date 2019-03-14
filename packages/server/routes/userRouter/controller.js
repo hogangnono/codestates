@@ -188,31 +188,38 @@ exports.load = async (req, res) => {
 /* Save data */
 exports.save = async (req, res) => {
     let transaction;
-    const { name, data } = req.body;
+    const { payload } = req.body;
     console.log('===================');
-    console.log('req.body \n', req.body);
+    console.log(JSON.parse(payload).actions[0].value);
     console.log('===================');
     try {
         transaction = await Drawing.sequelize.transaction();
-        if (Array.isArray(data)) {
-            const userID = await User.findOne({
-                where: { name },
-                transaction
-            }).get('id');
-            const drawingId = await Drawing.create(
-                { user_id: userID },
-                transaction
-            ).get('id');
-            const dataWithDrawingId = data.map(figure => {
-                const returnFigure = {
-                    ...figure,
-                    drawing_id: drawingId
-                };
-                return returnFigure;
-            });
-            await Figure.bulkCreate(dataWithDrawingId);
-            await transaction.commit();
-            res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
+        if (JSON.parse(payload).actions[0].value === 'Refuse') {
+            res.status(200).send('호재 데이터를 저장하지 않았습니다.');
+        } else {
+            const { name, data } = JSON.parse(
+                JSON.parse(payload).actions[0].value
+            );
+            if (Array.isArray(data)) {
+                const userID = await User.findOne({
+                    where: { name },
+                    transaction
+                }).get('id');
+                const drawingId = await Drawing.create(
+                    { user_id: userID },
+                    transaction
+                ).get('id');
+                const dataWithDrawingId = data.map(figure => {
+                    const returnFigure = {
+                        ...figure,
+                        drawing_id: drawingId
+                    };
+                    return returnFigure;
+                });
+                await Figure.bulkCreate(dataWithDrawingId);
+                await transaction.commit();
+                res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
+            }
         }
     } catch (err) {
         await transaction.rollback();
