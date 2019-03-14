@@ -81,7 +81,7 @@ class Drawing extends Component {
                     naverMap: map
                 });
             } else {
-                if (Shape.name === 'Rect' || Shape.name === 'Circle') {
+                if (Shape.name === 'Rect' || Shape.name === 'Circle' || Shape.name === 'Line') {
                     updateDrawingData({
                         figure,
                         lineData,
@@ -112,8 +112,7 @@ class Drawing extends Component {
             'rightclick',
             e => {
                 if (
-                    Shape.name === 'Line'
-                    || Shape.name === 'Polygon'
+                    Shape.name === 'Polygon'
                     || Shape.name === 'Arrow'
                 ) {
                     // 해당 포인트를 지워줌

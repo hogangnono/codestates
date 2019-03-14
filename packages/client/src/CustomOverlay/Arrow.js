@@ -17,8 +17,8 @@ Arrow.prototype.addShape = function() {
     .attr('markerUnits', 'userSpaceOnUse')
     .attr('orient', 'auto')
     .append('path')
-    .attr('d', 'M 0 0 12 6 0 12 3 6')
-    .style('fill', 'black')
+    .attr('d', 'M 12 0 0 6 12 12 9 6')
+    .style('fill', 'red')
     .style('stroke', 'none');
     this._path = this.svg.append('path');
 };
@@ -28,7 +28,7 @@ Arrow.prototype.addAttribute = function(line, newlineData) {
             .attr('stroke', 'black')
             .attr('stroke-width', 3)
             .attr('fill', 'none')
-            .attr('marker-end', 'url(#triangle)');
+            .attr('marker-start', 'url(#triangle)');
 };
 
 export default Arrow;
