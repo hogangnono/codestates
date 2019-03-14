@@ -60,7 +60,6 @@ class App extends Component {
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
-            //this.deleteDraw();
         });
         const userName = localStorage.getItem('token');
         if (userName) {
@@ -135,6 +134,9 @@ class App extends Component {
                 '저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?'
             );
             if (pressedConfirm) {
+                for (let index = 0; index < drawingData.length; index++) {
+                    drawingData[index].figure.onRemove();
+                }
                 this.setState({ drawingData: [] });
             } else if (!pressedConfirm) {
                 return;
