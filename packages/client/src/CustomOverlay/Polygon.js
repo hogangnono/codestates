@@ -14,7 +14,7 @@ Polygon.prototype.addAttribute = function(line, newlineData) {
             .attr('fill', this._color)
             .attr('stroke-opacity', 1);
 
-    if (this._fill) {
+    if (this._fill === 'fill') {
         this._path.attr('fill', this._color).attr('fill-opacity', 0.6);
     } else {
         this._path.attr('fill', 'none');

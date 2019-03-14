@@ -29,6 +29,10 @@ class Drawing extends Component {
         refresh: true
     };
 
+    color = undefined;
+
+    fill = undefined;
+
     handleRequestSave = data => {
         const { name, toggleModal } = this.props;
         saveHandle(name, data, toggleModal);
@@ -77,8 +81,8 @@ class Drawing extends Component {
             if (lineData.length === 1) {
                 lineData.push(position);
                 figure = new Shape({
-                    fill: 'fill',
-                    color: 'green',
+                    fill: this.fill,
+                    color: this.color,
                     lineData: lineData,
                     naverMap: map
                 });
@@ -153,8 +157,13 @@ class Drawing extends Component {
         this.setState({ refresh: !refresh });
     };
 
-    fillOrnot = (val) => {
-        console.log(val);
+    fillOrnot = (fillval) => {
+        this.fill = fillval;
+    }
+
+    decideFactor = (factorNum) => {
+        const colorList = ['Crimson', 'DarkOrange', 'SeaGreen', 'Navy', 'Indigo', 'Peru', 'HotPink', 'SlateGray'];
+        this.color = colorList[factorNum];
     }
 
     render() {
@@ -194,14 +203,38 @@ class Drawing extends Component {
                         onKeyPress={this.fillOrnot}
                         role="button"
                         tabIndex="0">비우기</div>
-                    <div role="button"># 상권</div>
-                    <div role="button"># 신축/재개발</div>
-                    <div role="button"># 교육</div>
-                    <div role="button"># 업무지구</div>
-                    <div role="button"># 주택단지</div>
-                    <div role="button"># 도로개통/확장</div>
-                    <div role="button"># 지하철개통</div>
-                    <div role="button"># 개통</div>
+                    <div onClick={() => this.decideFactor(0)}
+                        onKeyPress={this.decideFactor}
+                        role="button"
+                        tabIndex="0"># 상권</div>
+                    <div onClick={() => this.decideFactor(1)}
+                        onKeyPress={this.decideFactor}
+                        role="button"
+                        tabIndex="0"># 신축/재개발</div>
+                    <div onClick={() => this.decideFactor(2)}
+                        onKeyPress={this.decideFactor}
+                        role="button"
+                        tabIndex="0"># 교육</div>
+                    <div onClick={() => this.decideFactor(3)}
+                        onKeyPress={this.decideFactor}
+                        role="button"
+                        tabIndex="0"># 업무지구</div>
+                    <div onClick={() => this.decideFactor(4)}
+                        onKeyPress={this.decideFactor}
+                        role="button"
+                        tabIndex="0"># 주택단지</div>
+                    <div onClick={() => this.decideFactor(5)}
+                        onKeyPress={this.decideFactor}
+                        role="button"
+                        tabIndex="0"># 도로개통/확장</div>
+                    <div onClick={() => this.decideFactor(6)}
+                        onKeyPress={this.decideFactor}
+                        role="button"
+                        tabIndex="0"># 지하철개통</div>
+                    <div onClick={() => this.decideFactor(7)}
+                        onKeyPress={this.decideFactor}
+                        role="button"
+                        tabIndex="0"># 기타</div>
                 </div>
                 <div id="myDrawingsContainer">
                     <MyDrawingElement drawingData={drawingData} />
