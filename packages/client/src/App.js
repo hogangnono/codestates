@@ -22,8 +22,8 @@ class App extends Component {
             map: undefined,
             showFilter: false,
             showModal: false,
-            deactiveFilter: '',
-            deactiveDraw: 'deactive',
+            activeFilter: 'active',
+            activeDraw: '',
             MyInfoButton: false,
             showDraw: false,
             factors: [],
@@ -113,23 +113,22 @@ class App extends Component {
     };
 
     showFilter = () => {
-        const { showFilter, deactiveDraw } = this.state;
-
-        if (deactiveDraw === '') {
+        const { showFilter, activeFilter } = this.state;
+        if (activeFilter === 'active') {
             this.setState({
                 showFilter: !showFilter,
-                deactiveDraw: 'deactive'
+                activeFilter: ''
             });
         } else {
             this.setState({
                 showFilter: !showFilter,
-                deactiveDraw: ''
+                activeFilter: 'active'
             });
         }
     };
 
     showDraw = () => {
-        const { showDraw, drawingData, deactiveFilter } = this.state;
+        const { showDraw, drawingData, activeDraw } = this.state;
         if (drawingData.length) {
             const pressedConfirm = confirm(
                 '저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?'
@@ -144,15 +143,15 @@ class App extends Component {
             }
         }
 
-        if (deactiveFilter === '') {
+        if (activeDraw === 'active') {
             this.setState({
                 showDraw: !showDraw,
-                deactiveFilter: 'deactive'
+                activeDraw: ''
             });
         } else {
             this.setState({
                 showDraw: !showDraw,
-                deactiveFilter: ''
+                activeDraw: 'active'
             });
         }
     };
@@ -163,9 +162,14 @@ class App extends Component {
         this.factorLoad(undefined, !MyInfoButton);
     };
 
-    updateDrawingData = shapeData => {
+    updateDrawingData = (shapeData, order = false, index) => {
         const { drawingData } = this.state;
         this.setState({ drawingData: [...drawingData, shapeData] });
+        if (order) {
+            const newDrawingData = [...drawingData];
+            newDrawingData.splice(index, 1);
+            this.setState({ drawingData: newDrawingData });
+        }
     };
 
     deleteDrawingData = index => {
@@ -230,8 +234,8 @@ class App extends Component {
             showFilter,
             showDraw,
             showModal,
-            deactiveFilter,
-            deactiveDraw,
+            activeFilter,
+            activeDraw,
             MyInfoButton,
             NearByFactorItems
         } = this.state;
@@ -283,26 +287,26 @@ class App extends Component {
                             {`My`}
                         </div>
                         <div
-                            className={`loginFavorBtn ${deactiveFilter}`}
+                            className={`loginFavorBtn ${activeFilter}`}
                             onClick={() => {
-                                if (deactiveFilter === '') {
+                                if (activeDraw === '') {
                                     this.showFilter();
                                 }
                             }}
-                            onKeyPress={this.showFilter}
+                            onKeyPress={() => this.showFilter}
                             role="button"
                             tabIndex="0"
                         >
                             {`필터`}
                         </div>
                         <div
-                            className={`loginFavorBtn ${deactiveDraw}`}
+                            className={`loginFavorBtn ${activeDraw}`}
                             onClick={() => {
-                                if (deactiveDraw === '') {
+                                if (activeFilter === '') {
                                     this.showDraw();
                                 }
                             }}
-                            onKeyPress={this.showDraw}
+                            onKeyPress={() => this.showDraw}
                             role="button"
                             tabIndex="0"
                         >

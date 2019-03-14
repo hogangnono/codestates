@@ -10,18 +10,11 @@ class MyDrawingElement extends Component {
         updateDrawingData: PropTypes.func
     };
 
-    constructor(props) {
-        super(props);
-        this.myRef = React.createRef();
-    }
-
     deleteShape = (event) => {
-        console.log('== 삭제기능 호출 ==');
-        const { drawingData } = this.props;
-        // const getIndex = this.myRef.current.attributes.getNamedItem('value').value;
+        const { drawingData, updateDrawingData } = this.props;
         const getIndex = event.target.parentNode.parentNode.attributes.value.value;
-        console.log('getIndex : ', getIndex);
-        console.log('drawingData', drawingData[getIndex].figure._element);
+        updateDrawingData(drawingData, true, getIndex);
+        drawingData[getIndex].figure.onRemove();
     };
 
     render() {
@@ -31,7 +24,7 @@ class MyDrawingElement extends Component {
                 {drawingData.map((shapeData, index) => {
                     const newIndex = index + 1;
                     return (
-                        <div className="drewShape" key={newIndex} value={index} ref={this.myRef}>
+                        <div className="drewShape" key={newIndex} value={index}>
                             <span>{shapeData.shapeType}</span>
                             <IoMdTrash
                                 className="deleteDrawingDataIcon"
