@@ -27,8 +27,8 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: [],
-            NearByFilteringItems: []
+            NearByFactorItems: []
+            // NearByFilteringItems: []
         };
     }
 
@@ -60,7 +60,7 @@ class App extends Component {
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
-            //this.deleteDraw();
+            // this.deleteDraw();
         });
         const userName = localStorage.getItem('token');
         if (userName) {
@@ -164,6 +164,9 @@ class App extends Component {
         const { drawingData } = this.state;
         this.setState({ drawingData: [...drawingData, shapeData] });
     };
+
+    deleteDrawingData = index => {
+    }
 
     mainToggle = (stateName, toggle) => {
         this.setState({ [stateName]: !toggle });
