@@ -113,23 +113,22 @@ class App extends Component {
     };
 
     showFilter = () => {
-        const { showFilter, activeDraw } = this.state;
-
-        if (activeDraw === '') {
+        const { showFilter, activeFilter } = this.state;
+        if (activeFilter === 'active') {
             this.setState({
                 showFilter: !showFilter,
-                activeDraw: ''
+                activeFilter: ''
             });
         } else {
             this.setState({
                 showFilter: !showFilter,
-                activeDraw: 'active'
+                activeFilter: 'active'
             });
         }
     };
 
     showDraw = () => {
-        const { showDraw, drawingData, activeFilter } = this.state;
+        const { showDraw, drawingData, activeDraw } = this.state;
         if (drawingData.length) {
             const pressedConfirm = confirm(
                 '저장하지 않고 그리기 창을 닫으면 그린 정보는 모두 사라집니다!\n그래도 그리기 창을 닫으시겠어요?'
@@ -141,15 +140,15 @@ class App extends Component {
             }
         }
 
-        if (activeFilter === '') {
+        if (activeDraw === 'active') {
             this.setState({
                 showDraw: !showDraw,
-                activeFilter: ''
+                activeDraw: ''
             });
         } else {
             this.setState({
                 showDraw: !showDraw,
-                activeFilter: 'active'
+                activeDraw: 'active'
             });
         }
     };
@@ -287,11 +286,11 @@ class App extends Component {
                         <div
                             className={`loginFavorBtn ${activeFilter}`}
                             onClick={() => {
-                                if (activeFilter === '') {
+                                if (activeDraw === '') {
                                     this.showFilter();
                                 }
                             }}
-                            onKeyPress={this.showFilter}
+                            onKeyPress={() => this.showFilter}
                             role="button"
                             tabIndex="0"
                         >
@@ -300,11 +299,11 @@ class App extends Component {
                         <div
                             className={`loginFavorBtn ${activeDraw}`}
                             onClick={() => {
-                                if (activeDraw === '') {
+                                if (activeFilter === '') {
                                     this.showDraw();
                                 }
                             }}
-                            onKeyPress={this.showDraw}
+                            onKeyPress={() => this.showDraw}
                             role="button"
                             tabIndex="0"
                         >
