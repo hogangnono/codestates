@@ -6,11 +6,22 @@ import { IoMdTrash } from 'react-icons/io';
 
 class MyDrawingElement extends Component {
     static propTypes = {
-        drawingData: PropTypes.array.isRequired
+        drawingData: PropTypes.array.isRequired,
+        updateDrawingData: PropTypes.func
     };
 
-    deleteShape = () => {
-        console.log('삭제버튼을 눌렀습니다!');
+    constructor(props) {
+        super(props);
+        this.myRef = React.createRef();
+    }
+
+    deleteShape = (event) => {
+        console.log('== 삭제기능 호출 ==');
+        const { drawingData } = this.props;
+        // const getIndex = this.myRef.current.attributes.getNamedItem('value').value;
+        const getIndex = event.target.parentNode.parentNode.attributes.value.value;
+        console.log('getIndex : ', getIndex);
+        console.log('drawingData', drawingData[getIndex].figure._element);
     };
 
     render() {
@@ -20,7 +31,7 @@ class MyDrawingElement extends Component {
                 {drawingData.map((shapeData, index) => {
                     const newIndex = index + 1;
                     return (
-                        <div className="drewShape" key={newIndex}>
+                        <div className="drewShape" key={newIndex} value={index} ref={this.myRef}>
                             <span>{shapeData.shapeType}</span>
                             <IoMdTrash
                                 className="deleteDrawingDataIcon"

@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true
             },
             user_id: DataTypes.INTEGER,
+            title: DataTypes.STRING,
+            description: DataTypes.STRING,
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE
         },

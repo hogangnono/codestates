@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
             end_lat: DataTypes.DOUBLE,
             end_lng: DataTypes.DOUBLE,
             figures: DataTypes.TEXT,
+            title: DataTypes.STRING,
             description: DataTypes.STRING,
             css: DataTypes.STRING,
             factor_id: DataTypes.INTEGER,

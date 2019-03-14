@@ -5,7 +5,6 @@ const saveHandle = (name, data, callBack) => {
     console.log('===================');
     console.log('saveHandle 함수가 호출되었습니다.');
     const token = JSON.parse(localStorage.getItem('token'));
-    console.log('data in saveHandle : ', data);
 
     const dataSet = [];
 
@@ -14,7 +13,6 @@ const saveHandle = (name, data, callBack) => {
         figuresData.shape = oneShape.shapeType;
         figuresData.lineData = oneShape.figure._lineData;
         figuresData.zoomLevel = oneShape.figure._zoom;
-        console.log('figuresData', figuresData);
 
         const processedData = {};
         const _lineData = oneShape.figure._lineData;
@@ -26,14 +24,13 @@ const saveHandle = (name, data, callBack) => {
         processedData.description = 'test_description';
         processedData.css = 'test_lessCss';
         processedData.factor_id = 3;
-        // console.log(processedData);
         dataSet.push(processedData);
     });
     const reqBody = {
         name: name,
         data: dataSet
     };
-    console.log('reqBOdy:n', reqBody);
+    console.log('reqBOdy :\n', reqBody);
     console.log('===================');
 
     if (token) {
