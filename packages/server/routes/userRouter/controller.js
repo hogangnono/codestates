@@ -189,17 +189,16 @@ exports.load = async (req, res) => {
 exports.save = async (req, res) => {
     let transaction;
     const { payload } = req.body;
-    console.log('===================');
-    console.log(JSON.parse(payload).actions[0].value);
-    console.log('===================');
+    // console.log('===================');
+    // console.log(JSON.parse(payload).actions[0].value);
+    // console.log('===================');
+    const { value } = JSON.parse(payload).actions[0];
     try {
         transaction = await Drawing.sequelize.transaction();
-        if (JSON.parse(payload).actions[0].value === 'Refuse') {
+        if (value === 'Refuse') {
             res.status(200).send('호재 데이터를 저장하지 않았습니다.');
         } else {
-            const { name, data } = JSON.parse(
-                JSON.parse(payload).actions[0].value
-            );
+            const { name, data } = JSON.parse(value);
             if (Array.isArray(data)) {
                 const userID = await User.findOne({
                     where: { name },

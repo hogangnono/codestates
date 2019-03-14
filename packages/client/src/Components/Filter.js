@@ -37,15 +37,13 @@ class Filter extends Component {
         return (
             <div id="filterContainer">
                 <div className="filterBox">
-                    {factorBox.map(factor => {
-                        return (
-                            <FilterBox
-                                factorLoad={factorLoad}
-                                factor={factor}
-                                key={factor}
-                            />
-                        );
-                    })}
+                    {factorBox.map(factor => (
+                        <FilterBox
+                            factorLoad={factorLoad}
+                            factor={factor}
+                            key={factor}
+                        />
+                    ))}
                 </div>
 
                 <div className="buttonBox">

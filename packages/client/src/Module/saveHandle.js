@@ -25,7 +25,6 @@ const saveHandle = (name, data, callBack) => {
         processedData.description = 'test_description';
         processedData.css = 'test_lessCss';
         processedData.factor_id = 3;
-        // console.log(processedData);
         dataSet.push(processedData);
     });
     const reqBody = {
@@ -42,7 +41,7 @@ const saveHandle = (name, data, callBack) => {
             {
                 title: 'Description',
                 text: `${dataSet[0].description}`,
-                color: '#fff'
+                color: '#4d55b2'
             },
             {
                 fallback: '호재 정보를 database 에 저장하시겠습니까?',

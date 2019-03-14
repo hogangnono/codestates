@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import Line from './CustomOverlay/Line';
-import Arrow from './CustomOverlay/Arrow';
-import Circle from './CustomOverlay/Circle';
-import Rect from './CustomOverlay/Rect';
-import Polygon from './CustomOverlay/Polygon';
-import { API_USER_LOAD_PATH } from './constants';
+import Line from '../CustomOverlay/Line';
+import Arrow from '../CustomOverlay/Arrow';
+import Circle from '../CustomOverlay/Circle';
+import Rect from '../CustomOverlay/Rect';
+import Polygon from '../CustomOverlay/Polygon';
+import { API_USER_LOAD_PATH } from '../constants';
 const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
     axios
         .post(API_USER_LOAD_PATH, {
@@ -14,10 +14,10 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             factors
         })
         .then(async result => {
-            // toggle, this.drawList, map,
             const data = await result.data;
-            const resultData = await data[0];
-            const userData = await data[1];
+            // const resultData = await data[0];
+            // const userData = await data[1];
+            const [resultData, userData] = await data;
             const overlays = [Line, Arrow, Rect, Circle, Polygon];
             const nearbyFactors = [];
             let drawShape;
@@ -52,12 +52,10 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                 case 201:
                     if (userData && toggle) {
                         userData.map(async el => {
-                            // TODO:
                             drawing(el);
                         });
                     } else if (resultData && !toggle) {
                         resultData.map(async el => {
-                            // TODO:
                             drawing(el);
                         });
                     }
