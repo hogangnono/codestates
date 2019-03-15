@@ -33,7 +33,7 @@ class Drawing extends Component {
 
     fill = undefined;
 
-    factorBox = ['# 상권', '# 신축/재개발', '# 교육', '# 업무지구', '주택단지', '# 도로개통/확장', '# 지하철개통', '# 기타'];
+    factorBox = ['# 상권', '# 신축/재개발', '# 교육', '# 업무지구', '# 주택단지', '# 도로개통/확장', '# 지하철개통', '# 기타'];
 
     handleRequestSave = data => {
         const { name, toggleModal } = this.props;
@@ -58,7 +58,7 @@ class Drawing extends Component {
 
         let moveEvent;
         let figure;
-        const lineData = [];
+        let lineData = [];
         let isClick = false;
 
         for (let index = 0; index < icons.length; index++) {
@@ -82,12 +82,26 @@ class Drawing extends Component {
             // 처음 클릭시
             if (lineData.length === 1) {
                 lineData.push(position);
-                figure = new Shape({
-                    fill: this.fill,
-                    color: this.color,
-                    lineData: lineData,
-                    naverMap: map
-                });
+                // 호재를 선택한 경우
+                if (this.fill && this.color) {
+                    figure = new Shape({
+                        fill: this.fill,
+                        color: this.color,
+                        lineData: lineData,
+                        naverMap: map
+                    });
+                    figure.setMap(map);
+                } else {
+                    if (!this.fill && !this.color) {
+                        alert('도형 옵션과 호재를 선택해주세요');
+                    } else if (!this.fill) {
+                        alert('도형 옵션을 선택해주세요');
+                    } else if (!this.color) {
+                        alert('호재를 선택해주세요');
+                    }
+                    lineData = [];
+                    isClick = false;
+                }
             } else {
                 if (Shape.name === 'Rect' || Shape.name === 'Circle' || Shape.name === 'Line') {
                     updateDrawingData({
@@ -95,14 +109,16 @@ class Drawing extends Component {
                         lineData,
                         shapeType: Shape.name
                     });
+                    this.fill = undefined;
+                    this.color = undefined;
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                 } else {
                     figure.draw(lineData);
                 }
+                this.setState({ isInShapeCreateMode: false });
+                figure.setMap(map);
             }
-            figure.setMap(map);
-            this.setState({ isInShapeCreateMode: false });
         });
 
         moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
@@ -146,7 +162,6 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-        // console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
@@ -163,10 +178,9 @@ class Drawing extends Component {
     }
 
     decideFactor = (factorNum) => {
-        const colorList = ['Crimson', 'DarkOrange', 'SeaGreen', 'Navy', 'Indigo', 'Peru', 'HotPink', 'SlateGray'];
+        const colorList = ['Crimson', 'DarkOrange', 'SeaGreen', 'Navy', 'Indigo', 'Peru', 'HotPink', 'SlateGray', 'red'];
         this.color = colorList[factorNum];
     }
-
 
     render() {
         const {
@@ -197,19 +211,20 @@ class Drawing extends Component {
                     );
                 })}
                 {isInShapeCreateMode ? (
-                    <div>
-                        <div onClick={() => this.fillOrnot('fill')}
-                            onKeyPress={this.fillOrnot}
-                            role="button"
-                            tabIndex="0">채우기</div>
-                        <div onClick={() => this.fillOrnot('none')}
-                            onKeyPress={this.fillOrnot}
-                            role="button"
-                            tabIndex="0">비우기</div>
-
+                    <div className="selectOption">
+                        <div className="fillOrNot">
+                            <div onClick={() => this.fillOrnot('fill')}
+                                onKeyPress={this.fillOrnot}
+                                role="button"
+                                tabIndex="0">채우기</div>
+                            <div onClick={() => this.fillOrnot('none')}
+                                onKeyPress={this.fillOrnot}
+                                role="button"
+                                tabIndex="0">비우기</div>
+                        </div>
                         {this.factorBox.map((factor, idx) => {
                             return (
-                                <div key={idx++} onClick={() => this.decideFactor(idx)}
+                                <div className="filterBtn" key={idx++} onClick={() => this.decideFactor(idx)}
                                     onKeyPress={this.decideFactor}
                                     role="button"
                                     tabIndex="0">{factor}
