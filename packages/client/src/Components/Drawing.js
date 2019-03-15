@@ -82,7 +82,7 @@ class Drawing extends Component {
             // 처음 클릭시
             if (lineData.length === 1) {
                 lineData.push(position);
-                // 호재를 선택한 경우
+                // 호재와 채우기를 선택한 경우
                 if (this.fill && this.color) {
                     figure = new Shape({
                         fill: this.fill,
@@ -109,6 +109,7 @@ class Drawing extends Component {
                         lineData,
                         shapeType: Shape.name
                     });
+                    lineData.pop();
                     this.fill = undefined;
                     this.color = undefined;
                     naver.maps.Event.removeListener(moveEvent);
@@ -146,6 +147,7 @@ class Drawing extends Component {
                         shapeType: Shape.name
                     });
                 }
+                this.setState({ isInShapeCreateMode: false });
                 naver.maps.Event.removeListener(moveEvent);
                 naver.maps.Event.removeListener(leftClick);
             }
