@@ -9,7 +9,6 @@ import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 import saveHandle from '../Module/saveHandle';
-import * as post from '../postSlackApi';
 
 class Drawing extends Component {
     static propTypes = {
@@ -187,7 +186,8 @@ class Drawing extends Component {
             map,
             handleToggle,
             drawingData,
-            NearByFactorItems
+            // NearByFactorItems,
+            updateDrawingData
         } = this.props;
         const { selectedButton, shapes, isInShapeCreateMode } = this.state;
         const doNotShowTips = JSON.parse(
@@ -235,7 +235,10 @@ class Drawing extends Component {
                     </div>
                 ) : null}
                 <div id="myDrawingsContainer">
-                    <MyDrawingElement drawingData={drawingData} />
+                    <MyDrawingElement
+                        drawingData={drawingData}
+                        updateDrawingData={updateDrawingData}
+                    />
                 </div>
                 <div id="saveCloseBtns">
                     <button
@@ -243,7 +246,6 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
-                            post.slackApi('hogangnono', NearByFactorItems);
                         }}
                     >
                         {`저장`}
