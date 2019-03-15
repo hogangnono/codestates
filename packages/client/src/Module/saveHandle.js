@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { SLACK_GENERAL_PATH } from '../constants';
+import * as ipsumLorem from './randomIpsumLorem';
 
 const saveHandle = (name, data, callBack) => {
     // console.log('===================');
@@ -26,9 +27,10 @@ const saveHandle = (name, data, callBack) => {
         processedData.end_lat = _lineData[_lineData.length - 1].coord._lat;
         processedData.end_lng = _lineData[_lineData.length - 1].coord._lat;
         processedData.figures = JSON.stringify(figuresData);
-        processedData.description = 'test_description';
+        processedData.title = ipsumLorem.randomTitle();
+        processedData.description = ipsumLorem.randomDescription();
         processedData.css = JSON.stringify(figuresCss);
-        processedData.factor_id = 3;
+        processedData.factor_id = Math.floor(Math.random() * (8 - 0));
         dataSet.push(processedData);
     });
     const reqBody = {
