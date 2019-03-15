@@ -24,6 +24,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             console.log(resultData);
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
+                const { fill, color } = JSON.parse(el.css);
                 const { description, factor_id, id } = el;
                 const factorNearby = {
                     description: description,
@@ -40,6 +41,8 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                         }
                     }
                     const overlay = new drawShape({
+                        fill,
+                        color,
                         lineData,
                         naverMap: map,
                         zoom: zoomLevel

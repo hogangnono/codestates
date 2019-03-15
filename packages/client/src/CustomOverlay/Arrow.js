@@ -17,18 +17,18 @@ Arrow.prototype.addShape = function() {
     .attr('markerUnits', 'userSpaceOnUse')
     .attr('orient', 'auto')
     .append('path')
-    .attr('d', 'M 0 0 12 6 0 12 3 6')
-    .style('fill', 'black')
+    .attr('d', 'M 12 0 0 6 12 12 9 6')
+    .style('fill', this._color)
     .style('stroke', 'none');
     this._path = this.svg.append('path');
 };
 
-Arrow.prototype.addAttribute = function(line) {
-    this._path.attr('d', line(this._newlineData))
-            .attr('stroke', 'black')
+Arrow.prototype.addAttribute = function(line, newlineData) {
+    this._path.attr('d', line(newlineData))
+            .attr('stroke', this._color)
             .attr('stroke-width', 3)
             .attr('fill', 'none')
-            .attr('marker-end', 'url(#triangle)');
+            .attr('marker-start', 'url(#triangle)');
 };
 
 export default Arrow;
