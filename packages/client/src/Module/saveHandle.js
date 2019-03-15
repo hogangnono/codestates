@@ -15,6 +15,10 @@ const saveHandle = (name, data, callBack) => {
         figuresData.lineData = oneShape.figure._lineData;
         figuresData.zoomLevel = oneShape.figure._zoom;
 
+        const figuresCss = {};
+        figuresCss.fill = oneShape.figure._fill;
+        figuresCss.color = oneShape.figure._color;
+
         const processedData = {};
         const _lineData = oneShape.figure._lineData;
         processedData.start_lat = _lineData[0].coord._lat;
@@ -23,7 +27,7 @@ const saveHandle = (name, data, callBack) => {
         processedData.end_lng = _lineData[_lineData.length - 1].coord._lat;
         processedData.figures = JSON.stringify(figuresData);
         processedData.description = 'test_description';
-        processedData.css = 'test_lessCss';
+        processedData.css = JSON.stringify(figuresCss);
         processedData.factor_id = 3;
         dataSet.push(processedData);
     });
