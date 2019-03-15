@@ -9,6 +9,7 @@ import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 import saveHandle from '../Module/saveHandle';
+// import * as puppeteer from '../Module/puppeteer';
 
 class Drawing extends Component {
     static propTypes = {
@@ -200,6 +201,7 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
+                            // puppeteer.captureImage();
                         }}
                     >
                         {`저장`}
