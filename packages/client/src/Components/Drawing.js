@@ -33,6 +33,8 @@ class Drawing extends Component {
 
     fill = undefined;
 
+    factorBox = ['# 상권', '# 신축/재개발', '# 교육', '# 업무지구', '주택단지', '# 도로개통/확장', '# 지하철개통', '# 기타'];
+
     handleRequestSave = data => {
         const { name, toggleModal } = this.props;
         saveHandle(name, data, toggleModal);
@@ -100,6 +102,7 @@ class Drawing extends Component {
                 }
             }
             figure.setMap(map);
+            this.setState({ isInShapeCreateMode: false });
         });
 
         moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
@@ -108,7 +111,6 @@ class Drawing extends Component {
                 const { coord, offset } = e;
                 position = { coord, offset };
                 lineData[lineData.length - 1] = position;
-                this.setState({ isInShapeCreateMode: false });
                 figure.draw(lineData);
             }
         });
@@ -144,7 +146,6 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-        console.log('선택되었어!');
         // console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
@@ -165,6 +166,7 @@ class Drawing extends Component {
         const colorList = ['Crimson', 'DarkOrange', 'SeaGreen', 'Navy', 'Indigo', 'Peru', 'HotPink', 'SlateGray'];
         this.color = colorList[factorNum];
     }
+
 
     render() {
         const {
@@ -194,48 +196,28 @@ class Drawing extends Component {
                         />
                     );
                 })}
-                <div>
-                    <div onClick={() => this.fillOrnot('fill')}
-                        onKeyPress={this.fillOrnot}
-                        role="button"
-                        tabIndex="0">채우기</div>
-                    <div onClick={() => this.fillOrnot('none')}
-                        onKeyPress={this.fillOrnot}
-                        role="button"
-                        tabIndex="0">비우기</div>
-                    <div onClick={() => this.decideFactor(0)}
-                        onKeyPress={this.decideFactor}
-                        role="button"
-                        tabIndex="0"># 상권</div>
-                    <div onClick={() => this.decideFactor(1)}
-                        onKeyPress={this.decideFactor}
-                        role="button"
-                        tabIndex="0"># 신축/재개발</div>
-                    <div onClick={() => this.decideFactor(2)}
-                        onKeyPress={this.decideFactor}
-                        role="button"
-                        tabIndex="0"># 교육</div>
-                    <div onClick={() => this.decideFactor(3)}
-                        onKeyPress={this.decideFactor}
-                        role="button"
-                        tabIndex="0"># 업무지구</div>
-                    <div onClick={() => this.decideFactor(4)}
-                        onKeyPress={this.decideFactor}
-                        role="button"
-                        tabIndex="0"># 주택단지</div>
-                    <div onClick={() => this.decideFactor(5)}
-                        onKeyPress={this.decideFactor}
-                        role="button"
-                        tabIndex="0"># 도로개통/확장</div>
-                    <div onClick={() => this.decideFactor(6)}
-                        onKeyPress={this.decideFactor}
-                        role="button"
-                        tabIndex="0"># 지하철개통</div>
-                    <div onClick={() => this.decideFactor(7)}
-                        onKeyPress={this.decideFactor}
-                        role="button"
-                        tabIndex="0"># 기타</div>
-                </div>
+                {isInShapeCreateMode ? (
+                    <div>
+                        <div onClick={() => this.fillOrnot('fill')}
+                            onKeyPress={this.fillOrnot}
+                            role="button"
+                            tabIndex="0">채우기</div>
+                        <div onClick={() => this.fillOrnot('none')}
+                            onKeyPress={this.fillOrnot}
+                            role="button"
+                            tabIndex="0">비우기</div>
+
+                        {this.factorBox.map((factor, idx) => {
+                            return (
+                                <div key={idx++} onClick={() => this.decideFactor(idx)}
+                                    onKeyPress={this.decideFactor}
+                                    role="button"
+                                    tabIndex="0">{factor}
+                                </div>
+                            );
+                        })}
+                    </div>
+                ) : null}
                 <div id="myDrawingsContainer">
                     <MyDrawingElement drawingData={drawingData} />
                 </div>
