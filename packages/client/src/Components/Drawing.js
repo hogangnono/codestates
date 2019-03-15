@@ -28,6 +28,12 @@ class Drawing extends Component {
         refresh: true
     };
 
+    color = undefined;
+
+    fill = undefined;
+
+    factorBox = ['# 상권', '# 신축/재개발', '# 교육', '# 업무지구', '# 주택단지', '# 도로개통/확장', '# 지하철개통', '# 기타'];
+
     handleRequestSave = data => {
         const { name, toggleModal } = this.props;
         saveHandle(name, data, toggleModal);
@@ -51,7 +57,7 @@ class Drawing extends Component {
 
         let moveEvent;
         let figure;
-        const lineData = [];
+        let lineData = [];
         let isClick = false;
 
         for (let index = 0; index < icons.length; index++) {
@@ -68,7 +74,6 @@ class Drawing extends Component {
         }
 
         const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-            // console.log('왼쪽버튼을 클릭하지');
             const { coord, offset } = e;
             position = { coord, offset };
             lineData.push(position);
@@ -76,24 +81,44 @@ class Drawing extends Component {
             // 처음 클릭시
             if (lineData.length === 1) {
                 lineData.push(position);
-                figure = new Shape({
-                    lineData: lineData,
-                    naverMap: map
-                });
+                // 호재와 채우기를 선택한 경우
+                if (this.fill && this.color) {
+                    figure = new Shape({
+                        fill: this.fill,
+                        color: this.color,
+                        lineData: lineData,
+                        naverMap: map
+                    });
+                    figure.setMap(map);
+                } else {
+                    if (!this.fill && !this.color) {
+                        alert('도형 옵션과 호재를 선택해주세요');
+                    } else if (!this.fill) {
+                        alert('도형 옵션을 선택해주세요');
+                    } else if (!this.color) {
+                        alert('호재를 선택해주세요');
+                    }
+                    lineData = [];
+                    isClick = false;
+                }
             } else {
-                if (Shape.name === 'Rect' || Shape.name === 'Circle') {
+                if (Shape.name === 'Rect' || Shape.name === 'Circle' || Shape.name === 'Line') {
                     updateDrawingData({
                         figure,
                         lineData,
                         shapeType: Shape.name
                     });
+                    lineData.pop();
+                    this.fill = undefined;
+                    this.color = undefined;
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
+                    this.setState({ isInShapeCreateMode: false });
                 } else {
                     figure.draw(lineData);
                 }
+                figure.setMap(map);
             }
-            figure.setMap(map);
         });
 
         moveEvent = naver.maps.Event.addListener(map, 'mousemove', e => {
@@ -102,31 +127,31 @@ class Drawing extends Component {
                 const { coord, offset } = e;
                 position = { coord, offset };
                 lineData[lineData.length - 1] = position;
-                this.setState({ isInShapeCreateMode: false });
                 figure.draw(lineData);
             }
         });
 
-        const rightClick = naver.maps.Event.addListener(
-            map,
-            'rightclick',
-            e => {
-                if (
-                    Shape.name === 'Line'
-                    || Shape.name === 'Polygon'
-                    || Shape.name === 'Arrow'
-                ) {
-                    naver.maps.Event.removeListener(moveEvent);
+        const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
+            if (Shape.name === 'Polygon' || Shape.name === 'Arrow') {
+                // 해당 포인트를 지워줌
+                lineData.pop();
+                // 첫 클릭 이후 우클릭을 한 경우
+                if (lineData.length === 1) {
+                    figure.onRemove();
+                } else {
+                    figure.draw(lineData);
                     updateDrawingData({
                         figure,
                         lineData,
                         shapeType: Shape.name
                     });
-                    naver.maps.Event.removeListener(leftClick);
                 }
-                naver.maps.Event.removeListener(rightClick);
+                this.setState({ isInShapeCreateMode: false });
+                naver.maps.Event.removeListener(moveEvent);
+                naver.maps.Event.removeListener(leftClick);
             }
-        );
+            naver.maps.Event.removeListener(rightClick);
+        });
         this.setState({
             loadedListener: {
                 leftClick,
@@ -136,7 +161,6 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-        // console.log('selectedIcon: ', selectedIcon);
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
@@ -147,6 +171,15 @@ class Drawing extends Component {
         sessionStorage.setItem('doNotShowTipsForDrawing', JSON.stringify(true));
         this.setState({ refresh: !refresh });
     };
+
+    fillOrnot = (fillval) => {
+        this.fill = fillval;
+    }
+
+    decideFactor = (factorNum) => {
+        const colorList = ['Crimson', 'DarkOrange', 'SeaGreen', 'Navy', 'Indigo', 'Peru', 'HotPink', 'SlateGray', 'red'];
+        this.color = colorList[factorNum];
+    }
 
     render() {
         const {
@@ -160,6 +193,7 @@ class Drawing extends Component {
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
         );
+
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -177,6 +211,29 @@ class Drawing extends Component {
                         />
                     );
                 })}
+                {isInShapeCreateMode ? (
+                    <div className="selectOption">
+                        <div className="fillOrNot">
+                            <div onClick={() => this.fillOrnot('fill')}
+                                onKeyPress={this.fillOrnot}
+                                role="button"
+                                tabIndex="0">채우기</div>
+                            <div onClick={() => this.fillOrnot('none')}
+                                onKeyPress={this.fillOrnot}
+                                role="button"
+                                tabIndex="0">비우기</div>
+                        </div>
+                        {this.factorBox.map((factor, idx) => {
+                            return (
+                                <div className="filterBtn" key={idx++} onClick={() => this.decideFactor(idx)}
+                                    onKeyPress={this.decideFactor}
+                                    role="button"
+                                    tabIndex="0">{factor}
+                                </div>
+                            );
+                        })}
+                    </div>
+                ) : null}
                 <div id="myDrawingsContainer">
                     <MyDrawingElement
                         drawingData={drawingData}

@@ -11,7 +11,7 @@ var Line = function(options) {
 Line.prototype = Object.create(Shape.prototype);
 Line.prototype.constructor = Line;
 
-Line.prototype.setShape = function() {
+Line.prototype.setShape = function(spare) {
     if (!this._min || !this._max) {
         // deep copy
         this._min = JSON.parse(JSON.stringify(this._lineData[0]));
@@ -43,31 +43,33 @@ Line.prototype.setShape = function() {
             this._heightDiff = Math.abs(this._lineData[0].offset.y - this._max.offset.y);
         }
     }
-    this._width = Math.abs(this._max.offset.x - this._min.offset.x) + 1;
-    this._height = Math.abs(this._max.offset.y - this._min.offset.y) + 1;
+    this._width = Math.abs(this._max.offset.x - this._min.offset.x) + spare + 2;
+    this._height = Math.abs(this._max.offset.y - this._min.offset.y) + spare + 2;
     // 새로운 시작점을 정해줌 (lineData[0] 찍은 위치, lineData[1]는 현재 마우스 위치)
     this._startPos.x = this._min.coord.x;
     this._startPos.y = this._max.coord.y;
 };
 
-Line.prototype.setPath = function() {
+Line.prototype.setPath = function(flag) {
     const projection = this.getProjection();
-    const s = projection.fromCoordToOffset(this._lineData[0].coord);
+    const firstPoint = projection.fromCoordToOffset(this._lineData[0].coord);
+    const newlineData = [];
+
     for (let i = 0; i < this._lineData.length; i++) {
         const obj = {};
-        obj.x = projection.fromCoordToOffset(this._lineData[i].coord).x - s.x + this._widthDiff * 2 ** this._ratio;
-        obj.y = projection.fromCoordToOffset(this._lineData[i].coord).y - s.y + this._heightDiff * 2 ** this._ratio;
-        this._newlineData[i] = obj;
+        obj.x = projection.fromCoordToOffset(this._lineData[i].coord).x - firstPoint.x + this._widthDiff * 2 ** this._ratio + 12;
+        obj.y = projection.fromCoordToOffset(this._lineData[i].coord).y - firstPoint.y + this._heightDiff * 2 ** this._ratio + 12;
+        newlineData.push(obj);
     }
     const line = d3.line()
                 .x(function(d) { return (d.x); })
                 .y(function(d) { return (d.y); });
-    this.addAttribute(line);
+    this.addAttribute(line, newlineData);
 };
 
-Line.prototype.addAttribute = function(line) {
-    this._path.attr('d', line(this._newlineData))
-            .attr('stroke', 'black')
+Line.prototype.addAttribute = function(line, newlineData) {
+    this._path.attr('d', line(newlineData))
+            .attr('stroke', this._color)
             .attr('stroke-width', 3)
             .attr('fill', 'none');
 };
