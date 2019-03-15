@@ -113,10 +113,10 @@ class Drawing extends Component {
                     this.color = undefined;
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
+                    this.setState({ isInShapeCreateMode: false });
                 } else {
                     figure.draw(lineData);
                 }
-                this.setState({ isInShapeCreateMode: false });
                 figure.setMap(map);
             }
         });
@@ -131,28 +131,26 @@ class Drawing extends Component {
             }
         });
 
-        const rightClick = naver.maps.Event.addListener(
-            map,
-            'rightclick',
-            e => {
-                if (
-                    Shape.name === 'Polygon'
-                    || Shape.name === 'Arrow'
-                ) {
-                    // 해당 포인트를 지워줌
-                    lineData.pop();
+        const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
+            if (Shape.name === 'Polygon' || Shape.name === 'Arrow') {
+                // 해당 포인트를 지워줌
+                lineData.pop();
+                // 첫 클릭 이후 우클릭을 한 경우
+                if (lineData.length === 1) {
+                    figure.onRemove();
+                } else {
                     figure.draw(lineData);
-                    naver.maps.Event.removeListener(moveEvent);
                     updateDrawingData({
                         figure,
                         lineData,
                         shapeType: Shape.name
                     });
-                    naver.maps.Event.removeListener(leftClick);
                 }
-                naver.maps.Event.removeListener(rightClick);
+                naver.maps.Event.removeListener(moveEvent);
+                naver.maps.Event.removeListener(leftClick);
             }
-        );
+            naver.maps.Event.removeListener(rightClick);
+        });
         this.setState({
             loadedListener: {
                 leftClick,
@@ -193,6 +191,7 @@ class Drawing extends Component {
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
         );
+
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
