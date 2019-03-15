@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import drawData from './loadHandle';
+import drawData from './Module/loadHandle';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
@@ -172,13 +172,11 @@ class App extends Component {
         }
     };
 
-    deleteDrawingData = index => {
-    }
+    deleteDrawingData = index => {};
 
     mainToggle = (stateName, toggle) => {
         this.setState({ [stateName]: !toggle });
     };
-
 
     factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;

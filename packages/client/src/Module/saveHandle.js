@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { API_USER_SAVE_PATH } from '../constants';
+import { SLACK_GENERAL_PATH } from '../constants';
 
 const saveHandle = (name, data, callBack) => {
-    console.log('===================');
-    console.log('saveHandle 함수가 호출되었습니다.');
+    // console.log('===================');
+    // console.log('saveHandle 함수가 호출되었습니다.');
     const token = JSON.parse(localStorage.getItem('token'));
+    // console.log('data in saveHandle : ', data);
 
     const dataSet = [];
 
@@ -30,8 +31,42 @@ const saveHandle = (name, data, callBack) => {
         name: name,
         data: dataSet
     };
-    console.log('reqBOdy :\n', reqBody);
-    console.log('===================');
+    const options = {
+        // mrkdwn: true,
+        attachments: [
+            {
+                title: `${name}님의 호재 정보입니다.`,
+                color: '#4d55b2'
+            },
+            {
+                title: 'Description',
+                text: `${dataSet[0].description}`,
+                color: '#4d55b2'
+            },
+            {
+                fallback: '호재 정보를 database 에 저장하시겠습니까?',
+                title: '호재 정보를 database 에 저장하시겠습니까??',
+                color: '#4d55b2',
+                attachment_type: 'default',
+                callback_id: 'sendData',
+                actions: [
+                    {
+                        name: 'Accept',
+                        text: 'Accept',
+                        type: 'button',
+                        value: JSON.stringify(reqBody)
+                    },
+                    {
+                        name: 'Refuse',
+                        text: 'Refuse',
+                        style: 'danger',
+                        type: 'button',
+                        value: 'Refuse'
+                    }
+                ]
+            }
+        ]
+    };
 
     if (token) {
         if (!data.length) {
@@ -41,8 +76,11 @@ const saveHandle = (name, data, callBack) => {
         }
 
         return axios
-            .post(API_USER_SAVE_PATH, reqBody)
-            .then(result => alert('성공적으로 저장되었습니다.'))
+            .post(SLACK_GENERAL_PATH, JSON.stringify(options))
+            .then(result => {
+                alert('성공적으로 데이터를 보냈습니다.');
+                console.log('SUCCEEDED: Sent slack webhook: \n', result.data);
+            })
             .catch(err => {
                 alert(
                     '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'

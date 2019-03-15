@@ -19,17 +19,13 @@ export default class NearbyFactorDialog extends Component {
                 </div>
                 <div className="scrollBox">
                     {NearByFactorItems.length ? (
-                        NearByFactorItems.map((factorItem, i) => {
-                            // jihye: index 사용하면 lint error 있어서 새 index 생성하고 그걸 key값으로 넣었어요.
-                            const newIndex = i + 1;
-                            return (
-                                <NearbyFactorItem
-                                    description={factorItem.description}
-                                    factor_id={factorItem.factor_id}
-                                    key={factorItem.description + newIndex}
-                                />
-                            );
-                        })
+                        NearByFactorItems.map((factorItem, index) => (
+                            <NearbyFactorItem
+                                description={factorItem.description}
+                                factor_id={factorItem.factor_id}
+                                key={index++}
+                            />
+                        ))
                     ) : (
                         <div>loading</div>
                     )}

@@ -9,7 +9,6 @@ import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 import saveHandle from '../Module/saveHandle';
-import * as post from '../postSlackApi';
 
 class Drawing extends Component {
     static propTypes = {
@@ -43,12 +42,15 @@ class Drawing extends Component {
         naver.maps.Event.removeListener(rightClick);
     };
 
-    handleShowingDescriptionModal = (event) => {
+    handleShowingDescriptionModal = event => {
         const { drawingData } = this.props;
         console.log('event.target : ', event.target);
-        console.log('drawingData.figure._element', drawingData[0].figure._element);
+        console.log(
+            'drawingData.figure._element',
+            drawingData[0].figure._element
+        );
         // this.setState({ showDescriptionModal: });
-    }
+    };
 
     createShapeTest = selectedIcon => {
         let position;
@@ -77,7 +79,7 @@ class Drawing extends Component {
         }
 
         const leftClick = naver.maps.Event.addListener(map, 'click', e => {
-            console.log('왼쪽버튼을 클릭하지');
+            // console.log('왼쪽버튼을 클릭하지');
             const { coord, offset } = e;
             position = { coord, offset };
             lineData.push(position);
@@ -162,7 +164,7 @@ class Drawing extends Component {
             map,
             handleToggle,
             drawingData,
-            NearByFactorItems,
+            // NearByFactorItems,
             updateDrawingData
         } = this.props;
         const { selectedButton, shapes, isInShapeCreateMode } = this.state;
@@ -187,7 +189,10 @@ class Drawing extends Component {
                     );
                 })}
                 <div id="myDrawingsContainer">
-                    <MyDrawingElement drawingData={drawingData} updateDrawingData={updateDrawingData} />
+                    <MyDrawingElement
+                        drawingData={drawingData}
+                        updateDrawingData={updateDrawingData}
+                    />
                 </div>
                 <div id="saveCloseBtns">
                     <button
@@ -195,7 +200,6 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
-                            post.slackApi('hogangnono', NearByFactorItems);
                         }}
                     >
                         {`저장`}

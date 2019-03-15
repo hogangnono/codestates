@@ -10,7 +10,8 @@ class DrawContainer extends Component {
         handleToggle: PropTypes.func.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-        name: PropTypes.string
+        name: PropTypes.string.isRequired,
+        NearByFactorItems: PropTypes.array.isRequired
     };
 
     render() {

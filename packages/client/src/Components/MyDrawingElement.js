@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
 import { IoMdTrash } from 'react-icons/io';
-// import Circle from './CustomOverlay/Circle';
 
 class MyDrawingElement extends Component {
     static propTypes = {
@@ -10,7 +9,7 @@ class MyDrawingElement extends Component {
         updateDrawingData: PropTypes.func
     };
 
-    deleteShape = (event) => {
+    deleteShape = event => {
         const { drawingData, updateDrawingData } = this.props;
         const getIndex = event.target.parentNode.parentNode.attributes.value.value;
         updateDrawingData(drawingData, true, getIndex);
