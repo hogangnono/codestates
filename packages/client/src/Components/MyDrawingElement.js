@@ -2,6 +2,36 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
 import { IoMdTrash } from 'react-icons/io';
+import {
+    FaSlash,
+    FaCircle,
+    FaSquareFull,
+    FaDrawPolygon,
+    FaArrowLeft
+} from 'react-icons/fa';
+
+const type = {
+    Line: {
+        korean: '선',
+        component: (<FaSlash />)
+    },
+    Arrow: {
+        korean: '화살표',
+        component: (<FaArrowLeft />)
+    },
+    Rect: {
+        korean: '사각형',
+        component: (<FaSquareFull />)
+    },
+    Circle: {
+        korean: '원',
+        component: (<FaCircle />)
+    },
+    Polygon: {
+        korean: '다각형',
+        component: (<FaDrawPolygon />)
+    }
+};
 
 class MyDrawingElement extends Component {
     static propTypes = {
@@ -22,9 +52,11 @@ class MyDrawingElement extends Component {
             <div>
                 {drawingData.map((shapeData, index) => {
                     const newIndex = index + 1;
+                    const shapeType = shapeData.shapeType;
                     return (
                         <div className="drewShape" key={newIndex} value={index}>
-                            <span>{shapeData.shapeType}</span>
+                            {type[shapeType].component}
+                            <span>{type[shapeType].korean}</span>
                             <IoMdTrash
                                 className="deleteDrawingDataIcon"
                                 onClick={this.deleteShape}
