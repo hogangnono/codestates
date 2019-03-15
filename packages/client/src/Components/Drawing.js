@@ -25,7 +25,6 @@ class Drawing extends Component {
         selectedButton: null,
         loadedListener: null,
         isInShapeCreateMode: false,
-        showDescriptionModal: false,
         refresh: true
     };
 
@@ -40,16 +39,6 @@ class Drawing extends Component {
         const { rightClick } = this.state;
         naver.maps.Event.removeListener(leftClick);
         naver.maps.Event.removeListener(rightClick);
-    };
-
-    handleShowingDescriptionModal = event => {
-        const { drawingData } = this.props;
-        console.log('event.target : ', event.target);
-        console.log(
-            'drawingData.figure._element',
-            drawingData[0].figure._element
-        );
-        // this.setState({ showDescriptionModal: });
     };
 
     createShapeTest = selectedIcon => {
