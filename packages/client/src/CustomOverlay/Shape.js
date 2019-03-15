@@ -34,13 +34,16 @@ Shape.prototype.addShape = function() {
 };
 
 Shape.prototype.draw = function(lineData) {
+    // 도형들이 짤리지 않게 만드는 여유공간
+    const spare = 12;
+
     if (!this.getMap()) {
         return;
     }
     if (lineData) {
         this._lineData = lineData;
     }
-    this.setShape();
+    this.setShape(spare);
 
     const projection = this.getProjection();
     const position = this._startPos;
@@ -48,8 +51,8 @@ Shape.prototype.draw = function(lineData) {
 
     this._element.style.position = 'absolute';
     // div의 위치를 offset으로 변경해 붙임
-    this._element.style.top = `${pixelPosition.y}px`;
-    this._element.style.left = `${pixelPosition.x}px`;
+    this._element.style.top = `${pixelPosition.y - spare}px`;
+    this._element.style.left = `${pixelPosition.x - spare}px`;
 
     // 도형을 생성할때의 지도 비율과 현재 지도 비율을 비교해 비율을 계산
     this._ratio = this._map.getZoom() - this._zoom;
@@ -66,7 +69,6 @@ Shape.prototype.draw = function(lineData) {
     // svg를 원 크기에 맞게 생성
     svg.style.width = `${this._widthRatio}px`;
     svg.style.height = `${this._heightRatio}px`;
-
     this.setPath();
 };
 
