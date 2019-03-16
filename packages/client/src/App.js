@@ -30,9 +30,7 @@ class App extends Component {
             NearByFactorItems: [],
             descriptionModalState: false,
             descriptionValue: '',
-            descriptionTitle: '',
-            savedValue: '',
-            savedTitle: ''
+            descriptionTitle: ''
             // NearByFilteringItems: []
         };
     }
@@ -284,9 +282,7 @@ class App extends Component {
             activeFilter,
             activeDraw,
             MyInfoButton,
-            NearByFactorItems,
-            savedValue,
-            savedTitle
+            NearByFactorItems
         } = this.state;
         // const mainButton = [
         //     {
@@ -389,8 +385,6 @@ class App extends Component {
                             toggleModal={this.toggleModal}
                             NearByFactorItems={NearByFactorItems}
                             descriptionModalShow={this.descriptionModalShow}
-                            savedDescriptionValue={savedValue}
-                            savedDescriptionTitle={savedTitle}
                         />
                     </div>
                 </div>
