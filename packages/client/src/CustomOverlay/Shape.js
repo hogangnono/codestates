@@ -69,7 +69,7 @@ Shape.prototype.draw = function(lineData) {
     // svg를 원 크기에 맞게 생성
     svg.style.width = `${this._widthRatio}px`;
     svg.style.height = `${this._heightRatio}px`;
-    this.setPath();
+    this.setPath(spare);
 };
 
 Shape.prototype.setShape = function() {};
