@@ -35,8 +35,8 @@ class Drawing extends Component {
     fill = undefined;
 
     handleRequestSave = data => {
-        const { name, toggleModal } = this.props;
-        saveHandle(name, data, toggleModal);
+        const { name, toggleModal, savedDescriptionValue, savedDescriptionTitle } = this.props;
+        saveHandle(name, data, toggleModal, savedDescriptionValue, savedDescriptionTitle);
     };
 
     removeListener = () => {
@@ -50,7 +50,7 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let position;
         const naver = window.naver;
-        const { map, updateDrawingData } = this.props;
+        const { map, updateDrawingData, descriptionModalShow } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
@@ -118,6 +118,7 @@ class Drawing extends Component {
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                     this.setState({ isInShapeCreateMode: false });
+                    descriptionModalShow();
                 } else {
                     figure.draw(lineData);
                 }
@@ -154,6 +155,7 @@ class Drawing extends Component {
                         });
                     }
                     this.setState({ isInShapeCreateMode: false });
+                    descriptionModalShow();
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                 }

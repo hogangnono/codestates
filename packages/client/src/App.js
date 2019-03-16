@@ -27,7 +27,12 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: []
+            NearByFactorItems: [],
+            descriptionModalState: false,
+            descriptionValue: '',
+            descriptionTitle: '',
+            savedValue: '',
+            savedTitle: ''
             // NearByFilteringItems: []
         };
     }
@@ -223,6 +228,51 @@ class App extends Component {
         drawData(name, bound, factors, toggle, this.drawList, map, nearbyData);
     };
 
+    handleChangeDescription = event => {
+        this.setState({ descriptionValue: event.target.value });
+    }
+
+    handleChangeTitle = event => {
+        this.setState({ descriptionTitle: event.target.value });
+    }
+
+    descriptionModal = () => {
+        const { descriptionModalState, descriptionValue, descriptionTitle } = this.state;
+        if (descriptionModalState) {
+            return (
+                <div className="descriptionModal">
+                    {/* <h3 className="descriptionHeader">Description Modal</h3> */}
+                    <textarea placeholder="Add Title..." className="descriptionInputTitle" type="text" value={descriptionTitle} onChange={this.handleChangeTitle}></textarea>
+                    <textarea placeholder="Add description..." className="descriptionInput" type="text" value={descriptionValue} onChange={this.handleChangeDescription}></textarea>
+                    <button className="descriptionCloser" type="button" onClick={this.descriptionModalHide}>Close</button>
+                    <button className="descriptionSave" type="button" onClick={this.descriptionModalSave}>저장</button>
+                </div>
+            );
+        } else {
+            return <div></div>;
+        }
+    }
+
+    descriptionModalHide = () => {
+        this.setState({ descriptionModalState: false });
+        this.setState({ descriptionValue: '' });
+        this.setState({ descriptionTitle: '' });
+    }
+
+    descriptionModalSave = () => {
+        const { descriptionValue, descriptionTitle, drawingData } = this.state;
+        this.setState({ descriptionModalState: false });
+        const arrayOfShapes = drawingData;
+        console.log(arrayOfShapes[arrayOfShapes.length - 1]);
+        arrayOfShapes[arrayOfShapes.length - 1].title = descriptionTitle;
+        arrayOfShapes[arrayOfShapes.length - 1].value = descriptionValue;
+        this.setState({ drawingData: arrayOfShapes });
+    }
+
+    descriptionModalShow = () => {
+        this.setState({ descriptionModalState: true });
+    }
+
     render() {
         const {
             map,
@@ -234,7 +284,9 @@ class App extends Component {
             activeFilter,
             activeDraw,
             MyInfoButton,
-            NearByFactorItems
+            NearByFactorItems,
+            savedValue,
+            savedTitle
         } = this.state;
         // const mainButton = [
         //     {
@@ -256,6 +308,7 @@ class App extends Component {
         //         onClick: () => this.mainToggle('showDraw', showDraw)
         //     }
         // ];
+        console.log('check: ', drawingData);
         return (
             <div id="wrapper">
                 <div id="map">
@@ -335,8 +388,14 @@ class App extends Component {
                             updateDrawingData={this.updateDrawingData}
                             toggleModal={this.toggleModal}
                             NearByFactorItems={NearByFactorItems}
+                            descriptionModalShow={this.descriptionModalShow}
+                            savedDescriptionValue={savedValue}
+                            savedDescriptionTitle={savedTitle}
                         />
                     </div>
+                </div>
+                <div>
+                    <this.descriptionModal />
                 </div>
             </div>
         );
