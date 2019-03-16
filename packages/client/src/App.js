@@ -113,6 +113,7 @@ class App extends Component {
 
     toggleDraw = () => {
         const { showDraw } = this.state;
+        this.setState({ descriptionModalState: false });
         this.setState({ showDraw: !showDraw });
     };
 
@@ -142,6 +143,7 @@ class App extends Component {
                     drawingData[index].figure.onRemove();
                 }
                 this.setState({ drawingData: [] });
+                this.setState({ descriptionModalState: false });
             } else if (!pressedConfirm) {
                 return;
             }
@@ -350,6 +352,7 @@ class App extends Component {
                             onClick={() => {
                                 if (activeFilter === '') {
                                     this.showDraw();
+                                    this.descriptionModalHide();
                                 }
                             }}
                             onKeyPress={() => this.showDraw}
@@ -385,6 +388,7 @@ class App extends Component {
                             toggleModal={this.toggleModal}
                             NearByFactorItems={NearByFactorItems}
                             descriptionModalShow={this.descriptionModalShow}
+                            descriptionModalHide={this.descriptionModalHide}
                         />
                     </div>
                 </div>

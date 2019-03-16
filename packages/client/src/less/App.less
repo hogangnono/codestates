@@ -93,15 +93,35 @@ button {
 }
 
 .descriptionModal {
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   background-color: white;
-  top: 700px;
-  left: 600px;
+  bottom: 25px;
+  left: 790px;
   box-shadow: 2px 2px 5px;
   height: 200px;
   width: 340px;
   border-radius: 8px;
+
+  // -webkit-animation-name: fadeIn;
+  // -webkit-animation-duration: 0.4s;
+  // animation-name: fadeIn;
+  // animation-duration: 0.4s;
+
+  -webkit-animation-name: slideIn;
+  -webkit-animation-duration: 0.4s;
+  animation-name: slideIn;
+  animation-duration: 0.4s;
+}
+
+@-webkit-keyframes slideIn {
+  from {bottom: -300px; opacity: 0.8}
+  to {bottom: 25px; opacity: 1}
+}
+
+@keyframes slideIn {
+  from {bottom: -300px; opacity:0.8}
+  to {bottom: 25; opacity: 1}
 }
 
 .descriptionHeader {

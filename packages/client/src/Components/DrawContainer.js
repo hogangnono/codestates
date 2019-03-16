@@ -24,8 +24,7 @@ class DrawContainer extends Component {
             name,
             NearByFactorItems,
             descriptionModalShow,
-            savedDescriptionValue,
-            savedDescriptionTitle
+            descriptionModalHide
         } = this.props;
         return (
             <div id="toolbox">
@@ -43,8 +42,7 @@ class DrawContainer extends Component {
                             handleToggle={handleToggle}
                             NearByFactorItems={NearByFactorItems}
                             descriptionModalShow={descriptionModalShow}
-                            savedDescriptionValue={savedDescriptionValue}
-                            savedDescriptionTitle={savedDescriptionTitle}
+                            descriptionModalHide={descriptionModalHide}
                         />
                     </div>
                 </div>

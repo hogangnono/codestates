@@ -35,8 +35,9 @@ class Drawing extends Component {
     fill = undefined;
 
     handleRequestSave = data => {
-        const { name, toggleModal, savedDescriptionValue, savedDescriptionTitle } = this.props;
-        saveHandle(name, data, toggleModal, savedDescriptionValue, savedDescriptionTitle);
+        const { name, toggleModal, descriptionModalHide } = this.props;
+        descriptionModalHide();
+        saveHandle(name, data, toggleModal);
     };
 
     removeListener = () => {
@@ -171,8 +172,10 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
+        const { descriptionModalHide } = this.props;
         this.setState({ selectedButton: selectedIcon });
         this.setState({ isInShapeCreateMode: true });
+        descriptionModalHide();
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
     };
 
