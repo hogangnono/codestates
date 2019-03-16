@@ -241,7 +241,7 @@ class App extends Component {
         if (descriptionModalState) {
             return (
                 <div className="descriptionModal">
-                    {/* <h3 className="descriptionHeader">Description Modal</h3> */}
+                    <div className="descriptionHeader"> </div>
                     <textarea placeholder="Add Title..." className="descriptionInputTitle" type="text" value={descriptionTitle} onChange={this.handleChangeTitle}></textarea>
                     <textarea placeholder="Add description..." className="descriptionInput" type="text" value={descriptionValue} onChange={this.handleChangeDescription}></textarea>
                     <button className="descriptionCloser" type="button" onClick={this.descriptionModalHide}>Close</button>
