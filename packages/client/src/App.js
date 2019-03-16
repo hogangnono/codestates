@@ -103,7 +103,7 @@ class App extends Component {
         });
     };
 
-    toggleModal = () => {
+    toggleLoginModal = () => {
         const { showModal } = this.state;
         this.setState({ showModal: !showModal });
     };
@@ -156,6 +156,14 @@ class App extends Component {
             });
         }
     };
+
+    initDrawingListAfterSave = () => {
+        this.setState({ drawingData: [] });
+    }
+
+    initUserName = () => {
+        this.setState({ name: undefined });
+    }
 
     myInfoToggle = () => {
         const { MyInfoButton } = this.state;
@@ -276,8 +284,8 @@ class App extends Component {
                         )) */}
                         <div
                             className="loginFavorBtn"
-                            onClick={this.toggleModal}
-                            onKeyPress={this.toggleModal}
+                            onClick={this.toggleLoginModal}
+                            onKeyPress={this.toggleLoginModal}
                             role="button"
                             tabIndex="0"
                         >
@@ -313,8 +321,9 @@ class App extends Component {
                     {showModal ? (
                         <LoginModal
                             name={name}
-                            toggleModal={this.toggleModal}
+                            toggleLoginModal={this.toggleLoginModal}
                             handleUserNameOnChange={this.handleUserNameOnChange}
+                            initUserName={this.initUserName}
                         />
                     ) : null}
                     <div className={!showFilter ? 'block' : 'none'}>
@@ -333,8 +342,10 @@ class App extends Component {
                             handleUserNameOnChange={this.handleUserNameOnChange}
                             drawingData={drawingData}
                             updateDrawingData={this.updateDrawingData}
-                            toggleModal={this.toggleModal}
+                            toggleLoginModal={this.toggleLoginModal}
                             NearByFactorItems={NearByFactorItems}
+                            initDrawingListAfterSave={this.initDrawingListAfterSave}
+                            showDraw={this.showDraw}
                         />
                     </div>
                 </div>

@@ -8,7 +8,8 @@ export const newToggleBox = {
     지하철개통: false,
     기타: false
 };
-export const API_HOST = 'https://hogangnono.jihune.com';
+// export const API_HOST = 'https://hogangnono.jihune.com';
+export const API_HOST = 'http://127.0.0.1:3001';
 export const API_USER_PATH = API_HOST + '/user';
 export const API_USER_LOAD_PATH = API_HOST + '/user/load';
 export const API_USER_SAVE_PATH = API_HOST + '/user/save';

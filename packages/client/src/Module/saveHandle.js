@@ -2,14 +2,11 @@ import axios from 'axios';
 import { SLACK_GENERAL_PATH } from '../constants';
 import * as ipsumLorem from './randomIpsumLorem';
 
-const saveHandle = (name, data, callBack) => {
-    // console.log('===================');
-    // console.log('saveHandle 함수가 호출되었습니다.');
+const saveHandle = (name, data, toggleLoginModal, initDrawingData, showDraw) => {
     const token = JSON.parse(localStorage.getItem('token'));
-    // console.log('data in saveHandle : ', data);
 
     const dataSet = [];
-
+    console.log('data ::: ', data);
     data.map(oneShape => {
         const figuresData = {};
         figuresData.shape = oneShape.shapeType;
@@ -27,16 +24,25 @@ const saveHandle = (name, data, callBack) => {
         processedData.end_lat = _lineData[_lineData.length - 1].coord._lat;
         processedData.end_lng = _lineData[_lineData.length - 1].coord._lat;
         processedData.figures = JSON.stringify(figuresData);
-        processedData.title = ipsumLorem.randomTitle();
-        processedData.description = ipsumLorem.randomDescription();
+        processedData.title = ipsumLorem.randomTitle(); // TODO: title, description Modal 완성되면 수정해야함
+        processedData.description = ipsumLorem.randomDescription(); // TODO: title, description Modal 완성되면 수정해야함
         processedData.css = JSON.stringify(figuresCss);
-        processedData.factor_id = Math.floor(Math.random() * (8 - 0));
+        processedData.factor_id = Math.floor(Math.random() * (8 - 0)); // TODO: title, description Modal 완성되면 수정해야함
         dataSet.push(processedData);
     });
-    const reqBody = {
-        name: name,
-        data: dataSet
-    };
+
+    let reqBody;
+    if (data.length === 1) {
+        reqBody = {
+            name: name,
+            data: dataSet
+        };
+    } else if (data.length > 1) {
+        reqBody = {
+            /* do something */
+        };
+    }
+
     const options = {
         // mrkdwn: true,
         attachments: [
@@ -79,23 +85,27 @@ const saveHandle = (name, data, callBack) => {
             return alert(
                 '그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)'
             );
+        } else {
+            const pressValue = confirm('그린 호재 정보를 심사요청했습니다.\n신청하신 내용이 승인이 된 후에 지도에 표시되게 됩니다.\n심사 상태는 [My]메뉴에서 확인하실 수 있습니다 :)');
+            if (pressValue) {
+                initDrawingData();
+                return axios
+                        .post(SLACK_GENERAL_PATH, JSON.stringify(options))
+                        .then(result => {
+                            showDraw();
+                            console.log('SUCCEEDED: Sent slack webhook: \n', result.data);
+                        })
+                        .catch(err => {
+                            alert(
+                                '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
+                            );
+                            console.log('Result for axios.post(/save) :::::::\n', err);
+                        });
+            }
         }
-
-        return axios
-            .post(SLACK_GENERAL_PATH, JSON.stringify(options))
-            .then(result => {
-                alert('성공적으로 데이터를 보냈습니다.');
-                console.log('SUCCEEDED: Sent slack webhook: \n', result.data);
-            })
-            .catch(err => {
-                alert(
-                    '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
-                );
-                console.log('Result for axios.post(/save) :::::::\n', err);
-            });
     } else {
         alert('저장을 위해선 로그인이 필요합니다 :)');
-        callBack();
+        toggleLoginModal();
     }
 };
 

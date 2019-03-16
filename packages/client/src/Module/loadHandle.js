@@ -15,14 +15,12 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
         })
         .then(async result => {
             const data = await result.data;
-            console.log('data :: \n', data);
             // const resultData = await data[0];
             // const userData = await data[1];
             const [resultData, userData] = await data;
             const overlays = [Line, Arrow, Rect, Circle, Polygon];
             const nearbyFactors = [];
             let drawShape;
-            console.log(resultData);
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
                 const { fill, color } = JSON.parse(el.css);

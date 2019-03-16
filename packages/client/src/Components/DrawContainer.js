@@ -9,9 +9,11 @@ class DrawContainer extends Component {
         mapLoad: PropTypes.object,
         handleToggle: PropTypes.func.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired,
+        toggleLoginModal: PropTypes.func.isRequired,
         name: PropTypes.string.isRequired,
-        NearByFactorItems: PropTypes.array.isRequired
+        NearByFactorItems: PropTypes.array.isRequired,
+        initDrawingListAfterSave: PropTypes.func.isRequired,
+        showDraw: PropTypes.func.isRequired
     };
 
     render() {
@@ -19,10 +21,12 @@ class DrawContainer extends Component {
             drawingData,
             mapLoad,
             handleToggle,
-            toggleModal,
+            toggleLoginModal,
             updateDrawingData,
             name,
-            NearByFactorItems
+            NearByFactorItems,
+            initDrawingListAfterSave,
+            showDraw
         } = this.props;
         return (
             <div id="toolbox">
@@ -36,9 +40,11 @@ class DrawContainer extends Component {
                             name={name}
                             drawingData={drawingData}
                             updateDrawingData={updateDrawingData}
-                            toggleModal={toggleModal}
+                            toggleLoginModal={toggleLoginModal}
                             handleToggle={handleToggle}
                             NearByFactorItems={NearByFactorItems}
+                            initDrawingListAfterSave={initDrawingListAfterSave}
+                            showDraw={showDraw}
                         />
                     </div>
                 </div>

@@ -16,10 +16,12 @@ class Drawing extends Component {
     static propTypes = {
         map: PropTypes.object.isRequired,
         handleToggle: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired,
+        toggleLoginModal: PropTypes.func.isRequired,
         drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired
+        name: PropTypes.string.isRequired,
+        initDrawingListAfterSave: PropTypes.func.isRequired,
+        showDraw: PropTypes.func.isRequired
     };
 
     state = {
@@ -35,8 +37,8 @@ class Drawing extends Component {
     fill = undefined;
 
     handleRequestSave = data => {
-        const { name, toggleModal } = this.props;
-        saveHandle(name, data, toggleModal);
+        const { name, toggleLoginModal, initDrawingListAfterSave, showDraw } = this.props;
+        saveHandle(name, data, toggleLoginModal, initDrawingListAfterSave, showDraw);
     };
 
     removeListener = () => {

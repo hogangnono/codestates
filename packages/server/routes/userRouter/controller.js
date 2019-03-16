@@ -23,6 +23,10 @@ exports.signup = async (req, res) => {
 /* Load data */
 exports.load = async (req, res) => {
     const { name, bound, factors } = req.body;
+    console.log('name: ', name);
+    console.log('bound: ', bound);
+    console.log('factors: ', factors);
+
     let transaction;
     const data = [];
     const factorIdArray = [];
