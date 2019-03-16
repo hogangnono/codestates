@@ -12,14 +12,9 @@ Line.prototype = Object.create(Shape.prototype);
 Line.prototype.constructor = Line;
 
 Line.prototype.setShape = function(spare) {
-    if (!this._min || !this._max) {
-        // deep copy
-        this._min = JSON.parse(JSON.stringify(this._lineData[0]));
-        this._max = JSON.parse(JSON.stringify(this._lineData[0]));
-    } else {
+    const decideMinMax = (temp) => {
         const min = this._min;
         const max = this._max;
-        const temp = this._lineData[this._lineData.length - 1];
         // 왼쪽으로 이동시
         if (min.coord.x > temp.coord.x) {
             min.coord.x = temp.coord.x;
@@ -42,6 +37,16 @@ Line.prototype.setShape = function(spare) {
             max.offset.y = temp.offset.y;
             this._heightDiff = Math.abs(this._lineData[0].offset.y - this._max.offset.y);
         }
+    };
+    if (!this._min || !this._max) {
+        // deep copy
+        this._min = JSON.parse(JSON.stringify(this._lineData[0]));
+        this._max = JSON.parse(JSON.stringify(this._lineData[0]));
+        this._lineData.map((data) => {
+            decideMinMax(data);
+        });
+    } else {
+        decideMinMax(this._lineData[this._lineData.length - 1]);
     }
     this._width = Math.abs(this._max.offset.x - this._min.offset.x) + spare + 2;
     this._height = Math.abs(this._max.offset.y - this._min.offset.y) + spare + 2;
@@ -50,15 +55,15 @@ Line.prototype.setShape = function(spare) {
     this._startPos.y = this._max.coord.y;
 };
 
-Line.prototype.setPath = function(flag) {
+Line.prototype.setPath = function(spare) {
     const projection = this.getProjection();
     const firstPoint = projection.fromCoordToOffset(this._lineData[0].coord);
     const newlineData = [];
 
     for (let i = 0; i < this._lineData.length; i++) {
         const obj = {};
-        obj.x = projection.fromCoordToOffset(this._lineData[i].coord).x - firstPoint.x + this._widthDiff * 2 ** this._ratio + 12;
-        obj.y = projection.fromCoordToOffset(this._lineData[i].coord).y - firstPoint.y + this._heightDiff * 2 ** this._ratio + 12;
+        obj.x = projection.fromCoordToOffset(this._lineData[i].coord).x - firstPoint.x + this._widthDiff * 2 ** this._ratio + spare * 2 ** this._ratio;
+        obj.y = projection.fromCoordToOffset(this._lineData[i].coord).y - firstPoint.y + this._heightDiff * 2 ** this._ratio + spare * 2 ** this._ratio;
         newlineData.push(obj);
     }
     const line = d3.line()
