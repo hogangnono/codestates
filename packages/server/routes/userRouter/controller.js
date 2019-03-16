@@ -26,7 +26,8 @@ exports.load = async (req, res) => {
     let transaction;
     const data = [];
     const factorIdArray = [];
-    // not filtering
+
+    // 필터에서 호재를 선택하면 해당 호재를 load 함
     if (factors && factors.length) {
         try {
             transaction = await User.sequelize.transaction();
@@ -81,10 +82,17 @@ exports.load = async (req, res) => {
             res.status(400).send('데이터 요청에 실패했습니다.');
         }
     }
+    // 주변호재 찾기
     if (!factors || factors.length === 0) {
         try {
             transaction = await User.sequelize.transaction();
             const result = await Figure.findAll({
+                include: [
+                    {
+                        model: Drawing,
+                        attributes: ['title', 'description'] // Drawing table에서 title, description column만 가져옴
+                    }
+                ],
                 where: {
                     [Op.or]: [
                         {
