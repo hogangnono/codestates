@@ -21,6 +21,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             const overlays = [Line, Arrow, Rect, Circle, Polygon];
             const nearbyFactors = [];
             let drawShape;
+            console.log(resultData);
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
                 const { fill, color } = JSON.parse(el.css);

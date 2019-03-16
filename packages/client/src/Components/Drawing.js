@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
+// import { IoMdSquareOutline, IoMdSquare } from 'react-icons/io';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Arrow from '../CustomOverlay/Arrow';
@@ -9,15 +10,16 @@ import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 import saveHandle from '../Module/saveHandle';
+import * as constants from '../constants';
 
 class Drawing extends Component {
     static propTypes = {
-        map: PropTypes.object,
+        map: PropTypes.object.isRequired,
         handleToggle: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
         drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        name: PropTypes.string
+        name: PropTypes.string.isRequired
     };
 
     state = {
@@ -31,8 +33,6 @@ class Drawing extends Component {
     color = undefined;
 
     fill = undefined;
-
-    factorBox = ['# 상권', '# 신축/재개발', '# 교육', '# 업무지구', '# 주택단지', '# 도로개통/확장', '# 지하철개통', '# 기타'];
 
     handleRequestSave = data => {
         const { name, toggleModal } = this.props;
@@ -102,7 +102,11 @@ class Drawing extends Component {
                     isClick = false;
                 }
             } else {
-                if (Shape.name === 'Rect' || Shape.name === 'Circle' || Shape.name === 'Line') {
+                if (
+                    Shape.name === 'Rect'
+                    || Shape.name === 'Circle'
+                    || Shape.name === 'Line'
+                ) {
                     updateDrawingData({
                         figure,
                         lineData,
@@ -131,27 +135,31 @@ class Drawing extends Component {
             }
         });
 
-        const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
-            if (Shape.name === 'Polygon' || Shape.name === 'Arrow') {
-                // 해당 포인트를 지워줌
-                lineData.pop();
-                // 첫 클릭 이후 우클릭을 한 경우
-                if (lineData.length === 1) {
-                    figure.onRemove();
-                } else {
-                    figure.draw(lineData);
-                    updateDrawingData({
-                        figure,
-                        lineData,
-                        shapeType: Shape.name
-                    });
+        const rightClick = naver.maps.Event.addListener(
+            map,
+            'rightclick',
+            e => {
+                if (Shape.name === 'Polygon' || Shape.name === 'Arrow') {
+                    // 해당 포인트를 지워줌
+                    lineData.pop();
+                    // 첫 클릭 이후 우클릭을 한 경우
+                    if (lineData.length === 1) {
+                        figure.onRemove();
+                    } else {
+                        figure.draw(lineData);
+                        updateDrawingData({
+                            figure,
+                            lineData,
+                            shapeType: Shape.name
+                        });
+                    }
+                    this.setState({ isInShapeCreateMode: false });
+                    naver.maps.Event.removeListener(moveEvent);
+                    naver.maps.Event.removeListener(leftClick);
                 }
-                this.setState({ isInShapeCreateMode: false });
-                naver.maps.Event.removeListener(moveEvent);
-                naver.maps.Event.removeListener(leftClick);
+                naver.maps.Event.removeListener(rightClick);
             }
-            naver.maps.Event.removeListener(rightClick);
-        });
+        );
         this.setState({
             loadedListener: {
                 leftClick,
@@ -172,14 +180,24 @@ class Drawing extends Component {
         this.setState({ refresh: !refresh });
     };
 
-    fillOrnot = (fillval) => {
+    fillOrnot = fillval => {
         this.fill = fillval;
-    }
+    };
 
-    decideFactor = (factorNum) => {
-        const colorList = ['Crimson', 'DarkOrange', 'SeaGreen', 'Navy', 'Indigo', 'Peru', 'HotPink', 'SlateGray', 'red'];
+    decideFactor = factorNum => {
+        const colorList = [
+            'Crimson',
+            'DarkOrange',
+            'SeaGreen',
+            'Navy',
+            'Indigo',
+            'Peru',
+            'HotPink',
+            'SlateGray',
+            'red'
+        ];
         this.color = colorList[factorNum];
-    }
+    };
 
     render() {
         const {
@@ -193,6 +211,7 @@ class Drawing extends Component {
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
         );
+        const newToggleBox = Object.keys(constants.newToggleBox);
 
         return (
             <div id="drawingComponentContainer">
@@ -214,24 +233,41 @@ class Drawing extends Component {
                 {isInShapeCreateMode ? (
                     <div className="selectOption">
                         <div className="fillOrNot">
-                            <div onClick={() => this.fillOrnot('fill')}
+                            <div
+                                className="lineOrFillBox"
+                                onClick={() => this.fillOrnot('fill')}
                                 onKeyPress={this.fillOrnot}
                                 role="button"
-                                tabIndex="0">채우기</div>
-                            <div onClick={() => this.fillOrnot('none')}
+                                tabIndex="0"
+                            >
+                                Fill
+                            </div>
+                            <div
+                                className="lineOrFillBox"
+                                onClick={() => this.fillOrnot('none')}
                                 onKeyPress={this.fillOrnot}
                                 role="button"
-                                tabIndex="0">비우기</div>
+                                tabIndex="0"
+                            >
+                                Outline
+                            </div>
                         </div>
-                        {this.factorBox.map((factor, idx) => {
-                            return (
-                                <div className="filterBtn" key={idx++} onClick={() => this.decideFactor(idx)}
-                                    onKeyPress={this.decideFactor}
-                                    role="button"
-                                    tabIndex="0">{factor}
-                                </div>
-                            );
-                        })}
+                        <div className="factorContainerBox">
+                            {newToggleBox.map((factor, idx) => {
+                                return (
+                                    <div
+                                        className="factorBox"
+                                        key={idx++}
+                                        onClick={() => this.decideFactor(idx)}
+                                        onKeyPress={this.decideFactor}
+                                        role="button"
+                                        tabIndex="0"
+                                    >
+                                        {factor}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 ) : null}
                 <div id="myDrawingsContainer">
@@ -246,6 +282,7 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
+                            // puppeteer.captureImage();
                         }}
                     >
                         {`저장`}

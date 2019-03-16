@@ -1,4 +1,5 @@
-const factors = [
+// eslint-disable-next-line import/prefer-default-export
+export default [
     { id: 1, name: '상권' },
     { id: 2, name: '신축/재개발' },
     { id: 3, name: '교육' },
@@ -9,4 +10,4 @@ const factors = [
     { id: 8, name: '기타' }
 ];
 
-module.exports = factors;
+// module.exports = factors;
