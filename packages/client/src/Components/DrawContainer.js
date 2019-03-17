@@ -10,11 +10,12 @@ class DrawContainer extends Component {
         handleToggle: PropTypes.func.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
         toggleLoginModal: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired,
         NearByFactorItems: PropTypes.array.isRequired,
         initDrawingListAfterSave: PropTypes.func.isRequired,
         showDraw: PropTypes.func.isRequired,
-        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired
+        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired,
+        descriptionModalShow: PropTypes.func.isRequired,
+        descriptionModalHide: PropTypes.func.isRequired
     };
 
     render() {
@@ -24,7 +25,6 @@ class DrawContainer extends Component {
             handleToggle,
             toggleLoginModal,
             updateDrawingData,
-            name,
             NearByFactorItems,
             initDrawingListAfterSave,
             showDraw,
@@ -41,7 +41,6 @@ class DrawContainer extends Component {
                     <div>
                         <Drawing
                             map={mapLoad}
-                            name={name}
                             drawingData={drawingData}
                             updateDrawingData={updateDrawingData}
                             toggleLoginModal={toggleLoginModal}

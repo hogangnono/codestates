@@ -77,7 +77,7 @@ class App extends Component {
     };
 
     handleUserNameOnChange = username => {
-        this.setState({ name: username }, console.log('name : ', username));
+        this.setState({ name: username });
     };
 
     showDrawingSetTitleDescriptionModal = value => {
@@ -339,7 +339,6 @@ class App extends Component {
         //         onClick: () => this.mainToggle('showDraw', showDraw)
         //     }
         // ];
-        console.log('check: ', drawingData);
         return (
             <div id="wrapper">
                 <div id="map">
@@ -415,7 +414,6 @@ class App extends Component {
                         <DrawContainer
                             handleToggle={this.showDraw}
                             mapLoad={map}
-                            name={name}
                             handleUserNameOnChange={this.handleUserNameOnChange}
                             drawingData={drawingData}
                             updateDrawingData={this.updateDrawingData}

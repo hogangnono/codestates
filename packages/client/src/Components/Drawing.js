@@ -14,15 +14,16 @@ import * as constants from '../constants';
 
 class Drawing extends Component {
     static propTypes = {
-        map: PropTypes.object.isRequired,
+        map: PropTypes.object,
         handleToggle: PropTypes.func.isRequired,
         toggleLoginModal: PropTypes.func.isRequired,
         drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired,
         initDrawingListAfterSave: PropTypes.func.isRequired,
         showDraw: PropTypes.func.isRequired,
-        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired
+        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired,
+        descriptionModalShow: PropTypes.func.isRequired,
+        descriptionModalHide: PropTypes.func.isRequired
     };
 
     state = {
@@ -199,11 +200,11 @@ class Drawing extends Component {
         const { isInShapeCreateMode } = this.state;
         const { descriptionModalHide } = this.props;
         this.setState({ selectedButton: selectedIcon });
-        this.setState({ 
-          selectedButton: selectedIcon,
-          isInShapeCreateMode: !isInShapeCreateMode,
-          fillOrNotToggle1: false,
-          fillOrNotToggle2: false
+        this.setState({
+            selectedButton: selectedIcon,
+            isInShapeCreateMode: !isInShapeCreateMode,
+            fillOrNotToggle1: false,
+            fillOrNotToggle2: false
         });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
         this.showShape();
