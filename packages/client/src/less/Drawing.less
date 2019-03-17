@@ -1,7 +1,6 @@
 @mainColor: #4d55b2;
 @white: white;
-@colors: Crimson, DarkOrange, SeaGreen, Navy, Indigo, Peru, HotPink, SlateGray,
-  red;
+@colors: Crimson, DarkOrange, SeaGreen, Navy, Peru, HotPink, SlateGray, red;
 
 body {
   font-family: Apple SD Gothic Neo, sans-serif;
@@ -253,15 +252,14 @@ body {
     }
   }
   .factorContainerBox {
-    width: 80%;
+    width: 95%;
     height: 100%;
-    margin: 0 10%;
+    margin: 0 2.5%;
     margin-top: 20px;
     .factorBox {
-      width: 45%;
+      width: 46.25%;
       height: 40px;
       box-sizing: border-box;
-      text-align: center;
       line-height: 40px;
       font-size: 13px;
       float: left;
@@ -271,7 +269,7 @@ body {
       box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
       color: #777;
       &:nth-child(2n-1) {
-        margin-right: 10%;
+        margin-right: 7%;
       }
       &:hover {
         background-color: @mainColor;
@@ -283,17 +281,34 @@ body {
     }
   }
 }
+.factorContain {
+  position: relative;
+}
+.factorColorBox {
+  position: absolute;
+  top: 17px;
+  left: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 5px;
+  z-index: 100;
+  background-color: red;
+}
+.factorText {
+  // text-align: center;
+  padding-left: 20px;
+}
 
 // mixin to iterate over colors and create CSS class for each one
-// .factor(@i: length(@colors)) when (@i > 0) {
-//   .factor(@i - 1);
-//   @color: extract(@colors, @i);
-//   .factorBox:nth-child(@{i}) {
-//     color: @color;
-//   }
-// }
+.factor(@i: length(@colors)) when (@i > 0) {
+  .factor(@i - 1);
+  @color: extract(@colors, @i);
+  .factorBox:nth-child(@{i}) .factorColorBox {
+    background-color: @color;
+  }
+}
 
-// .factor(); // run the mixin
+.factor(); // run the mixin
 
 .a {
   background-color: @mainColor;
@@ -305,4 +320,91 @@ body {
 }
 .c {
   height: 0;
+}
+
+@cirle-width: 70px;
+
+// You can play with these for a little variation
+@shadow-depth: @cirle-width * 0.25;
+@shadow-depth-hover-ratio: 1.5;
+@shadow-blur: @shadow-depth * 0;
+@shadow-spread: @shadow-depth * 0;
+
+@y-offset: @shadow-depth * 0.5;
+@x-offset: @y-offset * 1.7320508076; // √3
+@y-offset-hover: @y-offset * @shadow-depth-hover-ratio;
+@x-offset-hover: @x-offset * @shadow-depth-hover-ratio;
+
+@red: rgba(255, 0, 0, 0.45);
+@orange: rgba(253, 127, 11, 0.54);
+@yellow: rgba(235, 255, 0, 0.54);
+@green: rgba(22, 243, 3, 0.55);
+@blue: rgba(0, 133, 255, 0.53);
+@purple: rgba(190, 11, 224, 0.55);
+
+// * {
+//   box-sizing: border-box;
+// }
+
+// html,
+// body {
+//   height: 100%;
+//   margin: 0;
+// }
+
+// body {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   background: radial-gradient(ellipse at center, #fff 0%, #eee 80%);
+// }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.legend {
+  position: absolute;
+  bottom: 50px;
+  right: 15px;
+  z-index: 100;
+  width: @cirle-width;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  background-color: white;
+  box-shadow: inset @x-offset (-@y-offset) @shadow-blur @shadow-spread @red,
+    inset (-@x-offset) (-@y-offset) @shadow-blur @shadow-spread @yellow,
+    inset 0 @shadow-depth @shadow-blur @shadow-spread @blue,
+    inset (-@x-offset) @y-offset @shadow-blur @shadow-spread @green,
+    inset @x-offset @y-offset @shadow-blur @shadow-spread @purple,
+    inset 0 (-@shadow-depth) @shadow-blur @shadow-spread @orange;
+  animation: spin 120s linear infinite;
+  &:focus {
+    outline: 0;
+  }
+
+  &:hover {
+    box-shadow: inset @x-offset-hover (-@y-offset-hover) @shadow-blur
+        @shadow-spread @red,
+      inset (-@x-offset-hover) (-@y-offset-hover) @shadow-blur @shadow-spread
+        @yellow,
+      inset 0 (@shadow-depth * @shadow-depth-hover-ratio) @shadow-blur
+        @shadow-spread @blue,
+      inset (-@x-offset-hover) @y-offset-hover @shadow-blur @shadow-spread
+        @green,
+      inset @x-offset-hover @y-offset-hover @shadow-blur @shadow-spread @purple,
+      inset 0 (-@shadow-depth * @shadow-depth-hover-ratio) @shadow-blur
+        @shadow-spread @orange;
+  }
+
+  &:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
 }

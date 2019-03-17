@@ -37,7 +37,7 @@ class Drawing extends Component {
     fill = undefined;
 
     handleRequestSave = data => {
-        const { name, toggleModal, descriptionModalHide } = this.props;
+        const { name, toggleModal } = this.props;
         this.setState({
             fillOrNotToggle1: false,
             fillOrNotToggle2: false
@@ -60,7 +60,6 @@ class Drawing extends Component {
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
-
         let moveEvent;
         let figure;
         let lineData = [];
@@ -177,15 +176,14 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-
         const { isInShapeCreateMode } = this.state;
         const { descriptionModalHide } = this.props;
         this.setState({ selectedButton: selectedIcon });
-        this.setState({ 
-          selectedButton: selectedIcon,
-          isInShapeCreateMode: !isInShapeCreateMode,
-          fillOrNotToggle1: false,
-          fillOrNotToggle2: false
+        this.setState({
+            selectedButton: selectedIcon,
+            isInShapeCreateMode: !isInShapeCreateMode,
+            fillOrNotToggle1: false,
+            fillOrNotToggle2: false
         });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
         this.showShape();
@@ -220,18 +218,8 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
-        const colorList = [
-            'Crimson',
-            'DarkOrange',
-            'SeaGreen',
-            'Navy',
-            'Indigo',
-            'Peru',
-            'HotPink',
-            'SlateGray',
-            'red'
-        ];
-        this.color = colorList[factorNum];
+        console.log(constants.colorList[factorNum]);
+        this.color = constants.colorList[factorNum];
     };
 
     render() {
@@ -307,13 +295,18 @@ class Drawing extends Component {
                                 return (
                                     <div
                                         className="factorBox"
-                                        key={idx++}
                                         onClick={() => this.decideFactor(idx)}
                                         onKeyPress={this.decideFactor}
                                         role="button"
                                         tabIndex="0"
+                                        key={idx}
                                     >
-                                        {factor}
+                                        <div className="factorContain">
+                                            <div className="factorColorBox" />
+                                            <div className="factorText">
+                                                {factor}
+                                            </div>
+                                        </div>
                                     </div>
                                 );
                             })}

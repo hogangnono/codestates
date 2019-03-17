@@ -8,6 +8,16 @@ export const newToggleBox = {
     지하철개통: false,
     기타: false
 };
+export const colorList = [
+    'Crimson',
+    'DarkOrange',
+    'SeaGreen',
+    'Navy',
+    'Peru',
+    'HotPink',
+    'SlateGray',
+    'Red'
+];
 export const API_HOST = 'https://hogangnono.jihune.com';
 export const API_USER_PATH = API_HOST + '/user';
 export const API_USER_LOAD_PATH = API_HOST + '/user/load';
