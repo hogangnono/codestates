@@ -213,18 +213,8 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
-        const colorList = [
-            'Crimson',
-            'DarkOrange',
-            'SeaGreen',
-            'Navy',
-            'Indigo',
-            'Peru',
-            'HotPink',
-            'SlateGray',
-            'red'
-        ];
-        this.color = colorList[factorNum];
+        console.log(constants.colorList[factorNum]);
+        this.color = constants.colorList[factorNum];
     };
 
     render() {
@@ -300,13 +290,18 @@ class Drawing extends Component {
                                 return (
                                     <div
                                         className="factorBox"
-                                        key={idx++}
                                         onClick={() => this.decideFactor(idx)}
                                         onKeyPress={this.decideFactor}
                                         role="button"
                                         tabIndex="0"
+                                        key={idx}
                                     >
-                                        {factor}
+                                        <div className="factorContain">
+                                            <div className="factorColorBox" />
+                                            <div className="factorText">
+                                                {factor}
+                                            </div>
+                                        </div>
                                     </div>
                                 );
                             })}

@@ -7,7 +7,6 @@ import DrawContainer from './Components/DrawContainer';
 import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 import * as constants from './constants';
-// import MainButton from './Components/MainButton';
 import NearbyFactorDialog from './Components/NearbyFactorDialog';
 
 class App extends Component {
@@ -27,7 +26,8 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: []
+            NearByFactorItems: [],
+            legendToggle: false
             // NearByFilteringItems: []
         };
     }
@@ -38,7 +38,7 @@ class App extends Component {
             zoomControl: true,
             zoomControlOptions: {
                 style: naver.maps.ZoomControlStyle.SMALL,
-                position: naver.maps.Position.LEFT_BOTTOM
+                position: naver.maps.Position.TOP_RIGHT
             },
             logoControl: true,
             logoControlOptions: {
@@ -50,7 +50,7 @@ class App extends Component {
             },
             mapDataControl: true,
             mapDataControlOptions: {
-                position: naver.maps.Position.BOTTOM_RIGHT
+                position: naver.maps.Position.BOTTOM_LEFT
             }
         });
 
@@ -111,6 +111,11 @@ class App extends Component {
     toggleDraw = () => {
         const { showDraw } = this.state;
         this.setState({ showDraw: !showDraw });
+    };
+
+    toggleLegend = () => {
+        const { legendToggle } = this.state;
+        this.setState({ legendToggle: !legendToggle });
     };
 
     showFilter = () => {
@@ -234,28 +239,9 @@ class App extends Component {
             activeFilter,
             activeDraw,
             MyInfoButton,
-            NearByFactorItems
+            NearByFactorItems,
+            legendToggle
         } = this.state;
-        // const mainButton = [
-        //     {
-        //         className: '',
-        //         cond: true,
-        //         name: 'My',
-        //         onClick: () => this.mainToggle('showModal', showModal)
-        //     },
-        //     {
-        //         className: deactiveFilter,
-        //         cond: deactiveFilter === '',
-        //         name: '필터',
-        //         onClick: () => this.mainToggle('showFilter', showFilter)
-        //     },
-        //     {
-        //         className: deactiveDraw,
-        //         cond: deactiveDraw === '',
-        //         name: '그리기',
-        //         onClick: () => this.mainToggle('showDraw', showDraw)
-        //     }
-        // ];
         return (
             <div id="wrapper">
                 <div id="map">
@@ -265,15 +251,6 @@ class App extends Component {
                     />
 
                     <div id="loginFavorContainer">
-                        {/* mainButton.map(bt => (
-                            <MainButton
-                                className={bt.className} // 추가되는 클래스명
-                                name={bt.name} // 'my' | 'filer'...
-                                cond={bt.cond} // 클릭 함수 실행 조건
-                                onClick={bt.onClick}
-                                key={bt.name}
-                            />
-                        )) */}
                         <div
                             className="loginFavorBtn"
                             onClick={this.toggleModal}
@@ -336,6 +313,29 @@ class App extends Component {
                             toggleModal={this.toggleModal}
                             NearByFactorItems={NearByFactorItems}
                         />
+                    </div>
+                    <div
+                        className="legend"
+                        onClick={this.toggleLegend}
+                        onKeyPress={this.toggleLegend}
+                        role="button"
+                        tabIndex="0"
+                    />
+                    <div
+                        className={
+                            'colorList ' + (legendToggle ? 'invisible' : '')
+                        }
+                    >
+                        {Object.keys(constants.newToggleBox).map(color => {
+                            return (
+                                <div className="eachColor">
+                                    <div className="legendColorBox">
+                                        <div className="colorCircle" />
+                                    </div>
+                                    <div className="legendTextBox">{color}</div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

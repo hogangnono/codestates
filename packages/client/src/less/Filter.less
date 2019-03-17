@@ -1,5 +1,6 @@
 @boxShadow: 0 0 5px rgba(0, 0, 0, 0.1);
 @hogangnonoColor: #4d55b2;
+@colors: Crimson, DarkOrange, SeaGreen, Navy, Peru, HotPink, SlateGray, red;
 
 body {
   font-family: Apple SD Gothic Neo, sans-serif;
@@ -28,14 +29,12 @@ body {
 }
 .filterBtn {
   position: relative;
-  width: auto;
+  width: 70%;
   height: 40px;
   line-height: 42px;
   font-size: 16px;
   transition-duration: 0.1s;
-  margin: 15px 20%;
-  // text-align: center;
-  // padding-left: 20px;
+  margin: 15px 15%;
   cursor: pointer;
   color: #555;
   border-radius: 30px;
@@ -44,15 +43,25 @@ body {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
   // border: 1px solid red;
 }
+.colorBox {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  z-index: 100;
+}
 .checkedBox {
   position: absolute;
+  right: 0;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
   border-radius: 30px;
   box-sizing: border-box;
   letter-spacing: 1px;
-  text-align: center;
+  padding-left: 45px;
   transition-duration: 0.2s;
 }
 input[type="checkbox"] {
@@ -101,9 +110,8 @@ input[type="checkbox"]:checked ~ .checkedBox {
 
 .checked {
   .toggleColor;
-
 }
-  .myInfoButton:focus {
+.myInfoButton:focus {
   outline: 0;
 }
 .unChecked {
@@ -142,12 +150,19 @@ input[type="checkbox"]:checked ~ .checkedBox {
       color: @hogangnonoColor;
     }
     @keyframes floating {
-      from { transform: translate(0,  0px); }
-      80%  { transform: translate(0, 10px); }
-      to   { transform: translate(0, -0px); }    
+      from {
+        transform: translate(0, 0px);
+      }
+      80% {
+        transform: translate(0, 10px);
+      }
+      to {
+        transform: translate(0, -0px);
+      }
     }
   }
-  .arrowBoxForFilter:after, .arrowBoxForFilter:before {
+  .arrowBoxForFilter:after,
+  .arrowBoxForFilter:before {
     bottom: 80%;
     left: 50%;
     border: solid transparent;
@@ -170,3 +185,13 @@ input[type="checkbox"]:checked ~ .checkedBox {
     margin-left: -36px;
   }
 }
+
+.factor(@i: length(@colors)) when (@i > 0) {
+  .factor(@i - 1);
+  @color: extract(@colors, @i);
+  .filterBtn:nth-child(@{i}) .colorBox {
+    background-color: @color;
+  }
+}
+
+.factor(); // run the mixin
