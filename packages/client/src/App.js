@@ -27,6 +27,9 @@ class App extends Component {
             showDraw: false,
             factors: [],
             NearByFactorItems: [],
+            descriptionModalState: false,
+            descriptionValue: '',
+            descriptionTitle: '',
             legendToggle: false
             // NearByFilteringItems: []
         };
@@ -60,7 +63,7 @@ class App extends Component {
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
-            // this.deleteDraw();
+            this.deleteDraw();
         });
         const userName = localStorage.getItem('token');
         if (userName) {
@@ -87,15 +90,23 @@ class App extends Component {
 
     deleteDraw = () => {
         Object.entries(this.drawList).forEach(([key, value]) => {
-            const position = {};
+            const startPos = {};
+            const endPos = {};
             // reference point
-            position.x = value._centerPoint.center_lng;
-            position.y = value._centerPoint.center_lat;
+            startPos.x = value._lineData[0].coord.x;
+            startPos.y = value._lineData[0].coord.y;
+            endPos.x = value._lineData[value._lineData.length - 1].coord.x;
+            endPos.y = value._lineData[value._lineData.length - 1].coord.y;
+
             if (
-                position.y < this.bound._min._lat - 0.01
-                || position.y > this.bound._max._lat + 0.01
-                || position.x < this.bound._min._lng - 0.01
-                || position.x > this.bound._max._lng + 0.01
+                (startPos.x < this.bound._min._lng - 0.01
+                    || this.bound._max._lng + 0.01 < startPos.x
+                    || startPos.y < this.bound._min._lat - 0.01
+                    || this.bound._max._lat + 0.01 < startPos.y)
+                && (endPos.x < this.bound._min._lng - 0.01
+                    || this.bound._max._lng + 0.01 < endPos.x
+                    || endPos.y < this.bound._min._lat - 0.01
+                    || this.bound._max._lat + 0.01 < endPos.y)
             ) {
                 value.setMap(null);
                 delete this.drawList[key];
@@ -110,6 +121,7 @@ class App extends Component {
 
     toggleDraw = () => {
         const { showDraw } = this.state;
+        this.setState({ descriptionModalState: false });
         this.setState({ showDraw: !showDraw });
     };
 
@@ -144,6 +156,7 @@ class App extends Component {
                     drawingData[index].figure.onRemove();
                 }
                 this.setState({ drawingData: [] });
+                this.setState({ descriptionModalState: false });
             } else if (!pressedConfirm) {
                 return;
             }
@@ -228,6 +241,79 @@ class App extends Component {
         drawData(name, bound, factors, toggle, this.drawList, map, nearbyData);
     };
 
+    handleChangeDescription = event => {
+        this.setState({ descriptionValue: event.target.value });
+    };
+
+    handleChangeTitle = event => {
+        this.setState({ descriptionTitle: event.target.value });
+    };
+
+    descriptionModal = () => {
+        const {
+            descriptionModalState,
+            descriptionValue,
+            descriptionTitle
+        } = this.state;
+        if (descriptionModalState) {
+            return (
+                <div className="descriptionModal">
+                    <div className="descriptionHeader"> </div>
+                    <textarea
+                        placeholder="제목을 지어주세요:D"
+                        className="descriptionInputTitle"
+                        type="text"
+                        value={descriptionTitle}
+                        onChange={this.handleChangeTitle}
+                    />
+                    <textarea
+                        placeholder="호재 내용을 채워주세요:D"
+                        className="descriptionInput"
+                        type="text"
+                        value={descriptionValue}
+                        onChange={this.handleChangeDescription}
+                    />
+                    <button
+                        className="descriptionCloser"
+                        type="button"
+                        onClick={this.descriptionModalHide}
+                    >
+                        닫기
+                    </button>
+                    <button
+                        className="descriptionSave"
+                        type="button"
+                        onClick={this.descriptionModalSave}
+                    >
+                        저장
+                    </button>
+                </div>
+            );
+        } else {
+            return <div />;
+        }
+    };
+
+    descriptionModalHide = () => {
+        this.setState({ descriptionModalState: false });
+        this.setState({ descriptionValue: '' });
+        this.setState({ descriptionTitle: '' });
+    };
+
+    descriptionModalSave = () => {
+        const { descriptionValue, descriptionTitle, drawingData } = this.state;
+        this.setState({ descriptionModalState: false });
+        const arrayOfShapes = drawingData;
+        console.log(arrayOfShapes[arrayOfShapes.length - 1]);
+        arrayOfShapes[arrayOfShapes.length - 1].title = descriptionTitle;
+        arrayOfShapes[arrayOfShapes.length - 1].value = descriptionValue;
+        this.setState({ drawingData: arrayOfShapes });
+    };
+
+    descriptionModalShow = () => {
+        this.setState({ descriptionModalState: true });
+    };
+
     render() {
         const {
             map,
@@ -278,6 +364,7 @@ class App extends Component {
                             onClick={() => {
                                 if (activeFilter === '') {
                                     this.showDraw();
+                                    this.descriptionModalHide();
                                 }
                             }}
                             onKeyPress={() => this.showDraw}
@@ -312,6 +399,8 @@ class App extends Component {
                             updateDrawingData={this.updateDrawingData}
                             toggleModal={this.toggleModal}
                             NearByFactorItems={NearByFactorItems}
+                            descriptionModalShow={this.descriptionModalShow}
+                            descriptionModalHide={this.descriptionModalHide}
                         />
                     </div>
                     <div
@@ -337,6 +426,9 @@ class App extends Component {
                             );
                         })}
                     </div>
+                </div>
+                <div>
+                    <this.descriptionModal />
                 </div>
             </div>
         );

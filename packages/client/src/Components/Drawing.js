@@ -56,11 +56,10 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let position;
         const naver = window.naver;
-        const { map, updateDrawingData } = this.props;
+        const { map, updateDrawingData, descriptionModalShow } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
-
         let moveEvent;
         let figure;
         let lineData = [];
@@ -124,6 +123,7 @@ class Drawing extends Component {
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                     this.setState({ isInShapeCreateMode: false });
+                    descriptionModalShow();
                 } else {
                     figure.draw(lineData);
                 }
@@ -160,6 +160,7 @@ class Drawing extends Component {
                         });
                     }
                     this.setState({ isInShapeCreateMode: false });
+                    descriptionModalShow();
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                 }
@@ -175,14 +176,18 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
+        const { isInShapeCreateMode } = this.state;
+        const { descriptionModalHide } = this.props;
+        this.setState({ selectedButton: selectedIcon });
         this.setState({
             selectedButton: selectedIcon,
-            isInShapeCreateMode: true,
+            isInShapeCreateMode: !isInShapeCreateMode,
             fillOrNotToggle1: false,
             fillOrNotToggle2: false
         });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
         this.showShape();
+        descriptionModalHide();
     };
 
     doNotShowTips = () => {
