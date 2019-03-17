@@ -23,10 +23,6 @@ exports.signup = async (req, res) => {
 /* Load data */
 exports.load = async (req, res) => {
     const { name, bound, factors } = req.body;
-    console.log('name: ', name);
-    console.log('bound: ', bound);
-    console.log('factors: ', factors);
-
     let transaction;
     const data = [];
     const factorIdArray = [];
@@ -237,6 +233,9 @@ exports.save = async (req, res) => {
             res.status(200).send('호재 데이터를 저장하지 않았습니다.');
         } else {
             const { name, data, drawingSetInfo } = JSON.parse(value);
+            console.log('===================');
+            console.log(drawingSetInfo);
+            console.log('===================');
             if (Array.isArray(data)) {
                 const userID = await User.findOne({
                     where: { name },

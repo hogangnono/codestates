@@ -10,7 +10,7 @@ import { API_USER_PATH } from '../constants';
 
 class LoginModal extends Component {
     static propTypes = {
-        name: PropTypes.string.isRequired,
+        name: PropTypes.string,
         toggleLoginModal: PropTypes.func.isRequired,
         handleUserNameOnChange: PropTypes.func.isRequired,
         initUserName: PropTypes.func.isRequired

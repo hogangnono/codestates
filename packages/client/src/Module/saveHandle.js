@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { SLACK_GENERAL_PATH } from '../constants';
+import * as MakeScret from './simpleEncryption';
 // import * as ipsumLorem from './randomIpsumLorem';
 
-const saveHandle = (name, data, drawingSetInfo, toggleLoginModal, initDrawingData, showDraw, showDrawingSetTitleDescriptionModal) => {
+const saveHandle = (data, drawingSetInfo, toggleLoginModal, initDrawingData, showDraw, showDrawingSetTitleDescriptionModal) => {
     const token = JSON.parse(localStorage.getItem('token'));
-
     const dataSet = [];
-    console.log('data ::: ', data);
     data.map(oneShape => {
         const figuresData = {};
         figuresData.shape = oneShape.shapeType;
@@ -33,17 +32,22 @@ const saveHandle = (name, data, drawingSetInfo, toggleLoginModal, initDrawingDat
 
     // 로그인 되어 있는 상태
     if (token) {
+        const name = MakeScret.Decrypt(token);
         if (!data.length) {
             return alert(
                 '그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)'
             );
         }
-        let reqBody = {
-            name: name,
-            data: dataSet
-        };
+        let reqBody;
         if (data.length === 1) {
-            /* TODO: do something */
+            reqBody = {
+                name: name,
+                data: dataSet,
+                drawingSetInfo: {
+                    title: dataSet[0].title,
+                    description: dataSet[0].description
+                }
+            };
         } else if (data.length > 1) {
             if (!drawingSetInfo) {
                 return showDrawingSetTitleDescriptionModal(true);

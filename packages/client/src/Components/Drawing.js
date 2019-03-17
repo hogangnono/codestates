@@ -9,7 +9,6 @@ import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 import saveHandle from '../Module/saveHandle';
-import * as MakeSecret from '../Module/simpleEncryption';
 import * as constants from '../constants';
 
 class Drawing extends Component {
@@ -52,9 +51,7 @@ class Drawing extends Component {
             fillOrNotToggle1: false,
             fillOrNotToggle2: false
         });
-        const username = MakeSecret.Decrypt(JSON.parse(localStorage.getItem('token')));
         saveHandle(
-            username,
             data,
             null,
             toggleLoginModal,

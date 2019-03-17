@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import '../less/drawingSetTitleDescriptionModal.less';
 import PropTypes from 'prop-types';
 import saveHandle from '../Module/saveHandle';
-import * as MakeSecret from '../Module/simpleEncryption';
 
 class DrawingSetTitleDescription extends Component {
     static propTypes = {
@@ -32,10 +31,7 @@ class DrawingSetTitleDescription extends Component {
             title: drawingSetTitle,
             description: drawingSetDescription
         };
-        const username = MakeSecret.Decrypt(JSON.parse(localStorage.getItem('token')));
-        console.log('username : ', username);
         saveHandle(
-            username,
             drawingData,
             drawingSetInfo,
             toggleLoginModal,

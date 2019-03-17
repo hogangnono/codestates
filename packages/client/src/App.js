@@ -4,7 +4,6 @@ import drawData from './Module/loadHandle';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
-import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 import * as constants from './constants';
 // import MainButton from './Components/MainButton';
@@ -69,11 +68,6 @@ class App extends Component {
             this.mainPageLoad(map);
             this.deleteDraw();
         });
-        const userName = localStorage.getItem('token');
-        if (userName) {
-            const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
-            this.setState({ name: decryptedName });
-        }
     };
 
     handleUserNameOnChange = username => {
@@ -284,16 +278,17 @@ class App extends Component {
     }
 
     descriptionModalHide = () => {
-        this.setState({ descriptionModalState: false });
-        this.setState({ descriptionValue: '' });
-        this.setState({ descriptionTitle: '' });
+        this.setState({
+            descriptionModalState: false,
+            descriptionValue: '',
+            descriptionTitle: ''
+        });
     }
 
     descriptionModalSave = () => {
         const { descriptionValue, descriptionTitle, drawingData } = this.state;
         this.setState({ descriptionModalState: false });
         const arrayOfShapes = drawingData;
-        console.log(arrayOfShapes[arrayOfShapes.length - 1]);
         arrayOfShapes[arrayOfShapes.length - 1].title = descriptionTitle;
         arrayOfShapes[arrayOfShapes.length - 1].value = descriptionValue;
         this.setState({ drawingData: arrayOfShapes });
