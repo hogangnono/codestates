@@ -455,9 +455,9 @@ class App extends Component {
                             'colorList ' + (legendToggle ? 'invisible' : '')
                         }
                     >
-                        {Object.keys(constants.newToggleBox).map(color => {
+                        {Object.keys(constants.newToggleBox).map((color, index) => {
                             return (
-                                <div className="eachColor">
+                                <div className="eachColor" key={index++}>
                                     <div className="legendColorBox">
                                         <div className="colorCircle" />
                                     </div>
