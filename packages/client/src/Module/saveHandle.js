@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { SLACK_GENERAL_PATH } from '../constants';
-import * as ipsumLorem from './randomIpsumLorem';
+// import * as ipsumLorem from './randomIpsumLorem';
 
 const saveHandle = (name, data, drawingSetInfo, toggleLoginModal, initDrawingData, showDraw, showDrawingSetTitleDescriptionModal) => {
     const token = JSON.parse(localStorage.getItem('token'));
@@ -22,10 +22,10 @@ const saveHandle = (name, data, drawingSetInfo, toggleLoginModal, initDrawingDat
         processedData.start_lat = _lineData[0].coord._lat;
         processedData.start_lng = _lineData[0].coord._lng;
         processedData.end_lat = _lineData[_lineData.length - 1].coord._lat;
-        processedData.end_lng = _lineData[_lineData.length - 1].coord._lat;
+        processedData.end_lng = _lineData[_lineData.length - 1].coord._lng;
         processedData.figures = JSON.stringify(figuresData);
-        processedData.title = ipsumLorem.randomTitle(); // TODO: title, description Modal 완성되면 수정해야함
-        processedData.description = ipsumLorem.randomDescription(); // TODO: title, description Modal 완성되면 수정해야함
+        processedData.title = oneShape.title; // Fixed. Go to App.js line 260 to see!
+        processedData.description = oneShape.value; // Fixed
         processedData.css = JSON.stringify(figuresCss);
         processedData.factor_id = Math.floor(Math.random() * (8 - 0)); // TODO: title, description Modal 완성되면 수정해야함
         dataSet.push(processedData);

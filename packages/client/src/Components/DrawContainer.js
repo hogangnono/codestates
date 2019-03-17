@@ -28,7 +28,9 @@ class DrawContainer extends Component {
             NearByFactorItems,
             initDrawingListAfterSave,
             showDraw,
-            showDrawingSetTitleDescriptionModal
+            showDrawingSetTitleDescriptionModal,
+            descriptionModalShow,
+            descriptionModalHide
         } = this.props;
         return (
             <div id="toolbox">
@@ -48,6 +50,8 @@ class DrawContainer extends Component {
                             initDrawingListAfterSave={initDrawingListAfterSave}
                             showDraw={showDraw}
                             showDrawingSetTitleDescriptionModal={showDrawingSetTitleDescriptionModal}
+                            descriptionModalShow={descriptionModalShow}
+                            descriptionModalHide={descriptionModalHide}
                         />
                     </div>
                 </div>

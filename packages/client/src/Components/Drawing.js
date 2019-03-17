@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../less/Drawing.less';
-// import { IoMdSquareOutline, IoMdSquare } from 'react-icons/io';
 import Button from '../Module/Button';
 import Line from '../CustomOverlay/Line';
 import Arrow from '../CustomOverlay/Arrow';
@@ -10,6 +9,7 @@ import Rect from '../CustomOverlay/Rect';
 import Polygon from '../CustomOverlay/Polygon';
 import MyDrawingElement from './MyDrawingElement';
 import saveHandle from '../Module/saveHandle';
+import * as MakeSecret from '../Module/simpleEncryption';
 import * as constants from '../constants';
 
 class Drawing extends Component {
@@ -30,7 +30,10 @@ class Drawing extends Component {
         selectedButton: null,
         loadedListener: null,
         isInShapeCreateMode: false,
-        refresh: true
+        refresh: true,
+        fillOrNotToggle1: false,
+        fillOrNotToggle2: false,
+        showShapeBox: false
     };
 
     color = undefined;
@@ -39,15 +42,18 @@ class Drawing extends Component {
 
     handleRequestSave = data => {
         const {
-            name,
             toggleLoginModal,
             initDrawingListAfterSave,
             showDraw,
             showDrawingSetTitleDescriptionModal
         } = this.props;
-
+        this.setState({
+            fillOrNotToggle1: false,
+            fillOrNotToggle2: false
+        });
+        const username = MakeSecret.Decrypt(JSON.parse(localStorage.getItem('token')));
         saveHandle(
-            name,
+            username,
             data,
             null,
             toggleLoginModal,
@@ -68,7 +74,7 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let position;
         const naver = window.naver;
-        const { map, updateDrawingData } = this.props;
+        const { map, updateDrawingData, descriptionModalShow } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
@@ -136,6 +142,7 @@ class Drawing extends Component {
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                     this.setState({ isInShapeCreateMode: false });
+                    descriptionModalShow();
                 } else {
                     figure.draw(lineData);
                 }
@@ -172,6 +179,7 @@ class Drawing extends Component {
                         });
                     }
                     this.setState({ isInShapeCreateMode: false });
+                    descriptionModalShow();
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                 }
@@ -187,9 +195,19 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
+
+        const { isInShapeCreateMode } = this.state;
+        const { descriptionModalHide } = this.props;
         this.setState({ selectedButton: selectedIcon });
-        this.setState({ isInShapeCreateMode: true });
+        this.setState({ 
+          selectedButton: selectedIcon,
+          isInShapeCreateMode: !isInShapeCreateMode,
+          fillOrNotToggle1: false,
+          fillOrNotToggle2: false
+        });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
+        this.showShape();
+        descriptionModalHide();
     };
 
     doNotShowTips = () => {
@@ -200,6 +218,23 @@ class Drawing extends Component {
 
     fillOrnot = fillval => {
         this.fill = fillval;
+        const { fillOrNotToggle1, fillOrNotToggle2 } = this.state;
+        if (fillval === 'fill') {
+            this.setState({
+                fillOrNotToggle1: !fillOrNotToggle1
+            });
+        } else {
+            this.setState({
+                fillOrNotToggle2: !fillOrNotToggle2
+            });
+        }
+    };
+
+    showShape = () => {
+        const { showShapeBox } = this.state;
+        this.setState({
+            showShapeBox: !showShapeBox
+        });
     };
 
     decideFactor = factorNum => {
@@ -228,7 +263,10 @@ class Drawing extends Component {
         const {
             selectedButton,
             shapes,
-            isInShapeCreateMode
+            isInShapeCreateMode,
+            fillOrNotToggle1,
+            fillOrNotToggle2,
+            showShapeBox
         } = this.state;
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
@@ -253,10 +291,15 @@ class Drawing extends Component {
                     );
                 })}
                 {isInShapeCreateMode ? (
-                    <div className="selectOption">
+                    <div
+                        className={'selectOption ' + (showShapeBox ? '' : 'c')}
+                    >
                         <div className="fillOrNot">
                             <div
-                                className="lineOrFillBox"
+                                className={
+                                    'lineOrFillBox '
+                                    + (fillOrNotToggle1 ? 'a' : '')
+                                }
                                 onClick={() => this.fillOrnot('fill')}
                                 onKeyPress={this.fillOrnot}
                                 role="button"
@@ -265,7 +308,10 @@ class Drawing extends Component {
                                 Fill
                             </div>
                             <div
-                                className="lineOrFillBox"
+                                className={
+                                    'lineOrFillBox '
+                                    + (fillOrNotToggle2 ? 'b' : '')
+                                }
                                 onClick={() => this.fillOrnot('none')}
                                 onKeyPress={this.fillOrnot}
                                 role="button"

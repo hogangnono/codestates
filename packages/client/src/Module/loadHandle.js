@@ -15,12 +15,9 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
         })
         .then(async result => {
             const data = await result.data;
-            // const resultData = await data[0];
-            // const userData = await data[1];
             const [resultData, userData] = await data;
-            const overlays = [Line, Arrow, Rect, Circle, Polygon];
             const nearbyFactors = [];
-            let drawShape;
+            console.log(resultData);
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
                 const { fill, color } = JSON.parse(el.css);
@@ -34,20 +31,68 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                     nearbyData(nearbyFactors);
                 }
                 if (!(id in drawList)) {
-                    for (let i = 0; i < overlays.length; i++) {
-                        if (shape === overlays[i].name) {
-                            drawShape = overlays[i];
+                    switch (shape) {
+                        case 'Line': {
+                            const overlay = new Line({
+                                fill,
+                                color,
+                                lineData,
+                                naverMap: map,
+                                zoom: zoomLevel
+                            });
+                            overlay.setMap(map);
+                            drawList[el.id] = overlay;
+                            break;
+                        }
+                        case 'Arrow': {
+                            const overlay = new Arrow({
+                                fill,
+                                color,
+                                lineData,
+                                naverMap: map,
+                                zoom: zoomLevel
+                            });
+                            overlay.setMap(map);
+                            drawList[el.id] = overlay;
+                            break;
+                        }
+                        case 'Rect': {
+                            const overlay = new Rect({
+                                fill,
+                                color,
+                                lineData,
+                                naverMap: map,
+                                zoom: zoomLevel
+                            });
+                            overlay.setMap(map);
+                            drawList[el.id] = overlay;
+                            break;
+                        }
+                        case 'Circle': {
+                            const overlay = new Circle({
+                                fill,
+                                color,
+                                lineData,
+                                naverMap: map,
+                                zoom: zoomLevel
+                            });
+                            overlay.setMap(map);
+                            drawList[el.id] = overlay;
+                            break;
+                        }
+                        case 'Polygon': {
+                            const overlay = new Polygon({
+                                fill,
+                                color,
+                                lineData,
+                                naverMap: map,
+                                zoom: zoomLevel
+                            });
+                            overlay.setMap(map);
+                            drawList[el.id] = overlay;
+                            break;
                         }
                     }
-                    const overlay = new drawShape({
-                        fill,
-                        color,
-                        lineData,
-                        naverMap: map,
-                        zoom: zoomLevel
-                    });
-                    overlay.setMap(map);
-                    drawList[el.id] = overlay;
                 }
             };
             switch (result.status) {
