@@ -6,7 +6,6 @@ import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
 import './less/App.less';
 import * as constants from './constants';
-// import MainButton from './Components/MainButton';
 import NearbyFactorDialog from './Components/NearbyFactorDialog';
 import DrawingSetTitleDescription from './Components/drawingSetTitleDescriptionModal';
 
@@ -33,7 +32,8 @@ class App extends Component {
             drawingSetDescription: null,
             descriptionModalState: false,
             descriptionValue: '',
-            descriptionTitle: ''
+            descriptionTitle: '',
+            legendToggle: false
             // NearByFilteringItems: []
         };
     }
@@ -44,7 +44,7 @@ class App extends Component {
             zoomControl: true,
             zoomControlOptions: {
                 style: naver.maps.ZoomControlStyle.SMALL,
-                position: naver.maps.Position.LEFT_BOTTOM
+                position: naver.maps.Position.TOP_RIGHT
             },
             logoControl: true,
             logoControlOptions: {
@@ -56,7 +56,7 @@ class App extends Component {
             },
             mapDataControl: true,
             mapDataControlOptions: {
-                position: naver.maps.Position.BOTTOM_RIGHT
+                position: naver.maps.Position.BOTTOM_LEFT
             }
         });
 
@@ -108,14 +108,16 @@ class App extends Component {
             endPos.x = value._lineData[value._lineData.length - 1].coord.x;
             endPos.y = value._lineData[value._lineData.length - 1].coord.y;
 
-            if ((startPos.x < this.bound._min._lng - 0.01
-                || this.bound._max._lng + 0.01 < startPos.x
-                || startPos.y < this.bound._min._lat - 0.01
-                || this.bound._max._lat + 0.01 < startPos.y)
+            if (
+                (startPos.x < this.bound._min._lng - 0.01
+                    || this.bound._max._lng + 0.01 < startPos.x
+                    || startPos.y < this.bound._min._lat - 0.01
+                    || this.bound._max._lat + 0.01 < startPos.y)
                 && (endPos.x < this.bound._min._lng - 0.01
                     || this.bound._max._lng + 0.01 < endPos.x
                     || endPos.y < this.bound._min._lat - 0.01
-                    || this.bound._max._lat + 0.01 < endPos.y)) {
+                    || this.bound._max._lat + 0.01 < endPos.y)
+            ) {
                 value.setMap(null);
                 delete this.drawList[key];
             }
@@ -131,6 +133,11 @@ class App extends Component {
         const { showDraw } = this.state;
         this.setState({ descriptionModalState: false });
         this.setState({ showDraw: !showDraw });
+    };
+
+    toggleLegend = () => {
+        const { legendToggle } = this.state;
+        this.setState({ legendToggle: !legendToggle });
     };
 
     showFilter = () => {
@@ -254,28 +261,56 @@ class App extends Component {
 
     handleChangeDescription = event => {
         this.setState({ descriptionValue: event.target.value });
-    }
+    };
 
     handleChangeTitle = event => {
         this.setState({ descriptionTitle: event.target.value });
-    }
+    };
 
     descriptionModal = () => {
-        const { descriptionModalState, descriptionValue, descriptionTitle } = this.state;
+        const {
+            descriptionModalState,
+            descriptionValue,
+            descriptionTitle
+        } = this.state;
         if (descriptionModalState) {
             return (
                 <div className="descriptionModal">
                     <div className="descriptionHeader"> </div>
-                    <textarea placeholder="Add Title..." className="descriptionInputTitle" type="text" value={descriptionTitle} onChange={this.handleChangeTitle}></textarea>
-                    <textarea placeholder="Add description..." className="descriptionInput" type="text" value={descriptionValue} onChange={this.handleChangeDescription}></textarea>
-                    <button className="descriptionCloser" type="button" onClick={this.descriptionModalHide}>Close</button>
-                    <button className="descriptionSave" type="button" onClick={this.descriptionModalSave}>저장</button>
+                    <textarea
+                        placeholder="제목을 지어주세요:D"
+                        className="descriptionInputTitle"
+                        type="text"
+                        value={descriptionTitle}
+                        onChange={this.handleChangeTitle}
+                    />
+                    <textarea
+                        placeholder="호재 내용을 채워주세요:D"
+                        className="descriptionInput"
+                        type="text"
+                        value={descriptionValue}
+                        onChange={this.handleChangeDescription}
+                    />
+                    <button
+                        className="descriptionCloser"
+                        type="button"
+                        onClick={this.descriptionModalHide}
+                    >
+                        닫기
+                    </button>
+                    <button
+                        className="descriptionSave"
+                        type="button"
+                        onClick={this.descriptionModalSave}
+                    >
+                        저장
+                    </button>
                 </div>
             );
         } else {
-            return <div></div>;
+            return <div />;
         }
-    }
+    };
 
     descriptionModalHide = () => {
         this.setState({
@@ -292,11 +327,11 @@ class App extends Component {
         arrayOfShapes[arrayOfShapes.length - 1].title = descriptionTitle;
         arrayOfShapes[arrayOfShapes.length - 1].value = descriptionValue;
         this.setState({ drawingData: arrayOfShapes });
-    }
+    };
 
     descriptionModalShow = () => {
         this.setState({ descriptionModalState: true });
-    }
+    };
 
     render() {
         const {
@@ -310,30 +345,11 @@ class App extends Component {
             activeDraw,
             MyInfoButton,
             NearByFactorItems,
+            legendToggle,
             showDrawingSetTitleDescriptionModal,
             drawingSetTitle,
             drawingSetDescription
         } = this.state;
-        // const mainButton = [
-        //     {
-        //         className: '',
-        //         cond: true,
-        //         name: 'My',
-        //         onClick: () => this.mainToggle('showModal', showModal)
-        //     },
-        //     {
-        //         className: deactiveFilter,
-        //         cond: deactiveFilter === '',
-        //         name: '필터',
-        //         onClick: () => this.mainToggle('showFilter', showFilter)
-        //     },
-        //     {
-        //         className: deactiveDraw,
-        //         cond: deactiveDraw === '',
-        //         name: '그리기',
-        //         onClick: () => this.mainToggle('showDraw', showDraw)
-        //     }
-        // ];
         return (
             <div id="wrapper">
                 <div id="map">
@@ -343,15 +359,6 @@ class App extends Component {
                     />
 
                     <div id="loginFavorContainer">
-                        {/* mainButton.map(bt => (
-                            <MainButton
-                                className={bt.className} // 추가되는 클래스명
-                                name={bt.name} // 'my' | 'filer'...
-                                cond={bt.cond} // 클릭 함수 실행 조건
-                                onClick={bt.onClick}
-                                key={bt.name}
-                            />
-                        )) */}
                         <div
                             className="loginFavorBtn"
                             onClick={this.toggleLoginModal}
@@ -436,6 +443,29 @@ class App extends Component {
                             />
                         )
                         : null}
+                    <div
+                        className="legend"
+                        onClick={this.toggleLegend}
+                        onKeyPress={this.toggleLegend}
+                        role="button"
+                        tabIndex="0"
+                    />
+                    <div
+                        className={
+                            'colorList ' + (legendToggle ? 'invisible' : '')
+                        }
+                    >
+                        {Object.keys(constants.newToggleBox).map(color => {
+                            return (
+                                <div className="eachColor">
+                                    <div className="legendColorBox">
+                                        <div className="colorCircle" />
+                                    </div>
+                                    <div className="legendTextBox">{color}</div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
                 <div>
                     <this.descriptionModal />
