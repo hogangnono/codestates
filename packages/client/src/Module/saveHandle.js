@@ -25,7 +25,7 @@ const saveHandle = (name, data, callBack) => {
         processedData.start_lat = _lineData[0].coord._lat;
         processedData.start_lng = _lineData[0].coord._lng;
         processedData.end_lat = _lineData[_lineData.length - 1].coord._lat;
-        processedData.end_lng = _lineData[_lineData.length - 1].coord._lat;
+        processedData.end_lng = _lineData[_lineData.length - 1].coord._lng;
         processedData.figures = JSON.stringify(figuresData);
         processedData.title = ipsumLorem.randomTitle();
         processedData.description = ipsumLorem.randomDescription();
