@@ -63,7 +63,7 @@ class App extends Component {
         naver.maps.Event.addListener(map, 'idle', e => {
             this.bound = map.getBounds();
             this.mainPageLoad(map);
-            // this.deleteDraw();
+            this.deleteDraw();
         });
         const userName = localStorage.getItem('token');
         if (userName) {
@@ -90,16 +90,22 @@ class App extends Component {
 
     deleteDraw = () => {
         Object.entries(this.drawList).forEach(([key, value]) => {
-            const position = {};
+            const startPos = {};
+            const endPos = {};
             // reference point
-            position.x = value._centerPoint.center_lng;
-            position.y = value._centerPoint.center_lat;
-            if (
-                position.y < this.bound._min._lat - 0.01
-                || position.y > this.bound._max._lat + 0.01
-                || position.x < this.bound._min._lng - 0.01
-                || position.x > this.bound._max._lng + 0.01
-            ) {
+            startPos.x = value._lineData[0].coord.x;
+            startPos.y = value._lineData[0].coord.y;
+            endPos.x = value._lineData[value._lineData.length - 1].coord.x;
+            endPos.y = value._lineData[value._lineData.length - 1].coord.y;
+
+            if ((startPos.x < this.bound._min._lng - 0.01
+                || this.bound._max._lng + 0.01 < startPos.x
+                || startPos.y < this.bound._min._lat - 0.01
+                || this.bound._max._lat + 0.01 < startPos.y)
+                && (endPos.x < this.bound._min._lng - 0.01
+                    || this.bound._max._lng + 0.01 < endPos.x
+                    || endPos.y < this.bound._min._lat - 0.01
+                    || this.bound._max._lat + 0.01 < endPos.y)) {
                 value.setMap(null);
                 delete this.drawList[key];
             }
