@@ -9,6 +9,7 @@ import './less/App.less';
 import * as constants from './constants';
 // import MainButton from './Components/MainButton';
 import NearbyFactorDialog from './Components/NearbyFactorDialog';
+import DrawingSetTitleDescription from './Components/drawingSetTitleDescriptionModal';
 
 class App extends Component {
     constructor(props) {
@@ -27,7 +28,10 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: []
+            NearByFactorItems: [],
+            showDrawingSetTitleDescriptionModal: false,
+            drawingSetTitle: null,
+            drawingSetDescription: null
             // NearByFilteringItems: []
         };
     }
@@ -70,8 +74,20 @@ class App extends Component {
     };
 
     handleUserNameOnChange = username => {
-        this.setState({ name: username });
+        this.setState({ name: username }, console.log('name : ', username));
     };
+
+    showDrawingSetTitleDescriptionModal = value => {
+        this.setState({ showDrawingSetTitleDescriptionModal: value });
+    }
+
+    changeDrawingSetTitle = text => {
+        this.setState({ drawingSetTitle: text });
+    }
+
+    changeDrawingSetDescription = text => {
+        this.setState({ drawingSetDescription: text });
+    }
 
     mainPageLoad = map => {
         const { name, factors } = this.state;
@@ -242,7 +258,10 @@ class App extends Component {
             activeFilter,
             activeDraw,
             MyInfoButton,
-            NearByFactorItems
+            NearByFactorItems,
+            showDrawingSetTitleDescriptionModal,
+            drawingSetTitle,
+            drawingSetDescription
         } = this.state;
         // const mainButton = [
         //     {
@@ -346,8 +365,24 @@ class App extends Component {
                             NearByFactorItems={NearByFactorItems}
                             initDrawingListAfterSave={this.initDrawingListAfterSave}
                             showDraw={this.showDraw}
+                            showDrawingSetTitleDescriptionModal={this.showDrawingSetTitleDescriptionModal}
                         />
                     </div>
+                    { showDrawingSetTitleDescriptionModal
+                        ? (
+                            <DrawingSetTitleDescription
+                                changeDrawingSetTitle={this.changeDrawingSetTitle}
+                                changeDrawingSetDescription={this.changeDrawingSetDescription}
+                                drawingData={drawingData}
+                                toggleLoginModal={this.toggleLoginModal}
+                                initDrawingListAfterSave={this.initDrawingListAfterSave}
+                                showDraw={this.showDraw}
+                                showDrawingSetTitleDescriptionModal={this.showDrawingSetTitleDescriptionModal}
+                                drawingSetTitle={drawingSetTitle}
+                                drawingSetDescription={drawingSetDescription}
+                            />
+                        )
+                        : null}
                 </div>
             </div>
         );

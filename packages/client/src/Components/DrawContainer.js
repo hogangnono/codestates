@@ -13,7 +13,8 @@ class DrawContainer extends Component {
         name: PropTypes.string.isRequired,
         NearByFactorItems: PropTypes.array.isRequired,
         initDrawingListAfterSave: PropTypes.func.isRequired,
-        showDraw: PropTypes.func.isRequired
+        showDraw: PropTypes.func.isRequired,
+        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired
     };
 
     render() {
@@ -26,7 +27,8 @@ class DrawContainer extends Component {
             name,
             NearByFactorItems,
             initDrawingListAfterSave,
-            showDraw
+            showDraw,
+            showDrawingSetTitleDescriptionModal
         } = this.props;
         return (
             <div id="toolbox">
@@ -45,6 +47,7 @@ class DrawContainer extends Component {
                             NearByFactorItems={NearByFactorItems}
                             initDrawingListAfterSave={initDrawingListAfterSave}
                             showDraw={showDraw}
+                            showDrawingSetTitleDescriptionModal={showDrawingSetTitleDescriptionModal}
                         />
                     </div>
                 </div>

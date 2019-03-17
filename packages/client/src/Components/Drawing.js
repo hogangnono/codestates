@@ -21,7 +21,8 @@ class Drawing extends Component {
         updateDrawingData: PropTypes.func.isRequired,
         name: PropTypes.string.isRequired,
         initDrawingListAfterSave: PropTypes.func.isRequired,
-        showDraw: PropTypes.func.isRequired
+        showDraw: PropTypes.func.isRequired,
+        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired
     };
 
     state = {
@@ -37,8 +38,23 @@ class Drawing extends Component {
     fill = undefined;
 
     handleRequestSave = data => {
-        const { name, toggleLoginModal, initDrawingListAfterSave, showDraw } = this.props;
-        saveHandle(name, data, toggleLoginModal, initDrawingListAfterSave, showDraw);
+        const {
+            name,
+            toggleLoginModal,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal
+        } = this.props;
+
+        saveHandle(
+            name,
+            data,
+            null,
+            toggleLoginModal,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal
+        );
     };
 
     removeListener = () => {
@@ -209,7 +225,11 @@ class Drawing extends Component {
             // NearByFactorItems,
             updateDrawingData
         } = this.props;
-        const { selectedButton, shapes, isInShapeCreateMode } = this.state;
+        const {
+            selectedButton,
+            shapes,
+            isInShapeCreateMode
+        } = this.state;
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
         );
