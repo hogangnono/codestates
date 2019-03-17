@@ -28,7 +28,7 @@ class Button extends Component {
                     className={
                         isSelected ? 'selected drawingTools' : 'drawingTools'
                     }
-                    onKeyPress={() => {}}
+                    onKeyPress={() => { }}
                     onClick={() => {
                         selectButton(icons);
                     }}
