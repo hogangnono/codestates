@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
             updatedAt: DataTypes.DATE
         },
         {
+            charset: 'utf8',
+            collate: 'utf8_unicode_ci',
             timestamps: true,
             freezeTableName: true
         }

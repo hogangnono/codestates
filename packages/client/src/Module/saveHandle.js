@@ -1,15 +1,18 @@
 import axios from 'axios';
 import { SLACK_GENERAL_PATH } from '../constants';
-// import * as ipsumLorem from './randomIpsumLorem';
+// import { API_HOST } from '../constants';
+import * as MakeScret from './simpleEncryption';
 
-const saveHandle = (name, data, callBack) => {
-    // console.log('===================');
-    // console.log('saveHandle 함수가 호출되었습니다.');
+const saveHandle = (
+    data,
+    drawingSetInfo,
+    toggleLoginModal,
+    initDrawingData,
+    showDraw,
+    showDrawingSetTitleDescriptionModal
+) => {
     const token = JSON.parse(localStorage.getItem('token'));
-    // console.log('data in saveHandle : ', data);
-
     const dataSet = [];
-
     data.map(oneShape => {
         const figuresData = {};
         figuresData.shape = oneShape.shapeType;
@@ -30,72 +33,107 @@ const saveHandle = (name, data, callBack) => {
         processedData.title = oneShape.title; // Fixed. Go to App.js line 260 to see!
         processedData.description = oneShape.value; // Fixed
         processedData.css = JSON.stringify(figuresCss);
-        processedData.factor_id = Math.floor(Math.random() * (8 - 0));
+        processedData.factor_id = Math.floor(Math.random() * (8 - 0)); // TODO: title, description Modal 완성되면 수정해야함
         dataSet.push(processedData);
     });
-    const reqBody = {
-        name: name,
-        data: dataSet
-    };
-    const options = {
-        // mrkdwn: true,
-        attachments: [
-            {
-                title: `${name}님의 호재 정보입니다.`,
-                color: '#4d55b2'
-            },
-            {
-                title: 'Description',
-                text: `${dataSet[0].description}`,
-                color: '#4d55b2'
-            },
-            {
-                fallback: '호재 정보를 database 에 저장하시겠습니까?',
-                title: '호재 정보를 database 에 저장하시겠습니까??',
-                color: '#4d55b2',
-                attachment_type: 'default',
-                callback_id: 'sendData',
-                actions: [
-                    {
-                        name: 'Accept',
-                        text: 'Accept',
-                        type: 'button',
-                        value: JSON.stringify(reqBody)
-                    },
-                    {
-                        name: 'Refuse',
-                        text: 'Refuse',
-                        style: 'danger',
-                        type: 'button',
-                        value: 'Refuse'
-                    }
-                ]
-            }
-        ]
-    };
 
+    // 로그인 되어 있는 상태
     if (token) {
+        const name = MakeScret.Decrypt(token);
         if (!data.length) {
             return alert(
                 '그린 도형이 없습니다.\n도형을 그리고 저장버튼을 눌러주세요 :)'
             );
         }
-
-        return axios
-            .post(SLACK_GENERAL_PATH, JSON.stringify(options))
-            .then(result => {
-                alert('성공적으로 데이터를 보냈습니다.');
-                console.log('SUCCEEDED: Sent slack webhook: \n', result.data);
-            })
-            .catch(err => {
-                alert(
-                    '메세지 전송에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
-                );
-                console.log('Result for axios.post(/save) :::::::\n', err);
-            });
+        let reqBody;
+        if (data.length === 1) {
+            reqBody = {
+                name: name,
+                data: dataSet,
+                drawingSetInfo: {
+                    title: dataSet[0].title,
+                    description: dataSet[0].description
+                }
+            };
+        } else if (data.length > 1) {
+            if (!drawingSetInfo) {
+                return showDrawingSetTitleDescriptionModal(true);
+            } else {
+                reqBody = {
+                    name: name,
+                    data: dataSet,
+                    drawingSetInfo
+                };
+            }
+        }
+        const pressValue = confirm(
+            '그린 호재 정보를 심사요청했습니다.\n신청하신 내용이 승인이 된 후에 지도에 표시되게 됩니다.'
+        );
+        if (pressValue) {
+            initDrawingData();
+            const options = {
+                // mrkdwn: true,
+                attachments: [
+                    {
+                        title: `${name}님의 호재 정보입니다.`,
+                        color: '#4d55b2'
+                    },
+                    {
+                        title: 'Description',
+                        text: `${dataSet[0].description}`,
+                        color: '#4d55b2'
+                    },
+                    {
+                        fallback: '호재 정보를 database 에 저장하시겠습니까?',
+                        title: '호재 정보를 database 에 저장하시겠습니까??',
+                        color: '#4d55b2',
+                        attachment_type: 'default',
+                        callback_id: 'sendData',
+                        actions: [
+                            {
+                                name: 'Accept',
+                                text: 'Accept',
+                                type: 'button',
+                                value: JSON.stringify(reqBody)
+                            },
+                            {
+                                name: 'Refuse',
+                                text: 'Refuse',
+                                style: 'danger',
+                                type: 'button',
+                                value: 'Refuse'
+                            }
+                        ]
+                    }
+                ]
+            };
+            return (
+                axios
+                    .post(SLACK_GENERAL_PATH, JSON.stringify(options))
+                    // .post(API_HOST, reqBody)
+                    .then(result => {
+                        showDraw();
+                        showDrawingSetTitleDescriptionModal(false);
+                        console.log(
+                            'SUCCEEDED: Sent slack webhook: \n',
+                            result.data
+                        );
+                    })
+                    .catch(err => {
+                        alert(
+                            '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
+                        );
+                        console.log(
+                            'Result for axios.post(/save) :::::::\n',
+                            err
+                        );
+                    })
+            );
+        }
+        // 로그인 안된 상태
     } else {
         alert('저장을 위해선 로그인이 필요합니다 :)');
-        callBack();
+        toggleLoginModal();
     }
 };
 

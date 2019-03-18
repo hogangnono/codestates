@@ -1,3 +1,5 @@
+@colors: Crimson, DarkOrange, SeaGreen, Navy, Peru, HotPink, SlateGray, red;
+
 .NearbyFactorItem {
   width: 100%;
   height: 35px;
@@ -12,8 +14,19 @@
     width: 25%;
     text-align: center;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    .colorCircle {
+      margin-left: 4px;
+      margin-right: 4px;
+      width: 7px;
+      height: 7px;
+      border-radius: 10px;
+    }
   }
-  .descriptionName {
+  .titleName {
     width: 75%;
     padding-left: 10px;
     box-sizing: border-box;

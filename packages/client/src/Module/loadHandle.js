@@ -17,14 +17,14 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             const data = await result.data;
             const [resultData, userData] = await data;
             const nearbyFactors = [];
-            console.log(resultData);
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
                 const { fill, color } = JSON.parse(el.css);
-                const { description, factor_id, id } = el;
+                const { title, description, factor_id, id } = el;
                 const factorNearby = {
-                    description: description,
-                    factor_id: factor_id
+                    title,
+                    description,
+                    factor_id
                 };
                 nearbyFactors.push(factorNearby);
                 if (nearbyFactors.length && !name) {

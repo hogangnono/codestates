@@ -13,12 +13,16 @@ import * as constants from '../constants';
 
 class Drawing extends Component {
     static propTypes = {
-        map: PropTypes.object.isRequired,
+        map: PropTypes.object,
         handleToggle: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired,
+        toggleLoginModal: PropTypes.func.isRequired,
         drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired
+        initDrawingListAfterSave: PropTypes.func.isRequired,
+        showDraw: PropTypes.func.isRequired,
+        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired,
+        descriptionModalShow: PropTypes.func.isRequired,
+        descriptionModalHide: PropTypes.func.isRequired
     };
 
     state = {
@@ -37,12 +41,24 @@ class Drawing extends Component {
     fill = undefined;
 
     handleRequestSave = data => {
-        const { name, toggleModal } = this.props;
+        const {
+            toggleLoginModal,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal
+        } = this.props;
         this.setState({
             fillOrNotToggle1: false,
             fillOrNotToggle2: false
         });
-        saveHandle(name, data, toggleModal);
+        saveHandle(
+            data,
+            null,
+            toggleLoginModal,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal
+        );
     };
 
     removeListener = () => {
@@ -122,7 +138,10 @@ class Drawing extends Component {
                     this.color = undefined;
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
-                    this.setState({ isInShapeCreateMode: false });
+                    this.setState({
+                        isInShapeCreateMode: false,
+                        showShapeBox: false
+                    });
                     descriptionModalShow();
                 } else {
                     figure.draw(lineData);
@@ -159,7 +178,10 @@ class Drawing extends Component {
                             shapeType: Shape.name
                         });
                     }
-                    this.setState({ isInShapeCreateMode: false });
+                    this.setState({
+                        isInShapeCreateMode: false,
+                        showShapeBox: false
+                    });
                     descriptionModalShow();
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
@@ -218,8 +240,8 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
-        // console.log(constants.colorList[factorNum]);
         this.color = constants.colorList[factorNum];
+        console.log(constants.colorList[factorNum]);
     };
 
     render() {
@@ -243,6 +265,48 @@ class Drawing extends Component {
         );
         const newToggleBox = Object.keys(constants.newToggleBox);
 
+        if (isInShapeCreateMode) {
+            const mapDiv = document.querySelector('#map').childNodes[6];
+            console.log(mapDiv);
+            if (mapDiv.style.cursor !== 'crosshair') {
+                mapDiv.style.cursor = 'crosshair';
+            }
+            window.naver.maps.Event.addListener(map, 'mouseup', e => {
+                const { isInShapeCreateMode } = this.state;
+                if (
+                    isInShapeCreateMode
+                    && mapDiv.style.cursor !== 'crosshair'
+                ) {
+                    mapDiv.style.cursor = 'crosshair';
+                } else if (
+                    !isInShapeCreateMode
+                    && mapDiv.style.cursor !== 'grab'
+                ) {
+                    mapDiv.style.cursor = 'grab';
+                }
+            });
+            window.naver.maps.Event.addListener(map, 'mousedown', e => {
+                const { isInShapeCreateMode } = this.state;
+                if (
+                    isInShapeCreateMode
+                    && mapDiv.style.cursor !== 'crosshair'
+                ) {
+                    mapDiv.style.cursor = 'crosshair';
+                } else if (
+                    !isInShapeCreateMode
+                    && mapDiv.style.cursor !== 'grabbing'
+                ) {
+                    mapDiv.style.cursor = 'grabbing';
+                }
+            });
+        } else {
+            if (map) {
+                const mapDiv = document.querySelector('#map').childNodes[6];
+                if (mapDiv.style.cursor !== 'grab') {
+                    mapDiv.style.cursor = 'grab';
+                }
+            }
+        }
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
