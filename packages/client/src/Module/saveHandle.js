@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SLACK_GENERAL_PATH } from '../constants';
+// import { API_HOST } from '../constants';
 import * as MakeScret from './simpleEncryption';
-// import * as ipsumLorem from './randomIpsumLorem';
 
 const saveHandle = (data, drawingSetInfo, toggleLoginModal, initDrawingData, showDraw, showDrawingSetTitleDescriptionModal) => {
     const token = JSON.parse(localStorage.getItem('token'));
@@ -55,7 +55,7 @@ const saveHandle = (data, drawingSetInfo, toggleLoginModal, initDrawingData, sho
                 reqBody = {
                     name: name,
                     data: dataSet,
-                    drawingSetInfo: drawingSetInfo
+                    drawingSetInfo
                 };
             }
         }
@@ -100,6 +100,7 @@ const saveHandle = (data, drawingSetInfo, toggleLoginModal, initDrawingData, sho
             };
             return axios
                     .post(SLACK_GENERAL_PATH, JSON.stringify(options))
+                    // .post(API_HOST, reqBody)
                     .then(result => {
                         showDraw();
                         showDrawingSetTitleDescriptionModal(false);
