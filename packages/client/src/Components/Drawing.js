@@ -138,7 +138,7 @@ class Drawing extends Component {
                     this.color = undefined;
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
-                    this.setState({ isInShapeCreateMode: false });
+                    this.setState({ isInShapeCreateMode: false, showShapeBox: false });
                     descriptionModalShow();
                 } else {
                     figure.draw(lineData);
@@ -175,7 +175,7 @@ class Drawing extends Component {
                             shapeType: Shape.name
                         });
                     }
-                    this.setState({ isInShapeCreateMode: false });
+                    this.setState({ isInShapeCreateMode: false, showShapeBox: false });
                     descriptionModalShow();
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
@@ -234,7 +234,6 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
-        console.log(constants.colorList[factorNum]);
         this.color = constants.colorList[factorNum];
     };
 
@@ -288,8 +287,6 @@ class Drawing extends Component {
                 }
             }
         }
-
-
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
