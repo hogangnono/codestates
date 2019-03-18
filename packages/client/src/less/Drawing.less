@@ -22,7 +22,6 @@ body {
   .drawingToolBox {
     width: 100%;
     height: 40px;
-    // background-color: red;
   }
   .drawingTools {
     float: left;
@@ -32,7 +31,6 @@ body {
     height: 20px;
     padding: 10px 0;
     margin: 0 2%;
-    font-size: 13px;
     text-align: center;
     border-color: #c0c0c061;
     border-radius: 3px;
@@ -51,9 +49,9 @@ body {
       background-color: @mainColor;
       color: @white;
     }
-  }
-  .drawingTools:focus {
-    outline: 0;
+    &:focus {
+      outline: 0;
+    }
   }
   #myDrawingsContainer {
     width: 100%;
@@ -80,7 +78,6 @@ body {
     width: 100%;
     height: 70px;
     box-sizing: border-box;
-    // background-color: red;
   }
   .saveCloseBtn {
     position: absolute;
@@ -106,12 +103,12 @@ body {
       background-color: @mainColor;
       color: @white;
     }
-  }
-  .saveCloseBtn:first-child {
-    left: 0px;
-  }
-  .saveCloseBtn:focus {
-    outline: 0;
+    &:first-child {
+      left: 0px;
+    }
+    &:focus {
+      outline: 0;
+    }
   }
   .selected {
     background-color: #4d55b2;
@@ -135,7 +132,6 @@ body {
     box-sizing: border-box;
     letter-spacing: 1px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
-    // border: 1px solid red;
   }
   .tipModalForDrawing {
     position: absolute;
@@ -239,9 +235,6 @@ body {
         background-color: @mainColor;
         color: @white;
       }
-      // &:hover {
-      //   color: @mainColor;
-      // }
       &:focus {
         outline: 0;
       }
@@ -295,11 +288,9 @@ body {
   background-color: red;
 }
 .factorText {
-  // text-align: center;
   padding-left: 20px;
 }
 
-// mixin to iterate over colors and create CSS class for each one
 .factor(@i: length(@colors)) when (@i > 0) {
   .factor(@i - 1);
   @color: extract(@colors, @i);
@@ -308,7 +299,7 @@ body {
   }
 }
 
-.factor(); // run the mixin
+.factor();
 
 .a {
   background-color: @mainColor;
@@ -322,10 +313,10 @@ body {
   height: 0;
 }
 
-@cirle-width: 70px;
+@circle-width: 70px;
 
 // You can play with these for a little variation
-@shadow-depth: @cirle-width * 0.25;
+@shadow-depth: @circle-width * 0.25;
 @shadow-depth-hover-ratio: 1.5;
 @shadow-blur: @shadow-depth * 0;
 @shadow-spread: @shadow-depth * 0;
@@ -342,23 +333,6 @@ body {
 @blue: rgba(0, 133, 255, 0.53);
 @purple: rgba(190, 11, 224, 0.55);
 
-// * {
-//   box-sizing: border-box;
-// }
-
-// html,
-// body {
-//   height: 100%;
-//   margin: 0;
-// }
-
-// body {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   background: radial-gradient(ellipse at center, #fff 0%, #eee 80%);
-// }
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -373,7 +347,7 @@ body {
   bottom: 50px;
   right: 15px;
   z-index: 100;
-  width: @cirle-width;
+  width: @circle-width;
   border-radius: 50%;
   transition: all 0.3s ease;
   background-color: white;

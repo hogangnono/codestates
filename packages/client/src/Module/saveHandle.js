@@ -3,7 +3,14 @@ import { SLACK_GENERAL_PATH } from '../constants';
 // import { API_HOST } from '../constants';
 import * as MakeScret from './simpleEncryption';
 
-const saveHandle = (data, drawingSetInfo, toggleLoginModal, initDrawingData, showDraw, showDrawingSetTitleDescriptionModal) => {
+const saveHandle = (
+    data,
+    drawingSetInfo,
+    toggleLoginModal,
+    initDrawingData,
+    showDraw,
+    showDrawingSetTitleDescriptionModal
+) => {
     const token = JSON.parse(localStorage.getItem('token'));
     const dataSet = [];
     data.map(oneShape => {
@@ -59,7 +66,9 @@ const saveHandle = (data, drawingSetInfo, toggleLoginModal, initDrawingData, sho
                 };
             }
         }
-        const pressValue = confirm('그린 호재 정보를 심사요청했습니다.\n신청하신 내용이 승인이 된 후에 지도에 표시되게 됩니다.');
+        const pressValue = confirm(
+            '그린 호재 정보를 심사요청했습니다.\n신청하신 내용이 승인이 된 후에 지도에 표시되게 됩니다.'
+        );
         if (pressValue) {
             initDrawingData();
             const options = {
@@ -98,22 +107,30 @@ const saveHandle = (data, drawingSetInfo, toggleLoginModal, initDrawingData, sho
                     }
                 ]
             };
-            return axios
+            return (
+                axios
                     .post(SLACK_GENERAL_PATH, JSON.stringify(options))
                     // .post(API_HOST, reqBody)
                     .then(result => {
                         showDraw();
                         showDrawingSetTitleDescriptionModal(false);
-                        console.log('SUCCEEDED: Sent slack webhook: \n', result.data);
+                        console.log(
+                            'SUCCEEDED: Sent slack webhook: \n',
+                            result.data
+                        );
                     })
                     .catch(err => {
                         alert(
                             '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
                         );
-                        console.log('Result for axios.post(/save) :::::::\n', err);
-                    });
+                        console.log(
+                            'Result for axios.post(/save) :::::::\n',
+                            err
+                        );
+                    })
+            );
         }
-    // 로그인 안된 상태
+        // 로그인 안된 상태
     } else {
         alert('저장을 위해선 로그인이 필요합니다 :)');
         toggleLoginModal();

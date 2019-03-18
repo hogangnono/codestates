@@ -71,9 +71,6 @@ input[type="checkbox"] {
   height: 100%;
   z-index: 1000;
 }
-// input[type="checkbox"]:hover ~ .checkedBox {
-//   box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
-// }
 input[type="checkbox"]:checked ~ .checkedBox {
   .toggleColor;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
@@ -95,22 +92,22 @@ input[type="checkbox"]:checked ~ .checkedBox {
   border: 1px solid #fff;
   box-sizing: border-box;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  &:hover {
+    .toggleColor;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+  }
+  &:focus {
+    outline: 0;
+  }
 }
 
 .last {
   left: 53%;
   .color;
 }
-.myInfoButton:hover {
-  .toggleColor;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
-}
 
 .checked {
   .toggleColor;
-}
-.myInfoButton:focus {
-  outline: 0;
 }
 .unChecked {
   .color;

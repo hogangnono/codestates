@@ -40,45 +40,46 @@ exports.load = async (req, res) => {
             });
             const result = await Figure.findAll({
                 where: {
-                    [Op.or]: [{
-                        [Op.and]: [
-                            {
-                                start_lat: {
-                                    [Op.between]: [
-                                        bound._min._lat - 0.01,
-                                        bound._max._lat + 0.01
-                                    ]
+                    [Op.or]: [
+                        {
+                            [Op.and]: [
+                                {
+                                    start_lat: {
+                                        [Op.between]: [
+                                            bound._min._lat - 0.01,
+                                            bound._max._lat + 0.01
+                                        ]
+                                    }
+                                },
+                                {
+                                    start_lng: {
+                                        [Op.between]: [
+                                            bound._min._lng - 0.01,
+                                            bound._max._lng + 0.01
+                                        ]
+                                    }
                                 }
-                            },
-                            {
-                                start_lng: {
-                                    [Op.between]: [
-                                        bound._min._lng - 0.01,
-                                        bound._max._lng + 0.01
-                                    ]
+                            ],
+                            [Op.and]: [
+                                {
+                                    end_lat: {
+                                        [Op.between]: [
+                                            bound._min._lat - 0.01,
+                                            bound._max._lat + 0.01
+                                        ]
+                                    }
+                                },
+                                {
+                                    end_lng: {
+                                        [Op.between]: [
+                                            bound._min._lng - 0.01,
+                                            bound._max._lng + 0.01
+                                        ]
+                                    }
                                 }
-                            }
-                        ],
-                        [Op.and]: [
-                            {
-                                end_lat: {
-                                    [Op.between]: [
-                                        bound._min._lat - 0.01,
-                                        bound._max._lat + 0.01
-                                    ]
-                                }
-                            },
-                            {
-                                end_lng: {
-                                    [Op.between]: [
-                                        bound._min._lng - 0.01,
-                                        bound._max._lng + 0.01
-                                    ]
-                                }
-                            }
-                        ]
-
-                    }]
+                            ]
+                        }
+                    ]
                 },
                 transaction
             });
@@ -102,45 +103,46 @@ exports.load = async (req, res) => {
                     }
                 ],
                 where: {
-                    [Op.or]: [{
-                        [Op.and]: [
-                            {
-                                start_lat: {
-                                    [Op.between]: [
-                                        bound._min._lat - 0.01,
-                                        bound._max._lat + 0.01
-                                    ]
+                    [Op.or]: [
+                        {
+                            [Op.and]: [
+                                {
+                                    start_lat: {
+                                        [Op.between]: [
+                                            bound._min._lat - 0.01,
+                                            bound._max._lat + 0.01
+                                        ]
+                                    }
+                                },
+                                {
+                                    start_lng: {
+                                        [Op.between]: [
+                                            bound._min._lng - 0.01,
+                                            bound._max._lng + 0.01
+                                        ]
+                                    }
                                 }
-                            },
-                            {
-                                start_lng: {
-                                    [Op.between]: [
-                                        bound._min._lng - 0.01,
-                                        bound._max._lng + 0.01
-                                    ]
+                            ],
+                            [Op.and]: [
+                                {
+                                    end_lat: {
+                                        [Op.between]: [
+                                            bound._min._lat - 0.01,
+                                            bound._max._lat + 0.01
+                                        ]
+                                    }
+                                },
+                                {
+                                    end_lng: {
+                                        [Op.between]: [
+                                            bound._min._lng - 0.01,
+                                            bound._max._lng + 0.01
+                                        ]
+                                    }
                                 }
-                            }
-                        ],
-                        [Op.and]: [
-                            {
-                                end_lat: {
-                                    [Op.between]: [
-                                        bound._min._lat - 0.01,
-                                        bound._max._lat + 0.01
-                                    ]
-                                }
-                            },
-                            {
-                                end_lng: {
-                                    [Op.between]: [
-                                        bound._min._lng - 0.01,
-                                        bound._max._lng + 0.01
-                                    ]
-                                }
-                            }
-                        ]
-
-                    }]
+                            ]
+                        }
+                    ]
                 },
                 transaction
             });
@@ -166,45 +168,46 @@ exports.load = async (req, res) => {
                     { model: Drawing, where: { user_id: userId }, transaction }
                 ], // include => join을 함
                 where: {
-                    [Op.or]: [{
-                        [Op.and]: [
-                            {
-                                start_lat: {
-                                    [Op.between]: [
-                                        bound._min._lat - 0.01,
-                                        bound._max._lat + 0.01
-                                    ]
+                    [Op.or]: [
+                        {
+                            [Op.and]: [
+                                {
+                                    start_lat: {
+                                        [Op.between]: [
+                                            bound._min._lat - 0.01,
+                                            bound._max._lat + 0.01
+                                        ]
+                                    }
+                                },
+                                {
+                                    start_lng: {
+                                        [Op.between]: [
+                                            bound._min._lng - 0.01,
+                                            bound._max._lng + 0.01
+                                        ]
+                                    }
                                 }
-                            },
-                            {
-                                start_lng: {
-                                    [Op.between]: [
-                                        bound._min._lng - 0.01,
-                                        bound._max._lng + 0.01
-                                    ]
+                            ],
+                            [Op.and]: [
+                                {
+                                    end_lat: {
+                                        [Op.between]: [
+                                            bound._min._lat - 0.01,
+                                            bound._max._lat + 0.01
+                                        ]
+                                    }
+                                },
+                                {
+                                    end_lng: {
+                                        [Op.between]: [
+                                            bound._min._lng - 0.01,
+                                            bound._max._lng + 0.01
+                                        ]
+                                    }
                                 }
-                            }
-                        ],
-                        [Op.and]: [
-                            {
-                                end_lat: {
-                                    [Op.between]: [
-                                        bound._min._lat - 0.01,
-                                        bound._max._lat + 0.01
-                                    ]
-                                }
-                            },
-                            {
-                                end_lng: {
-                                    [Op.between]: [
-                                        bound._min._lng - 0.01,
-                                        bound._max._lng + 0.01
-                                    ]
-                                }
-                            }
-                        ]
-
-                    }]
+                            ]
+                        }
+                    ]
                 },
                 transaction
             });
@@ -224,7 +227,7 @@ exports.save = async (req, res) => {
     let transaction;
     const { payload } = req.body;
     // console.log('===================');
-    // console.log(JSON.parse(payload).actions[0].value);
+    console.log('aaaaaaaaaaaaaaaaaa', JSON.parse(payload).actions[0].value);
     // console.log('===================');
     const { value } = JSON.parse(payload).actions[0];
     try {
@@ -233,14 +236,17 @@ exports.save = async (req, res) => {
             res.status(200).send('호재 데이터를 저장하지 않았습니다.');
         } else {
             const { name, data, drawingSetInfo } = JSON.parse(value);
+            console.log(name);
             console.log('===================');
             console.log(drawingSetInfo);
             console.log('===================');
             if (Array.isArray(data)) {
+                console.log('1');
                 const userID = await User.findOne({
                     where: { name },
                     transaction
                 }).get('id');
+                console.log('2');
                 const drawingId = await Drawing.create(
                     {
                         user_id: userID,
@@ -249,6 +255,7 @@ exports.save = async (req, res) => {
                     },
                     transaction
                 ).get('id');
+                console.log('3');
                 const dataWithDrawingId = data.map(figure => {
                     const returnFigure = {
                         ...figure,
@@ -256,8 +263,12 @@ exports.save = async (req, res) => {
                     };
                     return returnFigure;
                 });
+                console.log('4');
+                console.log(dataWithDrawingId);
                 await Figure.bulkCreate(dataWithDrawingId);
+                console.log('5');
                 await transaction.commit();
+                console.log('6');
                 res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
             }
         }
