@@ -138,7 +138,7 @@ class Drawing extends Component {
                     this.color = undefined;
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
-                    this.setState({ isInShapeCreateMode: false });
+                    this.setState({ isInShapeCreateMode: false, showShapeBox: false });
                     descriptionModalShow();
                 } else {
                     figure.draw(lineData);
@@ -175,7 +175,7 @@ class Drawing extends Component {
                             shapeType: Shape.name
                         });
                     }
-                    this.setState({ isInShapeCreateMode: false });
+                    this.setState({ isInShapeCreateMode: false, showShapeBox: false });
                     descriptionModalShow();
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
@@ -234,7 +234,6 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
-        console.log(constants.colorList[factorNum]);
         this.color = constants.colorList[factorNum];
     };
 
@@ -259,6 +258,36 @@ class Drawing extends Component {
         );
         const newToggleBox = Object.keys(constants.newToggleBox);
 
+        if (isInShapeCreateMode) {
+            const mapDiv = document.querySelector('#map').childNodes[6];
+            console.log(mapDiv);
+            if (mapDiv.style.cursor !== 'crosshair') {
+                mapDiv.style.cursor = 'crosshair';
+            }
+            window.naver.maps.Event.addListener(map, 'mouseup', e => {
+                const { isInShapeCreateMode } = this.state;
+                if (isInShapeCreateMode && mapDiv.style.cursor !== 'crosshair') {
+                    mapDiv.style.cursor = 'crosshair';
+                } else if (!isInShapeCreateMode && mapDiv.style.cursor !== 'grab') {
+                    mapDiv.style.cursor = 'grab';
+                }
+            });
+            window.naver.maps.Event.addListener(map, 'mousedown', e => {
+                const { isInShapeCreateMode } = this.state;
+                if (isInShapeCreateMode && mapDiv.style.cursor !== 'crosshair') {
+                    mapDiv.style.cursor = 'crosshair';
+                } else if (!isInShapeCreateMode && mapDiv.style.cursor !== 'grabbing') {
+                    mapDiv.style.cursor = 'grabbing';
+                }
+            });
+        } else {
+            if (map) {
+                const mapDiv = document.querySelector('#map').childNodes[6];
+                if (mapDiv.style.cursor !== 'grab') {
+                    mapDiv.style.cursor = 'grab';
+                }
+            }
+        }
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -341,7 +370,7 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
-                            // puppeteer.captureImage();
+                        // puppeteer.captureImage();
                         }}
                     >
                         {`저장`}
