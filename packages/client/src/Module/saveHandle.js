@@ -89,7 +89,7 @@ const saveHandle = (name, data, callBack) => {
             })
             .catch(err => {
                 alert(
-                    '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
+                    '메세지 전송에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
                 );
                 console.log('Result for axios.post(/save) :::::::\n', err);
             });

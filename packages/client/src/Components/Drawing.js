@@ -218,7 +218,7 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
-        console.log(constants.colorList[factorNum]);
+        // console.log(constants.colorList[factorNum]);
         this.color = constants.colorList[factorNum];
     };
 

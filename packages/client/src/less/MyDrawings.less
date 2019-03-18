@@ -1,56 +1,57 @@
-@ligthGrey : rgb(201, 199, 199);
+@lightgrey : rgb(201, 199, 199);
 @hogangnonoColor: #4d55b2;
+@font: Apple SD Gothic Neo, "Apple SD \C0B0\B3CC\ACE0\B515   Neo",
+  "\B9D1\C740   \ACE0\B515", Malgun Gothic, ng, sans-serif;
 
 #myDrawingsContainer {
-    .topInMyDrawingContainer {
-        position: relative;
-        background-color: @hogangnonoColor;
-        margin-top: 0;
-        border-radius: 10px 10px 0 0;
-        color: #fff;
-        width: 100%;
-        height: 100px;
-        .welcome {
-            position: absolute;
-            bottom: 5px;
-            margin: 10px;
-            p {
-                margin: 5px 0px;
-                font-size: 25px;
-                font-weight: bold;
-            }
-        }
+  .topInMyDrawingContainer {
+    position: relative;
+    background-color: @hogangnonoColor;
+    margin-top: 0;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    width: 100%;
+    height: 100px;
+    .welcome {
+      position: absolute;
+      bottom: 5px;
+      margin: 10px;
+      p {
+        margin: 5px 0px;
+        font-size: 25px;
+        font-weight: bold;
+      }
     }
-    .myDrawingsTitle {
-        font-size: 20px;
-        font-weight: 500;
-        border-bottom: 1px solid @ligthGrey;
-        margin: 15px 10px;
-        padding: 5px;
-    }
-    .myDrawingLists {
-        list-style: none;
-        margin: 15px 10px;
-        font-size: 17px;
-        font-family: Apple SD Gothic Neo, "Apple SD \C0B0\B3CC\ACE0\B515   Neo",
-        "\B9D1\C740   \ACE0\B515", Malgun Gothic, ng, sans-serif;
+  }
+  .myDrawingsTitle {
+    font-size: 20px;
+    font-weight: 500;
+    border-bottom: 1px solid @lightgrey;
+    margin: 15px 10px;
+    padding: 5px;
+  }
+  .myDrawingLists {
+    list-style: none;
+    margin: 15px 10px;
+    font-size: 17px;
+    font-family: @font;
 
-        .myDrawingEachListTitle {
-            font-weight: bold;
-        }
-        .myDrawingEachListDes {
-            color: rgb(53, 53, 53);
-        }
+    .myDrawingEachListTitle {
+      font-weight: bold;
     }
-    .logoutButton {
-        position: absolute;
-        bottom: 30px;
-        right: 30px;
-        color: #aaa;
-        background-color: #fff;
-        border-style: none;
-        padding: 10px;
-        border-radius: 5px;
-        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+    .myDrawingEachListDes {
+      color: rgb(53, 53, 53);
     }
+  }
+  .logoutButton {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    color: #aaa;
+    background-color: #fff;
+    border-style: none;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  }
 }
