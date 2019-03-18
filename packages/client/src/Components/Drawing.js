@@ -177,11 +177,11 @@ class Drawing extends Component {
     selectButton = selectedIcon => {
         const { isInShapeCreateMode } = this.state;
         this.setState({ selectedButton: selectedIcon });
-        this.setState({ 
-          selectedButton: selectedIcon,
-          isInShapeCreateMode: !isInShapeCreateMode,
-          fillOrNotToggle1: false,
-          fillOrNotToggle2: false
+        this.setState({
+            selectedButton: selectedIcon,
+            isInShapeCreateMode: !isInShapeCreateMode,
+            fillOrNotToggle1: false,
+            fillOrNotToggle2: false
         });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
         this.showShape();
