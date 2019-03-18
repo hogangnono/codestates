@@ -259,7 +259,8 @@ class Drawing extends Component {
         const newToggleBox = Object.keys(constants.newToggleBox);
 
         if (isInShapeCreateMode) {
-            const mapDiv = document.querySelector('#map').childNodes[4];
+            const mapDiv = document.querySelector('#map').childNodes[6];
+            console.log(mapDiv);
             if (mapDiv.style.cursor !== 'crosshair') {
                 mapDiv.style.cursor = 'crosshair';
             }
@@ -281,7 +282,7 @@ class Drawing extends Component {
             });
         } else {
             if (map) {
-                const mapDiv = document.querySelector('#map').childNodes[4];
+                const mapDiv = document.querySelector('#map').childNodes[6];
                 if (mapDiv.style.cursor !== 'grab') {
                     mapDiv.style.cursor = 'grab';
                 }
