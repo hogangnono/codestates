@@ -70,6 +70,8 @@ class App extends Component {
         });
     };
 
+    isDelete = false;
+
     handleUserNameOnChange = username => {
         this.setState({ name: username });
     };
@@ -97,6 +99,22 @@ class App extends Component {
         };
         drawData(name, bound, factors, false, this.drawList, map, nearbyData);
     };
+
+    toggleAllDraw = () => {
+        const { showDraw, map } = this.state;
+        if (showDraw) {
+            Object.entries(this.drawList).forEach(([key, value]) => {
+                value.setMap(null);
+                delete this.drawList[key];
+            });
+            this.isDelete = true;
+        } else {
+            if (this.isDelete) {
+                this.mainPageLoad(map);
+                this.isDelete = false;
+            }
+        }
+    }
 
     deleteDraw = () => {
         Object.entries(this.drawList).forEach(([key, value]) => {
@@ -350,6 +368,8 @@ class App extends Component {
             drawingSetTitle,
             drawingSetDescription
         } = this.state;
+
+        this.toggleAllDraw();
         return (
             <div id="wrapper">
                 <div className="introPage">
