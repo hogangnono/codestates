@@ -330,6 +330,14 @@ class App extends Component {
         } = this.state;
         return (
             <div id="wrapper">
+                <div className="introPage">
+                    <div className="chart1" />
+                    <div className="chart2" />
+                    <div className="chart3" />
+                    <div className="chart4" />
+                    <div className="chart5" />
+                    <div className="chart6" />
+                </div>
                 <div id="map">
                     <NearbyFactorDialog
                         mapLoad={map}
