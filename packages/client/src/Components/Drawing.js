@@ -214,6 +214,37 @@ class Drawing extends Component {
         );
         const newToggleBox = Object.keys(constants.newToggleBox);
 
+        if (isInShapeCreateMode) {
+            const mapDiv = document.querySelector('#map').childNodes[4];
+            if (mapDiv.style.cursor !== 'crosshair') {
+                mapDiv.style.cursor = 'crosshair';
+            }
+            window.naver.maps.Event.addListener(map, 'mouseup', e => {
+                const { isInShapeCreateMode } = this.state;
+                if (isInShapeCreateMode && mapDiv.style.cursor !== 'crosshair') {
+                    mapDiv.style.cursor = 'crosshair';
+                } else if (!isInShapeCreateMode && mapDiv.style.cursor !== 'grab') {
+                    mapDiv.style.cursor = 'grab';
+                }
+            });
+            window.naver.maps.Event.addListener(map, 'mousedown', e => {
+                const { isInShapeCreateMode } = this.state;
+                if (isInShapeCreateMode && mapDiv.style.cursor !== 'crosshair') {
+                    mapDiv.style.cursor = 'crosshair';
+                } else if (!isInShapeCreateMode && mapDiv.style.cursor !== 'grabbing') {
+                    mapDiv.style.cursor = 'grabbing';
+                }
+            });
+        } else {
+            if (map) {
+                const mapDiv = document.querySelector('#map').childNodes[4];
+                if (mapDiv.style.cursor !== 'grab') {
+                    mapDiv.style.cursor = 'grab';
+                }
+            }
+        }
+
+
         return (
             <div id="drawingComponentContainer">
                 {shapes.map(shape => {
@@ -283,7 +314,7 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
-                            // puppeteer.captureImage();
+                        // puppeteer.captureImage();
                         }}
                     >
                         {`저장`}
