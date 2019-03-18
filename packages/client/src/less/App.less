@@ -1,6 +1,7 @@
 @hogangnonoColor: #4d55b2;
 @baseColor: @hogangnonoColor;
 @white: #fff;
+@colors: Crimson, DarkOrange, SeaGreen, Navy, Peru, HotPink, SlateGray, red;
 
 body {
   background-color: @baseColor;
@@ -10,16 +11,66 @@ body {
   #wrapper {
     position: relative;
   }
+  .chart {
+    position: absolute;
+    border-radius: 10px;
+    background-color: red;
+  }
+  // .introPage {
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   background-color: rgba(0, 0, 0, 0.6);
+  //   z-index: 1000;
+  //   .chart1 {
+  //     .chart;
+  //     top: 20px;
+  //     left: 450px;
+  //     width: 300px;
+  //     height: 300px;
+  //   }
+  //   .chart2 {
+  //     .chart;
+  //     width: 300px;
+  //     height: 150px;
+  //     bottom: 110px;
+  //     right: 350px;
+  //   }
+  //   .chart3 {
+  //     .chart;
+  //     width: 300px;
+  //     height: 150px;
+  //     top: 80px;
+  //     right: 350px;
+  //   }
+  //   .chart4 {
+  //     .chart3;
+  //     top: 250px;
+  //   }
+  //   .chart5 {
+  //     .chart3;
+  //     top: 420px;
+  //   }
+  //   .chart6 {
+  //     .chart;
+  //     width: 300px;
+  //     height: 150px;
+  //     bottom: 50px;
+  //     left: 10px;
+  //   }
+  // }
   #map {
     height: 100vh;
 
     #loginFavorContainer {
       position: absolute;
-      z-index: 1000;
+      z-index: 100;
       text-align: center;
       @media (min-width: 767px) {
-        top: 40px;
-        right: 12px;
+        top: 80px;
+        right: 11px;
       }
       @media (max-width: 768px) {
         bottom: 100px;
@@ -71,23 +122,189 @@ button {
   z-index: 9999;
 }
 
-// button:active {
-//   background-color: purple;
-//   color: @color;
-// }
-// .lightPurple {
-//   background-color: rgb(190, 50, 190);
-//   color: @color;
-// }
-
-// .darkPurple {
-//   background-color: purple;
-//   color: @color;
-// }
-
 .block {
   display: block;
 }
 .none {
   display: none;
+}
+
+.colorList {
+  position: absolute;
+  bottom: 00px;
+  width: 70%;
+  margin: 0 15%;
+  height: 40px;
+  z-index: 100;
+  border-radius: 10px 10px 0 0;
+  background-color: #fff;
+  transition-duration: 1s;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  color: #666;
+}
+.invisible {
+  bottom: -40px;
+}
+.eachColor {
+  width: 12.5%;
+  height: 40px;
+  float: left;
+  border-right: 1px solid #eee;
+  box-sizing: border-box;
+  &:last-child {
+    border: 0;
+  }
+  .legendColorBox {
+    width: 25%;
+    height: 40px;
+    float: left;
+    padding-left: 10px;
+    box-sizing: border-box;
+    .colorCircle {
+      position: absolute;
+      top: 12.5px;
+      width: 15px;
+      height: 15px;
+      border-radius: 10px;
+      // box-shadow: inset -0.5px -0.5px 7px #666;
+    }
+  }
+  .legendTextBox {
+    width: 75%;
+    height: 40px;
+    float: left;
+    line-height: 44px;
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+}
+.factor(@i: length(@colors)) when (@i > 0) {
+  .factor(@i - 1);
+  @color: extract(@colors, @i);
+  .eachColor:nth-child(@{i}) .colorCircle {
+    background-color: @color;
+  }
+}
+
+.factor();
+
+.descriptionModal {
+  position: fixed;
+  z-index: 1000;
+  background-color: #fff;
+  bottom: 50px;
+  left: 50%;
+  margin-left: -170px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+  height: 220px;
+  width: 340px;
+  border-radius: 8px;
+  -webkit-animation-name: slideIn;
+  -webkit-animation-duration: 0.4s;
+  animation-name: slideIn;
+  animation-duration: 0.4s;
+  color: #666;
+}
+
+@-webkit-keyframes slideIn {
+  from {
+    bottom: -300px;
+    opacity: 0;
+  }
+  to {
+    bottom: 50px;
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    bottom: -300px;
+    opacity: 0;
+  }
+  to {
+    bottom: 50px;
+    opacity: 1;
+  }
+}
+
+.descriptionHeader {
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  // background-color: #4d55b2;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.descriptionInput {
+  position: absolute;
+  top: 60px;
+  left: 15px;
+  width: 305px;
+  height: 100px;
+  resize: none;
+  padding: 5px;
+  border: none;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  &:focus {
+    outline: none;
+  }
+}
+
+.descriptionInputTitle {
+  position: absolute;
+  left: 15px;
+  width: 305px;
+  height: 25px;
+  top: 18px;
+  resize: none;
+  padding-left: 5px;
+  line-height: 20px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+  &:focus {
+    outline: none;
+  }
+}
+
+.descriptionSave {
+  position: absolute;
+  top: 160px;
+  right: 84px;
+  border-radius: 4px;
+  background-color: white;
+  width: 70px;
+  height: 30px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  color: #666;
+  border: none;
+  transition: 0.2s;
+}
+
+.descriptionSave:hover {
+  background-color: #4d55b2;
+  color: white;
+}
+
+.descriptionCloser {
+  top: 160px;
+  right: 6px;
+  border-radius: 4px;
+  background-color: white;
+  width: 70px;
+  height: 30px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  color: #666;
+  border: none;
+  transition: 0.2s;
+}
+
+.descriptionCloser:hover {
+  background-color: #4d55b2;
+  color: white;
 }

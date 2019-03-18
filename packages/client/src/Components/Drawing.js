@@ -13,12 +13,16 @@ import * as constants from '../constants';
 
 class Drawing extends Component {
     static propTypes = {
-        map: PropTypes.object.isRequired,
+        map: PropTypes.object,
         handleToggle: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired,
+        toggleLoginModal: PropTypes.func.isRequired,
         drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired
+        initDrawingListAfterSave: PropTypes.func.isRequired,
+        showDraw: PropTypes.func.isRequired,
+        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired,
+        descriptionModalShow: PropTypes.func.isRequired,
+        descriptionModalHide: PropTypes.func.isRequired
     };
 
     state = {
@@ -37,12 +41,24 @@ class Drawing extends Component {
     fill = undefined;
 
     handleRequestSave = data => {
-        const { name, toggleModal } = this.props;
+        const {
+            toggleLoginModal,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal
+        } = this.props;
         this.setState({
             fillOrNotToggle1: false,
             fillOrNotToggle2: false
         });
-        saveHandle(name, data, toggleModal);
+        saveHandle(
+            data,
+            null,
+            toggleLoginModal,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal
+        );
     };
 
     removeListener = () => {
@@ -56,11 +72,10 @@ class Drawing extends Component {
     createShapeTest = selectedIcon => {
         let position;
         const naver = window.naver;
-        const { map, updateDrawingData } = this.props;
+        const { map, updateDrawingData, descriptionModalShow } = this.props;
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
-
         let moveEvent;
         let figure;
         let lineData = [];
@@ -124,6 +139,7 @@ class Drawing extends Component {
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                     this.setState({ isInShapeCreateMode: false });
+                    descriptionModalShow();
                 } else {
                     figure.draw(lineData);
                 }
@@ -160,6 +176,7 @@ class Drawing extends Component {
                         });
                     }
                     this.setState({ isInShapeCreateMode: false });
+                    descriptionModalShow();
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                 }
@@ -176,6 +193,7 @@ class Drawing extends Component {
 
     selectButton = selectedIcon => {
         const { isInShapeCreateMode } = this.state;
+        const { descriptionModalHide } = this.props;
         this.setState({ selectedButton: selectedIcon });
         this.setState({
             selectedButton: selectedIcon,
@@ -185,6 +203,7 @@ class Drawing extends Component {
         });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
         this.showShape();
+        descriptionModalHide();
     };
 
     doNotShowTips = () => {
@@ -215,18 +234,8 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
-        const colorList = [
-            'Crimson',
-            'DarkOrange',
-            'SeaGreen',
-            'Navy',
-            'Indigo',
-            'Peru',
-            'HotPink',
-            'SlateGray',
-            'red'
-        ];
-        this.color = colorList[factorNum];
+        console.log(constants.colorList[factorNum]);
+        this.color = constants.colorList[factorNum];
     };
 
     render() {
@@ -333,13 +342,18 @@ class Drawing extends Component {
                                 return (
                                     <div
                                         className="factorBox"
-                                        key={idx++}
                                         onClick={() => this.decideFactor(idx)}
                                         onKeyPress={this.decideFactor}
                                         role="button"
                                         tabIndex="0"
+                                        key={idx++}
                                     >
-                                        {factor}
+                                        <div className="factorContain">
+                                            <div className="factorColorBox" />
+                                            <div className="factorText">
+                                                {factor}
+                                            </div>
+                                        </div>
                                     </div>
                                 );
                             })}

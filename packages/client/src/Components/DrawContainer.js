@@ -9,9 +9,13 @@ class DrawContainer extends Component {
         mapLoad: PropTypes.object,
         handleToggle: PropTypes.func.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired,
-        NearByFactorItems: PropTypes.array.isRequired
+        toggleLoginModal: PropTypes.func.isRequired,
+        NearByFactorItems: PropTypes.array.isRequired,
+        initDrawingListAfterSave: PropTypes.func.isRequired,
+        showDraw: PropTypes.func.isRequired,
+        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired,
+        descriptionModalShow: PropTypes.func.isRequired,
+        descriptionModalHide: PropTypes.func.isRequired
     };
 
     render() {
@@ -19,10 +23,14 @@ class DrawContainer extends Component {
             drawingData,
             mapLoad,
             handleToggle,
-            toggleModal,
+            toggleLoginModal,
             updateDrawingData,
-            name,
-            NearByFactorItems
+            NearByFactorItems,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal,
+            descriptionModalShow,
+            descriptionModalHide
         } = this.props;
         return (
             <div id="toolbox">
@@ -33,12 +41,16 @@ class DrawContainer extends Component {
                     <div>
                         <Drawing
                             map={mapLoad}
-                            name={name}
                             drawingData={drawingData}
                             updateDrawingData={updateDrawingData}
-                            toggleModal={toggleModal}
+                            toggleLoginModal={toggleLoginModal}
                             handleToggle={handleToggle}
                             NearByFactorItems={NearByFactorItems}
+                            initDrawingListAfterSave={initDrawingListAfterSave}
+                            showDraw={showDraw}
+                            showDrawingSetTitleDescriptionModal={showDrawingSetTitleDescriptionModal}
+                            descriptionModalShow={descriptionModalShow}
+                            descriptionModalHide={descriptionModalHide}
                         />
                     </div>
                 </div>

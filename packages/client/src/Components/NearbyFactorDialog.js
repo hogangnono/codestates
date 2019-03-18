@@ -10,7 +10,6 @@ export default class NearbyFactorDialog extends Component {
 
     render() {
         const { NearByFactorItems } = this.props;
-        console.log('NearByFactorItems', NearByFactorItems);
         return (
             <div className="NearbyFactorDialog">
                 <div className="nearbyMenu">주변 호재</div>

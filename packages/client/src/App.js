@@ -4,11 +4,10 @@ import drawData from './Module/loadHandle';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
-import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 import * as constants from './constants';
-// import MainButton from './Components/MainButton';
 import NearbyFactorDialog from './Components/NearbyFactorDialog';
+import DrawingSetTitleDescription from './Components/drawingSetTitleDescriptionModal';
 
 class App extends Component {
     constructor(props) {
@@ -27,7 +26,14 @@ class App extends Component {
             MyInfoButton: false,
             showDraw: false,
             factors: [],
-            NearByFactorItems: []
+            NearByFactorItems: [],
+            showDrawingSetTitleDescriptionModal: false,
+            drawingSetTitle: null,
+            drawingSetDescription: null,
+            descriptionModalState: false,
+            descriptionValue: '',
+            descriptionTitle: '',
+            legendToggle: false
             // NearByFilteringItems: []
         };
     }
@@ -38,7 +44,7 @@ class App extends Component {
             zoomControl: true,
             zoomControlOptions: {
                 style: naver.maps.ZoomControlStyle.SMALL,
-                position: naver.maps.Position.LEFT_BOTTOM
+                position: naver.maps.Position.TOP_RIGHT
             },
             logoControl: true,
             logoControlOptions: {
@@ -50,7 +56,7 @@ class App extends Component {
             },
             mapDataControl: true,
             mapDataControlOptions: {
-                position: naver.maps.Position.BOTTOM_RIGHT
+                position: naver.maps.Position.BOTTOM_LEFT
             }
         });
 
@@ -62,16 +68,23 @@ class App extends Component {
             this.mainPageLoad(map);
             this.deleteDraw();
         });
-        const userName = localStorage.getItem('token');
-        if (userName) {
-            const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
-            this.setState({ name: decryptedName });
-        }
     };
 
     handleUserNameOnChange = username => {
         this.setState({ name: username });
     };
+
+    showDrawingSetTitleDescriptionModal = value => {
+        this.setState({ showDrawingSetTitleDescriptionModal: value });
+    }
+
+    changeDrawingSetTitle = text => {
+        this.setState({ drawingSetTitle: text });
+    }
+
+    changeDrawingSetDescription = text => {
+        this.setState({ drawingSetDescription: text });
+    }
 
     mainPageLoad = map => {
         const { name, factors } = this.state;
@@ -95,28 +108,36 @@ class App extends Component {
             endPos.x = value._lineData[value._lineData.length - 1].coord.x;
             endPos.y = value._lineData[value._lineData.length - 1].coord.y;
 
-            if ((startPos.x < this.bound._min._lng - 0.01
-                || this.bound._max._lng + 0.01 < startPos.x
-                || startPos.y < this.bound._min._lat - 0.01
-                || this.bound._max._lat + 0.01 < startPos.y)
+            if (
+                (startPos.x < this.bound._min._lng - 0.01
+                    || this.bound._max._lng + 0.01 < startPos.x
+                    || startPos.y < this.bound._min._lat - 0.01
+                    || this.bound._max._lat + 0.01 < startPos.y)
                 && (endPos.x < this.bound._min._lng - 0.01
                     || this.bound._max._lng + 0.01 < endPos.x
                     || endPos.y < this.bound._min._lat - 0.01
-                    || this.bound._max._lat + 0.01 < endPos.y)) {
+                    || this.bound._max._lat + 0.01 < endPos.y)
+            ) {
                 value.setMap(null);
                 delete this.drawList[key];
             }
         });
     };
 
-    toggleModal = () => {
+    toggleLoginModal = () => {
         const { showModal } = this.state;
         this.setState({ showModal: !showModal });
     };
 
     toggleDraw = () => {
         const { showDraw } = this.state;
+        this.setState({ descriptionModalState: false });
         this.setState({ showDraw: !showDraw });
+    };
+
+    toggleLegend = () => {
+        const { legendToggle } = this.state;
+        this.setState({ legendToggle: !legendToggle });
     };
 
     showFilter = () => {
@@ -145,6 +166,7 @@ class App extends Component {
                     drawingData[index].figure.onRemove();
                 }
                 this.setState({ drawingData: [] });
+                this.setState({ descriptionModalState: false });
             } else if (!pressedConfirm) {
                 return;
             }
@@ -162,6 +184,14 @@ class App extends Component {
             });
         }
     };
+
+    initDrawingListAfterSave = () => {
+        this.setState({ drawingData: [] });
+    }
+
+    initUserName = () => {
+        this.setState({ name: undefined });
+    }
 
     myInfoToggle = () => {
         const { MyInfoButton } = this.state;
@@ -229,6 +259,80 @@ class App extends Component {
         drawData(name, bound, factors, toggle, this.drawList, map, nearbyData);
     };
 
+    handleChangeDescription = event => {
+        this.setState({ descriptionValue: event.target.value });
+    };
+
+    handleChangeTitle = event => {
+        this.setState({ descriptionTitle: event.target.value });
+    };
+
+    descriptionModal = () => {
+        const {
+            descriptionModalState,
+            descriptionValue,
+            descriptionTitle
+        } = this.state;
+        if (descriptionModalState) {
+            return (
+                <div className="descriptionModal">
+                    <div className="descriptionHeader"> </div>
+                    <textarea
+                        placeholder="제목을 지어주세요:D"
+                        className="descriptionInputTitle"
+                        type="text"
+                        value={descriptionTitle}
+                        onChange={this.handleChangeTitle}
+                    />
+                    <textarea
+                        placeholder="호재 내용을 채워주세요:D"
+                        className="descriptionInput"
+                        type="text"
+                        value={descriptionValue}
+                        onChange={this.handleChangeDescription}
+                    />
+                    <button
+                        className="descriptionCloser"
+                        type="button"
+                        onClick={this.descriptionModalHide}
+                    >
+                        닫기
+                    </button>
+                    <button
+                        className="descriptionSave"
+                        type="button"
+                        onClick={this.descriptionModalSave}
+                    >
+                        저장
+                    </button>
+                </div>
+            );
+        } else {
+            return <div />;
+        }
+    };
+
+    descriptionModalHide = () => {
+        this.setState({
+            descriptionModalState: false,
+            descriptionValue: '',
+            descriptionTitle: ''
+        });
+    }
+
+    descriptionModalSave = () => {
+        const { descriptionValue, descriptionTitle, drawingData } = this.state;
+        this.setState({ descriptionModalState: false });
+        const arrayOfShapes = drawingData;
+        arrayOfShapes[arrayOfShapes.length - 1].title = descriptionTitle;
+        arrayOfShapes[arrayOfShapes.length - 1].value = descriptionValue;
+        this.setState({ drawingData: arrayOfShapes });
+    };
+
+    descriptionModalShow = () => {
+        this.setState({ descriptionModalState: true });
+    };
+
     render() {
         const {
             map,
@@ -240,30 +344,22 @@ class App extends Component {
             activeFilter,
             activeDraw,
             MyInfoButton,
-            NearByFactorItems
+            NearByFactorItems,
+            legendToggle,
+            showDrawingSetTitleDescriptionModal,
+            drawingSetTitle,
+            drawingSetDescription
         } = this.state;
-        // const mainButton = [
-        //     {
-        //         className: '',
-        //         cond: true,
-        //         name: 'My',
-        //         onClick: () => this.mainToggle('showModal', showModal)
-        //     },
-        //     {
-        //         className: deactiveFilter,
-        //         cond: deactiveFilter === '',
-        //         name: '필터',
-        //         onClick: () => this.mainToggle('showFilter', showFilter)
-        //     },
-        //     {
-        //         className: deactiveDraw,
-        //         cond: deactiveDraw === '',
-        //         name: '그리기',
-        //         onClick: () => this.mainToggle('showDraw', showDraw)
-        //     }
-        // ];
         return (
             <div id="wrapper">
+                <div className="introPage">
+                    <div className="chart1" />
+                    <div className="chart2" />
+                    <div className="chart3" />
+                    <div className="chart4" />
+                    <div className="chart5" />
+                    <div className="chart6" />
+                </div>
                 <div id="map">
                     <NearbyFactorDialog
                         mapLoad={map}
@@ -271,19 +367,10 @@ class App extends Component {
                     />
 
                     <div id="loginFavorContainer">
-                        {/* mainButton.map(bt => (
-                            <MainButton
-                                className={bt.className} // 추가되는 클래스명
-                                name={bt.name} // 'my' | 'filer'...
-                                cond={bt.cond} // 클릭 함수 실행 조건
-                                onClick={bt.onClick}
-                                key={bt.name}
-                            />
-                        )) */}
                         <div
                             className="loginFavorBtn"
-                            onClick={this.toggleModal}
-                            onKeyPress={this.toggleModal}
+                            onClick={this.toggleLoginModal}
+                            onKeyPress={this.toggleLoginModal}
                             role="button"
                             tabIndex="0"
                         >
@@ -307,6 +394,7 @@ class App extends Component {
                             onClick={() => {
                                 if (activeFilter === '') {
                                     this.showDraw();
+                                    this.descriptionModalHide();
                                 }
                             }}
                             onKeyPress={() => this.showDraw}
@@ -319,8 +407,9 @@ class App extends Component {
                     {showModal ? (
                         <LoginModal
                             name={name}
-                            toggleModal={this.toggleModal}
+                            toggleLoginModal={this.toggleLoginModal}
                             handleUserNameOnChange={this.handleUserNameOnChange}
+                            initUserName={this.initUserName}
                         />
                     ) : null}
                     <div className={!showFilter ? 'block' : 'none'}>
@@ -335,14 +424,59 @@ class App extends Component {
                         <DrawContainer
                             handleToggle={this.showDraw}
                             mapLoad={map}
-                            name={name}
                             handleUserNameOnChange={this.handleUserNameOnChange}
                             drawingData={drawingData}
                             updateDrawingData={this.updateDrawingData}
-                            toggleModal={this.toggleModal}
+                            toggleLoginModal={this.toggleLoginModal}
                             NearByFactorItems={NearByFactorItems}
+                            initDrawingListAfterSave={this.initDrawingListAfterSave}
+                            showDraw={this.showDraw}
+                            showDrawingSetTitleDescriptionModal={this.showDrawingSetTitleDescriptionModal}
+                            descriptionModalShow={this.descriptionModalShow}
+                            descriptionModalHide={this.descriptionModalHide}
                         />
                     </div>
+                    { showDrawingSetTitleDescriptionModal
+                        ? (
+                            <DrawingSetTitleDescription
+                                changeDrawingSetTitle={this.changeDrawingSetTitle}
+                                changeDrawingSetDescription={this.changeDrawingSetDescription}
+                                drawingData={drawingData}
+                                toggleLoginModal={this.toggleLoginModal}
+                                initDrawingListAfterSave={this.initDrawingListAfterSave}
+                                showDraw={this.showDraw}
+                                showDrawingSetTitleDescriptionModal={this.showDrawingSetTitleDescriptionModal}
+                                drawingSetTitle={drawingSetTitle}
+                                drawingSetDescription={drawingSetDescription}
+                            />
+                        )
+                        : null}
+                    <div
+                        className="legend"
+                        onClick={this.toggleLegend}
+                        onKeyPress={this.toggleLegend}
+                        role="button"
+                        tabIndex="0"
+                    />
+                    <div
+                        className={
+                            'colorList ' + (legendToggle ? 'invisible' : '')
+                        }
+                    >
+                        {Object.keys(constants.newToggleBox).map((color, index) => {
+                            return (
+                                <div className="eachColor" key={index++}>
+                                    <div className="legendColorBox">
+                                        <div className="colorCircle" />
+                                    </div>
+                                    <div className="legendTextBox">{color}</div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+                <div>
+                    <this.descriptionModal />
                 </div>
             </div>
         );
