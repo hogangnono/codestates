@@ -4,10 +4,10 @@ import drawData from './Module/loadHandle';
 import FilterContainer from './Components/FilterContainer';
 import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
-import * as MakeSecret from './Module/simpleEncryption';
 import './less/App.less';
 import * as constants from './constants';
 import NearbyFactorDialog from './Components/NearbyFactorDialog';
+import DrawingSetTitleDescription from './Components/drawingSetTitleDescriptionModal';
 
 class App extends Component {
     constructor(props) {
@@ -27,6 +27,9 @@ class App extends Component {
             showDraw: false,
             factors: [],
             NearByFactorItems: [],
+            showDrawingSetTitleDescriptionModal: false,
+            drawingSetTitle: null,
+            drawingSetDescription: null,
             descriptionModalState: false,
             descriptionValue: '',
             descriptionTitle: '',
@@ -65,16 +68,23 @@ class App extends Component {
             this.mainPageLoad(map);
             this.deleteDraw();
         });
-        const userName = localStorage.getItem('token');
-        if (userName) {
-            const decryptedName = MakeSecret.Decrypt(JSON.parse(userName));
-            this.setState({ name: decryptedName });
-        }
     };
 
     handleUserNameOnChange = username => {
         this.setState({ name: username });
     };
+
+    showDrawingSetTitleDescriptionModal = value => {
+        this.setState({ showDrawingSetTitleDescriptionModal: value });
+    }
+
+    changeDrawingSetTitle = text => {
+        this.setState({ drawingSetTitle: text });
+    }
+
+    changeDrawingSetDescription = text => {
+        this.setState({ drawingSetDescription: text });
+    }
 
     mainPageLoad = map => {
         const { name, factors } = this.state;
@@ -114,7 +124,7 @@ class App extends Component {
         });
     };
 
-    toggleModal = () => {
+    toggleLoginModal = () => {
         const { showModal } = this.state;
         this.setState({ showModal: !showModal });
     };
@@ -174,6 +184,14 @@ class App extends Component {
             });
         }
     };
+
+    initDrawingListAfterSave = () => {
+        this.setState({ drawingData: [] });
+    }
+
+    initUserName = () => {
+        this.setState({ name: undefined });
+    }
 
     myInfoToggle = () => {
         const { MyInfoButton } = this.state;
@@ -295,16 +313,17 @@ class App extends Component {
     };
 
     descriptionModalHide = () => {
-        this.setState({ descriptionModalState: false });
-        this.setState({ descriptionValue: '' });
-        this.setState({ descriptionTitle: '' });
-    };
+        this.setState({
+            descriptionModalState: false,
+            descriptionValue: '',
+            descriptionTitle: ''
+        });
+    }
 
     descriptionModalSave = () => {
         const { descriptionValue, descriptionTitle, drawingData } = this.state;
         this.setState({ descriptionModalState: false });
         const arrayOfShapes = drawingData;
-        console.log(arrayOfShapes[arrayOfShapes.length - 1]);
         arrayOfShapes[arrayOfShapes.length - 1].title = descriptionTitle;
         arrayOfShapes[arrayOfShapes.length - 1].value = descriptionValue;
         this.setState({ drawingData: arrayOfShapes });
@@ -326,7 +345,10 @@ class App extends Component {
             activeDraw,
             MyInfoButton,
             NearByFactorItems,
-            legendToggle
+            legendToggle,
+            showDrawingSetTitleDescriptionModal,
+            drawingSetTitle,
+            drawingSetDescription
         } = this.state;
         return (
             <div id="wrapper">
@@ -339,8 +361,8 @@ class App extends Component {
                     <div id="loginFavorContainer">
                         <div
                             className="loginFavorBtn"
-                            onClick={this.toggleModal}
-                            onKeyPress={this.toggleModal}
+                            onClick={this.toggleLoginModal}
+                            onKeyPress={this.toggleLoginModal}
                             role="button"
                             tabIndex="0"
                         >
@@ -377,8 +399,9 @@ class App extends Component {
                     {showModal ? (
                         <LoginModal
                             name={name}
-                            toggleModal={this.toggleModal}
+                            toggleLoginModal={this.toggleLoginModal}
                             handleUserNameOnChange={this.handleUserNameOnChange}
+                            initUserName={this.initUserName}
                         />
                     ) : null}
                     <div className={!showFilter ? 'block' : 'none'}>
@@ -393,16 +416,33 @@ class App extends Component {
                         <DrawContainer
                             handleToggle={this.showDraw}
                             mapLoad={map}
-                            name={name}
                             handleUserNameOnChange={this.handleUserNameOnChange}
                             drawingData={drawingData}
                             updateDrawingData={this.updateDrawingData}
-                            toggleModal={this.toggleModal}
+                            toggleLoginModal={this.toggleLoginModal}
                             NearByFactorItems={NearByFactorItems}
+                            initDrawingListAfterSave={this.initDrawingListAfterSave}
+                            showDraw={this.showDraw}
+                            showDrawingSetTitleDescriptionModal={this.showDrawingSetTitleDescriptionModal}
                             descriptionModalShow={this.descriptionModalShow}
                             descriptionModalHide={this.descriptionModalHide}
                         />
                     </div>
+                    { showDrawingSetTitleDescriptionModal
+                        ? (
+                            <DrawingSetTitleDescription
+                                changeDrawingSetTitle={this.changeDrawingSetTitle}
+                                changeDrawingSetDescription={this.changeDrawingSetDescription}
+                                drawingData={drawingData}
+                                toggleLoginModal={this.toggleLoginModal}
+                                initDrawingListAfterSave={this.initDrawingListAfterSave}
+                                showDraw={this.showDraw}
+                                showDrawingSetTitleDescriptionModal={this.showDrawingSetTitleDescriptionModal}
+                                drawingSetTitle={drawingSetTitle}
+                                drawingSetDescription={drawingSetDescription}
+                            />
+                        )
+                        : null}
                     <div
                         className="legend"
                         onClick={this.toggleLegend}
@@ -415,9 +455,9 @@ class App extends Component {
                             'colorList ' + (legendToggle ? 'invisible' : '')
                         }
                     >
-                        {Object.keys(constants.newToggleBox).map(color => {
+                        {Object.keys(constants.newToggleBox).map((color, index) => {
                             return (
-                                <div className="eachColor">
+                                <div className="eachColor" key={index++}>
                                     <div className="legendColorBox">
                                         <div className="colorCircle" />
                                     </div>

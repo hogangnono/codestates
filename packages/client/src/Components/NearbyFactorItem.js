@@ -22,7 +22,10 @@ export default class NearbyFactorItem extends Component {
         return (
             <div className="NearbyFactorItem">
                 <div className="factorName">{factorName}</div>
-                <div className="descriptionName">{description}</div>
+                { description.length > 25
+                    ? (<div className="descriptionName">{`${description.substr(0, 25)}..`}</div>)
+                    : (<div className="descriptionName">{description}</div>)
+                }
             </div>
         );
     }

@@ -17,7 +17,6 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             const data = await result.data;
             const [resultData, userData] = await data;
             const nearbyFactors = [];
-            console.log(resultData);
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
                 const { fill, color } = JSON.parse(el.css);

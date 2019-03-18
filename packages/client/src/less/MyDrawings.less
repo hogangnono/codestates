@@ -1,56 +1,101 @@
-@ligthGrey : rgb(201, 199, 199);
+@ligthGrey : rgba(0, 0, 0, 0.1);
 @hogangnonoColor: #4d55b2;
 
 #myDrawingsContainer {
+    display: inline;
     .topInMyDrawingContainer {
         position: relative;
-        background-color: @hogangnonoColor;
-        margin-top: 0;
+        background: linear-gradient(0.25turn, #4d55b2, #3b428e);
         border-radius: 10px 10px 0 0;
         color: #fff;
         width: 100%;
         height: 100px;
         .welcome {
             position: absolute;
-            bottom: 5px;
-            margin: 10px;
+            line-height: 100px;
             p {
-                margin: 5px 0px;
-                font-size: 25px;
+                margin: 5px 30px;
+                font-size: 30px;
                 font-weight: bold;
             }
         }
     }
+
+    .subMyDrawingContainer {
+        margin-right: 30px;
+        margin-left: 30px;
+        padding: 10px;
+    }
     .myDrawingsTitle {
-        font-size: 20px;
-        font-weight: 500;
-        border-bottom: 1px solid @ligthGrey;
-        margin: 15px 10px;
+        font-size: 25px;
+        font-weight: 600;
         padding: 5px;
     }
+    .titleBox {
+        display: flex;
+        width: 100%;
+        padding: 10px;
+        color: #aaa;
+        font-size: 14px;
+        text-align: center;
+        border-top: 1px solid @ligthGrey;
+        border-bottom: 1px solid @ligthGrey;
+        .factorTitle {
+          width: 25%;
+          border-right: 1px solid @ligthGrey;
+        }
+        .descriptionTitle {
+          width: 75%;
+        }
+      }
+    .myDrawingListsContainer{
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        overflow-x: hidden;
+    }
     .myDrawingLists {
+        width: 100%;
+        height: 35px;
         list-style: none;
-        margin: 15px 10px;
+        padding: 10px;
+        display: flex;
+        overflow: auto;
+        text-align: center;
+        align-items: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         font-size: 17px;
         font-family: Apple SD Gothic Neo, "Apple SD \C0B0\B3CC\ACE0\B515   Neo",
         "\B9D1\C740   \ACE0\B515", Malgun Gothic, ng, sans-serif;
 
         .myDrawingEachListTitle {
+            width: 25%;
+            text-align: center;
             font-weight: bold;
+            box-sizing: border-box;
         }
         .myDrawingEachListDes {
-            color: rgb(53, 53, 53);
+            width: 75%;
+            padding-left: 30px;
+            text-align: left;
+            box-sizing: border-box;
         }
     }
     .logoutButton {
-        position: absolute;
-        bottom: 30px;
-        right: 30px;
+        position: relative;
+        float: right;
+        text-align: center;
         color: #aaa;
         background-color: #fff;
         border-style: none;
+        width: 60px;
         padding: 10px;
+        margin-right: 30px;
         border-radius: 5px;
         box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .logoutButton:hover {
+        background-color: @hogangnonoColor;
+        color: #fff;
     }
 }

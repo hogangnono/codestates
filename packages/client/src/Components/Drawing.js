@@ -13,12 +13,16 @@ import * as constants from '../constants';
 
 class Drawing extends Component {
     static propTypes = {
-        map: PropTypes.object.isRequired,
+        map: PropTypes.object,
         handleToggle: PropTypes.func.isRequired,
-        toggleModal: PropTypes.func.isRequired,
+        toggleLoginModal: PropTypes.func.isRequired,
         drawingData: PropTypes.array.isRequired,
         updateDrawingData: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired
+        initDrawingListAfterSave: PropTypes.func.isRequired,
+        showDraw: PropTypes.func.isRequired,
+        showDrawingSetTitleDescriptionModal: PropTypes.func.isRequired,
+        descriptionModalShow: PropTypes.func.isRequired,
+        descriptionModalHide: PropTypes.func.isRequired
     };
 
     state = {
@@ -37,12 +41,24 @@ class Drawing extends Component {
     fill = undefined;
 
     handleRequestSave = data => {
-        const { name, toggleModal } = this.props;
+        const {
+            toggleLoginModal,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal
+        } = this.props;
         this.setState({
             fillOrNotToggle1: false,
             fillOrNotToggle2: false
         });
-        saveHandle(name, data, toggleModal);
+        saveHandle(
+            data,
+            null,
+            toggleLoginModal,
+            initDrawingListAfterSave,
+            showDraw,
+            showDrawingSetTitleDescriptionModal
+        );
     };
 
     removeListener = () => {
@@ -299,7 +315,7 @@ class Drawing extends Component {
                                         onKeyPress={this.decideFactor}
                                         role="button"
                                         tabIndex="0"
-                                        key={idx}
+                                        key={idx++}
                                     >
                                         <div className="factorContain">
                                             <div className="factorColorBox" />
