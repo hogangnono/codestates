@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 var Shape = function(options) {
+    this._factorId = options.factorId;
     // 현재 지도의 축적 또는 저장될 당시의 축적
     this._zoom = options.zoom || options.naverMap.getZoom();
     this._map = options.naverMap;
