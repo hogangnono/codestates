@@ -10,7 +10,6 @@ export default class NearbyFactorDialog extends Component {
 
     render() {
         const { NearByFactorItems } = this.props;
-        console.log('NearByFactorItems : ', NearByFactorItems);
         return (
             <div className="NearbyFactorDialog">
                 <div className="nearbyMenu">주변 호재</div>
@@ -19,17 +18,13 @@ export default class NearbyFactorDialog extends Component {
                     <div className="descriptionTitle">제목</div>
                 </div>
                 <div className="scrollBox">
-                    {NearByFactorItems.length ? (
-                        NearByFactorItems.map((factorItem, index) => (
-                            <NearbyFactorItem
-                                title={factorItem.title}
-                                factor_id={factorItem.factor_id}
-                                key={index++}
-                            />
-                        ))
-                    ) : (
-                        <div>loading</div>
-                    )}
+                    <NearbyFactorItem NearByFactorItems={NearByFactorItems} />
+                    {/* // NearByFactorItems.map((factorItem, index) => (
+                    //     <NearbyFactorItem
+                    //         title={factorItem.title}
+                    //         factor_id={factorItem.factor_id}
+                    //         key={index++}
+                    //     /> */}
                 </div>
             </div>
         );
