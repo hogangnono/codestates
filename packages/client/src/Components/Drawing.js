@@ -38,6 +38,8 @@ class Drawing extends Component {
 
     color = undefined;
 
+    factorId = undefined;
+
     fill = undefined;
 
     handleRequestSave = data => {
@@ -105,6 +107,7 @@ class Drawing extends Component {
                 // 호재와 채우기를 선택한 경우
                 if (this.fill && this.color) {
                     figure = new Shape({
+                        factorId: this.factorId,
                         fill: this.fill,
                         color: this.color,
                         lineData: lineData,
@@ -240,6 +243,7 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
+        this.factorId = factorNum;
         this.color = constants.colorList[factorNum];
     };
 
@@ -361,7 +365,7 @@ class Drawing extends Component {
                                         onKeyPress={this.decideFactor}
                                         role="button"
                                         tabIndex="0"
-                                        key={idx}
+                                        key={idx++}
                                     >
                                         <div className="factorContain">
                                             <div className="factorColorBox" />
