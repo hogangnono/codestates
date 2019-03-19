@@ -39,7 +39,14 @@ exports.load = async (req, res) => {
                 factorIdArray.push(idTable.dataValues.id);
             });
             const result = await Figure.findAll({
+                include: [
+                    {
+                        model: Drawing,
+                        attributes: ['title', 'description'] // Drawing table에서 title, description column만 가져옴
+                    }
+                ],
                 where: {
+                    factor_id: { [Op.in]: factorIdArray },
                     [Op.or]: [
                         {
                             [Op.and]: [
@@ -162,12 +169,12 @@ exports.load = async (req, res) => {
                 where: { name },
                 transaction
             }).get('id');
-            // console.log(userId);
             const result = await Figure.findAll({
                 include: [
                     { model: Drawing, where: { user_id: userId }, transaction }
                 ], // include => join을 함
                 where: {
+                    // user_id: userId,
                     [Op.or]: [
                         {
                             [Op.and]: [

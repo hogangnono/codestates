@@ -107,28 +107,22 @@ const saveHandle = (
                     }
                 ]
             };
-            return (
-                axios
-                    .post(SLACK_GENERAL_PATH, JSON.stringify(options))
-                    // .post(API_HOST, reqBody)
-                    .then(result => {
-                        showDraw();
-                        showDrawingSetTitleDescriptionModal(false);
-                        console.log(
-                            'SUCCEEDED: Sent slack webhook: \n',
-                            result.data
-                        );
-                    })
-                    .catch(err => {
-                        alert(
-                            '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
-                        );
-                        console.log(
-                            'Result for axios.post(/save) :::::::\n',
-                            err
-                        );
-                    })
-            );
+            return axios
+                .post(SLACK_GENERAL_PATH, JSON.stringify(options))
+                .then(result => {
+                    showDraw();
+                    showDrawingSetTitleDescriptionModal(false);
+                    console.log(
+                        'SUCCEEDED: Sent slack webhook: \n',
+                        result.data
+                    );
+                })
+                .catch(err => {
+                    alert(
+                        '도형 저장에 실패했습니다.\n콘솔에서 err 메시지를 확인해주세요.'
+                    );
+                    console.log('Result for axios.post(/save) :::::::\n', err);
+                });
         }
         // 로그인 안된 상태
     } else {
