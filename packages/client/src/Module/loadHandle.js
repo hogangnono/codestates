@@ -43,7 +43,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                                 zoom: zoomLevel
                             });
                             overlay.setMap(map);
-                            drawList[el.id] = overlay;
+                            drawList[id] = overlay;
                             break;
                         }
                         case 'Arrow': {
@@ -55,7 +55,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                                 zoom: zoomLevel
                             });
                             overlay.setMap(map);
-                            drawList[el.id] = overlay;
+                            drawList[id] = overlay;
                             break;
                         }
                         case 'Rect': {
@@ -67,7 +67,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                                 zoom: zoomLevel
                             });
                             overlay.setMap(map);
-                            drawList[el.id] = overlay;
+                            drawList[id] = overlay;
                             break;
                         }
                         case 'Circle': {
@@ -79,7 +79,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                                 zoom: zoomLevel
                             });
                             overlay.setMap(map);
-                            drawList[el.id] = overlay;
+                            drawList[id] = overlay;
                             break;
                         }
                         case 'Polygon': {
@@ -91,7 +91,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                                 zoom: zoomLevel
                             });
                             overlay.setMap(map);
-                            drawList[el.id] = overlay;
+                            drawList[id] = overlay;
                             break;
                         }
                     }
@@ -102,10 +102,12 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                 case 201:
                     if (userData && toggle) {
                         userData.map(async el => {
+                            console.log(el);
                             drawing(el);
                         });
                     } else if (resultData && !toggle) {
                         resultData.map(async el => {
+                            // console.log(el);
                             drawing(el);
                         });
                     }

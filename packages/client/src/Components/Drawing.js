@@ -241,7 +241,6 @@ class Drawing extends Component {
 
     decideFactor = factorNum => {
         this.color = constants.colorList[factorNum];
-        console.log(constants.colorList[factorNum]);
     };
 
     render() {
@@ -267,7 +266,7 @@ class Drawing extends Component {
 
         if (isInShapeCreateMode) {
             const mapDiv = document.querySelector('#map').childNodes[6];
-            console.log(mapDiv);
+            // console.log(mapDiv);
             if (mapDiv.style.cursor !== 'crosshair') {
                 mapDiv.style.cursor = 'crosshair';
             }
