@@ -430,6 +430,7 @@ class App extends Component {
                             toggleLoginModal={this.toggleLoginModal}
                             handleUserNameOnChange={this.handleUserNameOnChange}
                             initUserName={this.initUserName}
+                            bound={this.bound}
                         />
                     ) : null}
                     <div className={!showFilter ? 'block' : 'none'}>
