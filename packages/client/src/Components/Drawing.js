@@ -362,7 +362,7 @@ class Drawing extends Component {
                                 return (
                                     <div
                                         className="factorBox"
-                                        onClick={() => this.decideFactor(idx)}
+                                        onClick={() => this.decideFactor(idx - 1)}
                                         onKeyPress={this.decideFactor}
                                         role="button"
                                         tabIndex="0"
