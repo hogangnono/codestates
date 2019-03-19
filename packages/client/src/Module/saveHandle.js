@@ -33,7 +33,7 @@ const saveHandle = (
         processedData.title = oneShape.title; // Fixed. Go to App.js line 260 to see!
         processedData.description = oneShape.value; // Fixed
         processedData.css = JSON.stringify(figuresCss);
-        processedData.factor_id = Math.floor(Math.random() * (8 - 0)); // TODO: title, description Modal 완성되면 수정해야함
+        processedData.factor_id = oneShape.figure._factorId;
         dataSet.push(processedData);
     });
 
