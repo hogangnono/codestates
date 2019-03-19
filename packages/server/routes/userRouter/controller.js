@@ -39,6 +39,12 @@ exports.load = async (req, res) => {
                 factorIdArray.push(idTable.dataValues.id);
             });
             const result = await Figure.findAll({
+                include: [
+                    {
+                        model: Drawing,
+                        attributes: ['title', 'description'] // Drawing table에서 title, description column만 가져옴
+                    }
+                ],
                 where: {
                     [Op.or]: [
                         {

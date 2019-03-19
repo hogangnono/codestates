@@ -11,8 +11,8 @@ export default class NearbyFactorItem extends Component {
     };
 
     render() {
-        // const { title, factor_id } = this.props;
-        const { factor_id } = this.props;
+        const { title, factor_id } = this.props;
+        // const { factor_id } = this.props;
         const factorCategories = Object.keys(constants.newToggleBox);
         const colorList = constants.colorList;
         let factorName;
@@ -30,10 +30,10 @@ export default class NearbyFactorItem extends Component {
                     <div className="colorCircle" style={{ backgroundColor: factorColor }} />
                     {factorName}
                 </div>
-                {/* { title.length > 25
+                { title && title.length > 25
                     ? (<div className="titleName">{`${title.substr(0, 25)}..`}</div>)
                     : (<div className="titleName">{title}</div>)
-                } */}
+                }
             </div>
         );
     }
