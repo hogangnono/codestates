@@ -285,6 +285,26 @@ exports.save = async (req, res) => {
     }
 };
 
+exports.userdrawing = async (req, res) => {
+    const { name } = req.body;
+    let transaction;
+    try {
+        transaction = await Drawing.sequelize.transaction();
+        const userId = await User.findOne({
+            where: { name }
+        }).get('id');
+        const result = await Drawing.findAll({
+            where: { user_id: userId },
+            transaction
+        });
+        await transaction.commit();
+        res.status(200).send(result);
+    } catch (err) {
+        await transaction.rollback();
+        res.status(500).send('Failed to load your drawing data');
+    }
+};
+
 /* Delete all data */
 exports.deleteAll = async (req, res) => {
     const { name } = req.body;

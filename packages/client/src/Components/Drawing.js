@@ -362,7 +362,7 @@ class Drawing extends Component {
                                         onKeyPress={this.decideFactor}
                                         role="button"
                                         tabIndex="0"
-                                        key={idx}
+                                        key={idx++}
                                     >
                                         <div className="factorContain">
                                             <div className="factorColorBox" />

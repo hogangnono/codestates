@@ -55,7 +55,6 @@ const saveHandle = (
                     description: dataSet[0].description
                 }
             };
-            console.log('reqBody for a shape: ', reqBody);
         } else if (data.length > 1) {
             if (!drawingSetInfo) {
                 return showDrawingSetTitleDescriptionModal(true);
@@ -66,7 +65,6 @@ const saveHandle = (
                     drawingSetInfo
                 };
             }
-            console.log('reqBody for shapes: ', reqBody);
         }
         const pressValue = confirm(
             '그린 호재 정보를 심사요청했습니다.\n신청하신 내용이 승인이 된 후에 지도에 표시되게 됩니다.'
