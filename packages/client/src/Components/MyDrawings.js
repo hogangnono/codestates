@@ -18,8 +18,6 @@ class MyDrawings extends Component {
     }
 
     render() {
-        const { myDrawingList } = this.props;
-        console.log('myDrawing: ', myDrawingList);
         return (
             <div>
                 <div id="myDrawingsContainer">

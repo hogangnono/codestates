@@ -91,7 +91,6 @@ class App extends Component {
     mainPageLoad = map => {
         const { name, factors } = this.state;
         const bound = this.bound;
-        // this.setState는 Promise가 아닌데 async await 안써도 되지 않나요? (from Cloie)
         const nearbyData = async val => {
             await this.setState({
                 NearByFactorItems: val
@@ -430,7 +429,6 @@ class App extends Component {
                             toggleLoginModal={this.toggleLoginModal}
                             handleUserNameOnChange={this.handleUserNameOnChange}
                             initUserName={this.initUserName}
-                            bound={this.bound}
                         />
                     ) : null}
                     <div className={!showFilter ? 'block' : 'none'}>
