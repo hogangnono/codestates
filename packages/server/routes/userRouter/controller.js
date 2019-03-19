@@ -46,6 +46,7 @@ exports.load = async (req, res) => {
                     }
                 ],
                 where: {
+                    factor_id: { [Op.in]: factorIdArray },
                     [Op.or]: [
                         {
                             [Op.and]: [
@@ -168,12 +169,12 @@ exports.load = async (req, res) => {
                 where: { name },
                 transaction
             }).get('id');
-            // console.log(userId);
             const result = await Figure.findAll({
                 include: [
                     { model: Drawing, where: { user_id: userId }, transaction }
                 ], // include => join을 함
                 where: {
+                    // user_id: userId,
                     [Op.or]: [
                         {
                             [Op.and]: [

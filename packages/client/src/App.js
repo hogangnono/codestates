@@ -6,6 +6,7 @@ import LoginModal from './Components/LoginModal';
 import DrawContainer from './Components/DrawContainer';
 import './less/App.less';
 import * as constants from './constants';
+import * as MakeSecret from './Module/simpleEncryption';
 import NearbyFactorDialog from './Components/NearbyFactorDialog';
 import DrawingSetTitleDescription from './Components/drawingSetTitleDescriptionModal';
 
@@ -68,6 +69,12 @@ class App extends Component {
             this.mainPageLoad(map);
             this.deleteDraw();
         });
+        const name = JSON.parse(localStorage.getItem('token'));
+        if (name) {
+            this.setState({
+                name: MakeSecret.Decrypt(name)
+            });
+        }
     };
 
     isDelete = false;
@@ -78,18 +85,19 @@ class App extends Component {
 
     showDrawingSetTitleDescriptionModal = value => {
         this.setState({ showDrawingSetTitleDescriptionModal: value });
-    }
+    };
 
     changeDrawingSetTitle = text => {
         this.setState({ drawingSetTitle: text });
-    }
+    };
 
     changeDrawingSetDescription = text => {
         this.setState({ drawingSetDescription: text });
-    }
+    };
 
     mainPageLoad = map => {
         const { name, factors } = this.state;
+        // console.log(name);
         const bound = this.bound;
         // this.setState는 Promise가 아닌데 async await 안써도 되지 않나요? (from Cloie)
         const nearbyData = async val => {
@@ -114,7 +122,7 @@ class App extends Component {
                 this.isDelete = false;
             }
         }
-    }
+    };
 
     deleteDraw = () => {
         Object.entries(this.drawList).forEach(([key, value]) => {
@@ -205,11 +213,11 @@ class App extends Component {
 
     initDrawingListAfterSave = () => {
         this.setState({ drawingData: [] });
-    }
+    };
 
     initUserName = () => {
         this.setState({ name: undefined });
-    }
+    };
 
     myInfoToggle = () => {
         const { MyInfoButton } = this.state;
@@ -233,6 +241,7 @@ class App extends Component {
 
     factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;
+        console.log(name);
         const bound = this.bound;
         const factors = [];
         let nearbyData;
@@ -336,7 +345,7 @@ class App extends Component {
             descriptionValue: '',
             descriptionTitle: ''
         });
-    }
+    };
 
     descriptionModalSave = () => {
         const { descriptionValue, descriptionTitle, drawingData } = this.state;
@@ -450,28 +459,36 @@ class App extends Component {
                             updateDrawingData={this.updateDrawingData}
                             toggleLoginModal={this.toggleLoginModal}
                             NearByFactorItems={NearByFactorItems}
-                            initDrawingListAfterSave={this.initDrawingListAfterSave}
+                            initDrawingListAfterSave={
+                                this.initDrawingListAfterSave
+                            }
                             showDraw={this.showDraw}
-                            showDrawingSetTitleDescriptionModal={this.showDrawingSetTitleDescriptionModal}
+                            showDrawingSetTitleDescriptionModal={
+                                this.showDrawingSetTitleDescriptionModal
+                            }
                             descriptionModalShow={this.descriptionModalShow}
                             descriptionModalHide={this.descriptionModalHide}
                         />
                     </div>
-                    { showDrawingSetTitleDescriptionModal
-                        ? (
-                            <DrawingSetTitleDescription
-                                changeDrawingSetTitle={this.changeDrawingSetTitle}
-                                changeDrawingSetDescription={this.changeDrawingSetDescription}
-                                drawingData={drawingData}
-                                toggleLoginModal={this.toggleLoginModal}
-                                initDrawingListAfterSave={this.initDrawingListAfterSave}
-                                showDraw={this.showDraw}
-                                showDrawingSetTitleDescriptionModal={this.showDrawingSetTitleDescriptionModal}
-                                drawingSetTitle={drawingSetTitle}
-                                drawingSetDescription={drawingSetDescription}
-                            />
-                        )
-                        : null}
+                    {showDrawingSetTitleDescriptionModal ? (
+                        <DrawingSetTitleDescription
+                            changeDrawingSetTitle={this.changeDrawingSetTitle}
+                            changeDrawingSetDescription={
+                                this.changeDrawingSetDescription
+                            }
+                            drawingData={drawingData}
+                            toggleLoginModal={this.toggleLoginModal}
+                            initDrawingListAfterSave={
+                                this.initDrawingListAfterSave
+                            }
+                            showDraw={this.showDraw}
+                            showDrawingSetTitleDescriptionModal={
+                                this.showDrawingSetTitleDescriptionModal
+                            }
+                            drawingSetTitle={drawingSetTitle}
+                            drawingSetDescription={drawingSetDescription}
+                        />
+                    ) : null}
                     <div
                         className="legend"
                         onClick={this.toggleLegend}
@@ -484,16 +501,20 @@ class App extends Component {
                             'colorList ' + (legendToggle ? 'invisible' : '')
                         }
                     >
-                        {Object.keys(constants.newToggleBox).map((color, index) => {
-                            return (
-                                <div className="eachColor" key={index++}>
-                                    <div className="legendColorBox">
-                                        <div className="colorCircle" />
+                        {Object.keys(constants.newToggleBox).map(
+                            (color, index) => {
+                                return (
+                                    <div className="eachColor" key={index++}>
+                                        <div className="legendColorBox">
+                                            <div className="colorCircle" />
+                                        </div>
+                                        <div className="legendTextBox">
+                                            {color}
+                                        </div>
                                     </div>
-                                    <div className="legendTextBox">{color}</div>
-                                </div>
-                            );
-                        })}
+                                );
+                            }
+                        )}
                     </div>
                 </div>
                 <div>
