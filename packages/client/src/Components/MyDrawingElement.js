@@ -48,7 +48,6 @@ class MyDrawingElement extends Component {
 
     render() {
         const { drawingData } = this.props;
-        console.log('drawingDatat : ', drawingData);
         return (
             <div>
                 {drawingData.map((shapeData, index) => {
