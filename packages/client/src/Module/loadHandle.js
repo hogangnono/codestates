@@ -20,7 +20,8 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
                 const { fill, color } = JSON.parse(el.css);
-                const { title, description, factor_id, id } = el;
+                const { factor_id, id } = el;
+                const { title, description } = el.Drawing;
                 const factorNearby = {
                     title,
                     description,
