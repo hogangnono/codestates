@@ -15,7 +15,7 @@ class MyDrawings extends Component {
         initUserName();
         toggleLoginModal();
         localStorage.removeItem('token');
-    }
+    };
 
     render() {
         const { myDrawingList } = this.props;

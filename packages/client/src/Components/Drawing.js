@@ -266,7 +266,6 @@ class Drawing extends Component {
 
         if (isInShapeCreateMode) {
             const mapDiv = document.querySelector('#map').childNodes[6];
-            // console.log(mapDiv);
             if (mapDiv.style.cursor !== 'crosshair') {
                 mapDiv.style.cursor = 'crosshair';
             }

@@ -233,9 +233,6 @@ exports.load = async (req, res) => {
 exports.save = async (req, res) => {
     let transaction;
     const { payload } = req.body;
-    // console.log('===================');
-    console.log('aaaaaaaaaaaaaaaaaa', JSON.parse(payload).actions[0].value);
-    // console.log('===================');
     const { value } = JSON.parse(payload).actions[0];
     try {
         transaction = await Drawing.sequelize.transaction();
@@ -243,17 +240,13 @@ exports.save = async (req, res) => {
             res.status(200).send('호재 데이터를 저장하지 않았습니다.');
         } else {
             const { name, data, drawingSetInfo } = JSON.parse(value);
-            console.log(name);
-            console.log('===================');
-            console.log(drawingSetInfo);
-            console.log('===================');
             if (Array.isArray(data)) {
-                console.log('1');
+                // console.log('1');
                 const userID = await User.findOne({
                     where: { name },
                     transaction
                 }).get('id');
-                console.log('2');
+                // console.log('2');
                 const drawingId = await Drawing.create(
                     {
                         user_id: userID,
@@ -262,7 +255,7 @@ exports.save = async (req, res) => {
                     },
                     transaction
                 ).get('id');
-                console.log('3');
+                // console.log('3');
                 const dataWithDrawingId = data.map(figure => {
                     const returnFigure = {
                         ...figure,
@@ -270,12 +263,12 @@ exports.save = async (req, res) => {
                     };
                     return returnFigure;
                 });
-                console.log('4');
+                // console.log('4');
                 console.log(dataWithDrawingId);
                 await Figure.bulkCreate(dataWithDrawingId);
-                console.log('5');
+                // console.log('5');
                 await transaction.commit();
-                console.log('6');
+                // console.log('6');
                 res.status(200).send('성공적으로 호재 정보를 저장했습니다! :)');
             }
         }

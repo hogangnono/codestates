@@ -19,12 +19,6 @@ export default class NearbyFactorDialog extends Component {
                 </div>
                 <div className="scrollBox">
                     <NearbyFactorItem NearByFactorItems={NearByFactorItems} />
-                    {/* // NearByFactorItems.map((factorItem, index) => (
-                    //     <NearbyFactorItem
-                    //         title={factorItem.title}
-                    //         factor_id={factorItem.factor_id}
-                    //         key={index++}
-                    //     /> */}
                 </div>
             </div>
         );

@@ -97,7 +97,6 @@ class App extends Component {
 
     mainPageLoad = map => {
         const { name, factors } = this.state;
-        // console.log(name);
         const bound = this.bound;
         // this.setState는 Promise가 아닌데 async await 안써도 되지 않나요? (from Cloie)
         const nearbyData = async val => {
@@ -241,7 +240,6 @@ class App extends Component {
 
     factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;
-        console.log(name);
         const bound = this.bound;
         const factors = [];
         let nearbyData;
