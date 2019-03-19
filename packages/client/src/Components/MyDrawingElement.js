@@ -48,6 +48,7 @@ class MyDrawingElement extends Component {
 
     render() {
         const { drawingData } = this.props;
+        console.log('drawingDatat : ', drawingData);
         return (
             <div>
                 {drawingData.map((shapeData, index) => {
@@ -56,7 +57,10 @@ class MyDrawingElement extends Component {
                     return (
                         <div className="drewShape" key={newIndex} value={index}>
                             {type[shapeType].component}
-                            <span>{type[shapeType].korean}</span>
+                            {shapeData.title
+                                ? (<span>{`${shapeData.title.substr(0, 10)}..`}</span>)
+                                : (<span></span>)
+                            }
                             <IoMdTrash
                                 className="deleteDrawingDataIcon"
                                 onClick={this.deleteShape}
