@@ -18,9 +18,10 @@ export const colorList = [
     'SlateGray',
     'Red'
 ];
-export const API_HOST = 'http://localhost:3001';
 // export const API_HOST = 'http://localhost:3001';
+export const API_HOST = 'http://localhost:3001';
 export const API_USER_PATH = API_HOST + '/user';
 export const API_USER_LOAD_PATH = API_HOST + '/user/load';
 export const API_USER_SAVE_PATH = API_HOST + '/user/save';
+export const API_USER_USERDRAWING_PATH = API_HOST + '/user/userdrawing';
 export const SLACK_GENERAL_PATH = 'https://hooks.slack.com/services/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';

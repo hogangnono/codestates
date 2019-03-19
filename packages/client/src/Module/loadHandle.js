@@ -15,7 +15,6 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
         })
         .then(async result => {
             const data = await result.data;
-            console.log('data --- my에 갔을 때 ---: ', data);
             const [resultData, userData] = await data;
             const nearbyFactors = [];
             const drawing = el => {
