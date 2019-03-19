@@ -59,7 +59,7 @@ class MyDrawingElement extends Component {
                             {type[shapeType].component}
                             {shapeData.title
                                 ? (<span>{`${shapeData.title.substr(0, 10)}..`}</span>)
-                                : (<span></span>)
+                                : (<span>{type[shapeType].korean}</span>)
                             }
                             <IoMdTrash
                                 className="deleteDrawingDataIcon"
