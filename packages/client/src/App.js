@@ -65,9 +65,13 @@ class App extends Component {
         this.bound = map.getBounds();
         this.mainPageLoad(map);
         naver.maps.Event.addListener(map, 'idle', e => {
+            const { showDraw } = this.state;
             this.bound = map.getBounds();
-            this.mainPageLoad(map);
-            this.deleteDraw();
+            // 그리기 모드가 아닌 경우에만 데이터를 불러옴
+            if (!showDraw) {
+                this.mainPageLoad(map);
+                this.deleteDraw();
+            }
         });
         const name = JSON.parse(localStorage.getItem('token'));
         if (name) {
@@ -500,7 +504,7 @@ class App extends Component {
                         {Object.keys(constants.newToggleBox).map(
                             (color, index) => {
                                 return (
-                                    <div className="eachColor" key={index++}>
+                                    <div className="eachColor" key={index}>
                                         <div className="legendColorBox">
                                             <div className="colorCircle" />
                                         </div>
