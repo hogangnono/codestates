@@ -28,15 +28,26 @@
 
     <br>
 
-    <p>
+    <!-- <p>
     <iframe width="640" height="360" src="https://www.youtube.com/embed/elRI1DB4520?rel=0&amp;showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </p>
-    - 사용자가 해당 호재를 선택시 viewport 안 한눈에 볼 수 있도록 구현.
-    <p>
-    <iframe width="640" height="360" src="https://www.youtube.com/embed/pNZ7LkcditI?rel=0&amp;showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </p>
-    - 사용자가 직접 그린 데이터만 나타내도록 구현.</center>
-    <p>
-    <iframe width="640" height="360" src="https://www.youtube.com/embed/w9ilvJ1FzYA?rel=0&amp;showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </p>
-    - 사용자가 직접 도형별로 그릴 수 있게 구현.
+    </p> -->
+
+    ![gif](https://media.giphy.com/media/H6KAgO6pyZfXuZI44J/giphy.gif)
+
+    - 사용자가 해당 호재를 선택시 viewport 안 한눈에 볼 수 있도록 구현. [`해당 영상`](https://www.youtube.com/watch?v=elRI1DB4520)
+
+      <!-- <p>
+      <iframe width="640" height="360" src="https://www.youtube.com/embed/pNZ7LkcditI?rel=0&amp;showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </p> -->
+
+    ![gif](https://media.giphy.com/media/MY10D0ZPCrvYEQ19IP/giphy.gif)
+
+    - 사용자가 직접 그린 데이터만 나타내도록 구현. [`해당 영상`](https://www.youtube.com/watch?v=pNZ7LkcditI)
+
+      <!-- <p>
+      <iframe width="640" height="360" src="https://www.youtube.com/embed/w9ilvJ1FzYA?rel=0&amp;showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </p> -->
+
+    ![gif](https://media.giphy.com/media/ZXfWW9lUzRSYnCrhae/giphy.gif)
+
+    - 사용자가 직접 도형별로 그릴 수 있게 구현. [`해당 영상`](https://www.youtube.com/watch?v=w9ilvJ1FzYA)
