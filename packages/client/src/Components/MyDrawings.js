@@ -15,19 +15,22 @@ class MyDrawings extends Component {
 
     state = {
         userDrawingSet: {}
-    }
+    };
 
     componentDidMount = async () => {
-        const userName = MakeSecret.Decrypt(JSON.parse(localStorage.getItem('token')));
+        const userName = MakeSecret.Decrypt(
+            JSON.parse(localStorage.getItem('token'))
+        );
         if (userName) {
-            await axios.post(API_USER_USERDRAWING_PATH, {
-                name: userName
-            })
+            await axios
+                .post(API_USER_USERDRAWING_PATH, {
+                    name: userName
+                })
                 .then(result => {
                     this.setState({ userDrawingSet: result });
                 });
         }
-    }
+    };
 
     handleLogout = () => {
         const { toggleLoginModal, initUserName } = this.props;
@@ -53,8 +56,8 @@ class MyDrawings extends Component {
                             <div className="descriptionTitle">설명</div>
                         </div>
                         <div className="myDrawingListsContainer">
-                            { Object.keys(userDrawingSet).length
-                                ? userDrawingSet.data.map(figure => {
+                            {Object.keys(userDrawingSet).length ? (
+                                userDrawingSet.data.map(figure => {
                                     return (
                                         <div key={'myDrawing' + figure.id}>
                                             <li className="myDrawingLists">
@@ -68,7 +71,9 @@ class MyDrawings extends Component {
                                         </div>
                                     );
                                 })
-                                : <></>}
+                            ) : (
+                                <div />
+                            )}
                         </div>
                     </div>
                     <div
