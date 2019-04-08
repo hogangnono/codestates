@@ -18,6 +18,15 @@ export const colorList = [
     'SlateGray', // 7
     'Red' // 8
 ];
+
+export const typeOfShape = {
+    0: 'Line',
+    1: 'Arrow',
+    2: 'Rect',
+    3: 'Circle',
+    4: 'Polygon'
+};
+
 // export const API_HOST = 'https://hogangnono.jihune.com';
 export const API_HOST = 'http://localhost:3001';
 export const API_USER_PATH = API_HOST + '/user';

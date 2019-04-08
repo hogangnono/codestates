@@ -107,7 +107,6 @@ const saveHandle = (
                     }
                 ]
             };
-            console.log('json reqBody : ', JSON.stringify(reqBody));
             return axios
                 .post(SLACK_GENERAL_PATH, JSON.stringify(options))
                 .then(result => {

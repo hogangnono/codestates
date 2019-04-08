@@ -101,7 +101,6 @@ class App extends Component {
 
     mainPageLoad = map => {
         const { name, factors } = this.state;
-        // console.log(name);
         const bound = this.bound;
         const nearbyData = async val => {
             await this.setState({
@@ -244,7 +243,6 @@ class App extends Component {
 
     factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;
-        console.log(name);
         const bound = this.bound;
         const factors = [];
         let nearbyData;

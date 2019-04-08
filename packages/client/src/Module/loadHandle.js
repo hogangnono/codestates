@@ -15,18 +15,12 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
         })
         .then(async result => {
             const data = await result.data;
-            const [resultData, userData] = await data; // 무슨차이?
+            const [resultData, userData] = await data;
             const nearbyFactors = [];
             const drawing = el => {
                 const { shape, lineData, zoomLevel } = JSON.parse(el.figures);
                 const { fill, color } = JSON.parse(el.css);
                 const { factor_id, id } = el;
-                console.log('====================');
-                console.log('resultData : ', resultData);
-                console.log('userData : ', userData);
-                console.log('factor_id : ', factor_id);
-                console.log('id : ', id);
-                console.log('drawList : ', drawList);
                 const { title, description } = el.Drawing;
                 const factorNearby = {
                     title,
@@ -34,7 +28,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                     factor_id
                 };
                 nearbyFactors.push(factorNearby);
-                if (nearbyFactors.length && !name) {
+                if (nearbyFactors.length) {
                     nearbyData(nearbyFactors);
                 }
                 if (!(id in drawList)) {
@@ -105,17 +99,12 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
             switch (result.status) {
                 case 200:
                 case 201:
-                    console.log('여기(201)를 작업중이에요');
                     if (userData && toggle) {
-                        console.log('유저데이터를 작업중이에요');
                         userData.map(async el => {
-                            console.log(el);
                             drawing(el);
                         });
                     } else if (resultData && !toggle) {
-                        console.log('리절트데이터를 작업중이에요');
                         resultData.map(async el => {
-                            // console.log(el);
                             drawing(el);
                         });
                     }
