@@ -26,7 +26,6 @@ exports.load = async (req, res) => {
     let transaction;
     const data = [];
     const factorIdArray = [];
-
     // 필터에서 호재를 선택하면 해당 호재를 load 함
     if (factors && factors.length) {
         try {

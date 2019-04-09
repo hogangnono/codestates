@@ -56,7 +56,10 @@ class MyDrawingElement extends Component {
                     return (
                         <div className="drewShape" key={newIndex} value={index}>
                             {type[shapeType].component}
-                            <span>{type[shapeType].korean}</span>
+                            {shapeData.title
+                                ? (<span>{`${shapeData.title.substr(0, 10)}..`}</span>)
+                                : (<span>{type[shapeType].korean}</span>)
+                            }
                             <IoMdTrash
                                 className="deleteDrawingDataIcon"
                                 onClick={this.deleteShape}

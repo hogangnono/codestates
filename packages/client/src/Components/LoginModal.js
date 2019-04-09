@@ -47,16 +47,6 @@ class LoginModal extends Component {
                     toggleLoginModal();
                     alert(error);
                 });
-            // axios
-            //     .post(API_USER_LOAD_PATH, {
-            //         name, bound
-            //     })
-            //     .then(async result => {
-            //         this.setState({
-            //             myDrawingList: result.data[1]
-            //         });
-            //         console.log('이거 받았다: ', result.data[1]);
-            //     });
         } else {
             alert('올바른 이름을 입력해주세요 :)');
         }

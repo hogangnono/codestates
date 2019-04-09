@@ -101,7 +101,6 @@ class App extends Component {
 
     mainPageLoad = map => {
         const { name, factors } = this.state;
-        // console.log(name);
         const bound = this.bound;
         const nearbyData = async val => {
             await this.setState({
@@ -244,7 +243,6 @@ class App extends Component {
 
     factorLoad = (category, toggle = false) => {
         const { name, map } = this.state;
-        console.log(name);
         const bound = this.bound;
         const factors = [];
         let nearbyData;
@@ -278,6 +276,7 @@ class App extends Component {
             });
             this.setState({
                 factors: factors
+            // eslint-disable-next-line react/destructuring-assignment
             });
             nearbyData = async val => {
                 await this.setState({
@@ -380,7 +379,6 @@ class App extends Component {
             drawingSetTitle,
             drawingSetDescription
         } = this.state;
-
         this.toggleAllDraw();
         return (
             <div id="wrapper">
