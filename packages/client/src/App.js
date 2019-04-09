@@ -276,6 +276,7 @@ class App extends Component {
             });
             this.setState({
                 factors: factors
+            // eslint-disable-next-line react/destructuring-assignment
             });
             nearbyData = async val => {
                 await this.setState({
@@ -378,7 +379,6 @@ class App extends Component {
             drawingSetTitle,
             drawingSetDescription
         } = this.state;
-
         this.toggleAllDraw();
         return (
             <div id="wrapper">

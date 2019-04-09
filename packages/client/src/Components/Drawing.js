@@ -78,6 +78,7 @@ class Drawing extends Component {
         const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
+        let shapeIndex;
         let moveEvent;
         let figure;
         let lineData = [];
@@ -86,9 +87,10 @@ class Drawing extends Component {
         for (let index = 0; index < icons.length; index++) {
             if (selectedIcon === icons[index]) {
                 Shape = overlays[index];
+                shapeIndex = index;
             }
         }
-
+        const shapeName = constants.typeOfShape[shapeIndex];
         const { loadedListener } = this.state;
 
         if (loadedListener !== null) {
@@ -127,14 +129,17 @@ class Drawing extends Component {
                 }
             } else {
                 if (
-                    Shape.name === 'Rect'
-                    || Shape.name === 'Circle'
-                    || Shape.name === 'Line'
+                    shapeName === 'Rect'
+                    || shapeName === 'Circle'
+                    || shapeName === 'Line'
+                    // Shape.name === 'Rect'
+                    // || Shape.name === 'Circle'
+                    // || Shape.name === 'Line'
                 ) {
                     updateDrawingData({
                         figure,
                         lineData,
-                        shapeType: Shape.name
+                        shapeType: shapeName
                     });
                     lineData.pop();
                     this.fill = undefined;
@@ -163,35 +168,31 @@ class Drawing extends Component {
             }
         });
 
-        const rightClick = naver.maps.Event.addListener(
-            map,
-            'rightclick',
-            e => {
-                if (Shape.name === 'Polygon' || Shape.name === 'Arrow') {
-                    // 해당 포인트를 지워줌
-                    lineData.pop();
-                    // 첫 클릭 이후 우클릭을 한 경우
-                    if (lineData.length === 1) {
-                        figure.onRemove();
-                    } else {
-                        figure.draw(lineData);
-                        updateDrawingData({
-                            figure,
-                            lineData,
-                            shapeType: Shape.name
-                        });
-                    }
-                    this.setState({
-                        isInShapeCreateMode: false,
-                        showShapeBox: false
+        const rightClick = naver.maps.Event.addListener(map, 'rightclick', e => {
+            if (shapeName === 'Polygon' || shapeName === 'Arrow') {
+                // 해당 포인트를 지워줌
+                lineData.pop();
+                // 첫 클릭 이후 우클릭을 한 경우
+                if (lineData.length === 1) {
+                    figure.onRemove();
+                } else {
+                    figure.draw(lineData);
+                    updateDrawingData({
+                        figure,
+                        lineData,
+                        shapeType: shapeName
                     });
-                    descriptionModalShow();
-                    naver.maps.Event.removeListener(moveEvent);
-                    naver.maps.Event.removeListener(leftClick);
                 }
-                naver.maps.Event.removeListener(rightClick);
+                this.setState({
+                    isInShapeCreateMode: false,
+                    showShapeBox: false
+                });
+                descriptionModalShow();
+                naver.maps.Event.removeListener(moveEvent);
+                naver.maps.Event.removeListener(leftClick);
             }
-        );
+            naver.maps.Event.removeListener(rightClick);
+        });
         this.setState({
             loadedListener: {
                 leftClick,
@@ -361,7 +362,7 @@ class Drawing extends Component {
                                 return (
                                     <div
                                         className="factorBox"
-                                        onClick={() => this.decideFactor(idx)}
+                                        onClick={() => this.decideFactor(idx - 1)}
                                         onKeyPress={this.decideFactor}
                                         role="button"
                                         tabIndex="0"

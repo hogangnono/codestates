@@ -41,7 +41,6 @@ class MyDrawings extends Component {
 
     render() {
         const { userDrawingSet } = this.state;
-        console.log('userDrawingSet : ', userDrawingSet);
         return (
             <div>
                 <div id="myDrawingsContainer">

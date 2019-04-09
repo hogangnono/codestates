@@ -28,7 +28,7 @@ const drawData = (name, bound, factors, toggle, drawList, map, nearbyData) => {
                     factor_id
                 };
                 nearbyFactors.push(factorNearby);
-                if (nearbyFactors.length && !name) {
+                if (nearbyFactors.length) {
                     nearbyData(nearbyFactors);
                 }
                 if (!(id in drawList)) {
