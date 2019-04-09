@@ -224,7 +224,7 @@ class App extends Component {
     myInfoToggle = () => {
         const { MyInfoButton } = this.state;
         this.setState({ MyInfoButton: !MyInfoButton });
-        this.factorLoad(undefined, !MyInfoButton);
+        this.factorLoad(null, !MyInfoButton);
     };
 
     updateDrawingData = (shapeData, order = false, index) => {
@@ -276,7 +276,6 @@ class App extends Component {
             });
             this.setState({
                 factors: factors
-            // eslint-disable-next-line react/destructuring-assignment
             });
             nearbyData = async val => {
                 await this.setState({
@@ -379,23 +378,15 @@ class App extends Component {
             drawingSetTitle,
             drawingSetDescription
         } = this.state;
+
         this.toggleAllDraw();
         return (
             <div id="wrapper">
-                <div className="introPage">
-                    <div className="chart1" />
-                    <div className="chart2" />
-                    <div className="chart3" />
-                    <div className="chart4" />
-                    <div className="chart5" />
-                    <div className="chart6" />
-                </div>
                 <div id="map">
                     <NearbyFactorDialog
                         mapLoad={map}
                         NearByFactorItems={NearByFactorItems}
                     />
-
                     <div id="loginFavorContainer">
                         <div
                             className="loginFavorBtn"
