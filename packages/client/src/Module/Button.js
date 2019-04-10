@@ -33,7 +33,7 @@ class Button extends Component {
                         selectButton(icons);
                     }}
                 >
-                    {icons === 'line' ? (
+                    {icons === 'Line' ? (
                         <FaSlash
                             className={
                                 isSelected
@@ -41,7 +41,7 @@ class Button extends Component {
                                     : 'rotateIcon1'
                             }
                         />
-                    ) : icons === 'arrow' ? (
+                    ) : icons === 'Arrow' ? (
                         <FaArrowLeft
                             className={
                                 isSelected
@@ -49,11 +49,11 @@ class Button extends Component {
                                     : 'rotateIcon2'
                             }
                         />
-                    ) : icons === 'square' ? (
+                    ) : icons === 'Rect' ? (
                         <FaSquareFull
                             className={isSelected ? 'selectedIcon' : ''}
                         />
-                    ) : icons === 'circle' ? (
+                    ) : icons === 'Circle' ? (
                         <FaCircle
                             className={isSelected ? 'selectedIcon' : ''}
                         />
