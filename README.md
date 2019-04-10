@@ -2,7 +2,7 @@
 
 ### **_`Hogangnono`_** 팀과 협업해 진행한 부동산 호재 정보를 시각화된 자료로 제공해주는 서비스입니다.
 
-### 🌏[여기호재 서비스 이용하기](bit.ly/Hogangnono)
+### 🌏 [여기호재 서비스 이용하기](bit.ly/Hogangnono)
 
 <br>
 
@@ -40,7 +40,7 @@
 - ## 설명
 
   - Naver 지도 API에서 제공하는 CustomOverlayView 클래스를 이용하여 D3로 SVG 도형 그리기 기능 구현.
-  - 현재 지도의 'Viewport’ bound data (lat, long, center point)에 따라 도형이 나타남.
+  - 현재 지도의 'Viewport’ bound data (lat, lng, center point)에 따라 도형이 나타남.
 
     <br>
 
