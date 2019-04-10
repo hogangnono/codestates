@@ -249,7 +249,7 @@ class Drawing extends Component {
     };
 
     decideFactor = factorNum => {
-        this.factorId = factorNum;
+        this.factorId = factorNum + 1;
         this.color = constants.colorList[factorNum];
     };
 
@@ -396,7 +396,6 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
-                            this.showShape();
                             // puppeteer.captureImage();
                         }}
                     >
