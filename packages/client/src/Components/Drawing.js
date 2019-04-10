@@ -151,6 +151,7 @@ class Drawing extends Component {
                     this.setState({
                         isInShapeCreateMode: false
                     });
+                    this.selectButton();
                     descriptionModalShow();
                 } else {
                     figure.draw(lineData);
@@ -187,6 +188,7 @@ class Drawing extends Component {
                 this.setState({
                     isInShapeCreateMode: false
                 });
+                this.selectButton();
                 descriptionModalShow();
                 naver.maps.Event.removeListener(moveEvent);
                 naver.maps.Event.removeListener(leftClick);
@@ -202,7 +204,7 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-        const { isInShapeCreateMode, isSelectStatus, refresh } = this.state;
+        const { isInShapeCreateMode, isSelectStatus } = this.state;
         const { descriptionModalHide } = this.props;
         const resetStatus = { ...isSelectStatus };
         for (const key in resetStatus) {
@@ -220,8 +222,7 @@ class Drawing extends Component {
             isInShapeCreateMode: !isInShapeCreateMode,
             isSelectStatus: newStatus,
             fillOrNotToggle1: false,
-            fillOrNotToggle2: false,
-            refresh: !refresh
+            fillOrNotToggle2: false
         });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
         descriptionModalHide();
@@ -332,7 +333,7 @@ class Drawing extends Component {
                 })}
                 {shapeStatus ? (
                     <div
-                        className="selectOption"
+                        className={'selectOption ' + (shapeStatus ? '' : 'invisible')}
                     >
                         <div className="fillOrNot">
                             <div
@@ -395,6 +396,7 @@ class Drawing extends Component {
                         className="saveCloseBtn"
                         onClick={() => {
                             this.handleRequestSave(drawingData);
+                            this.showShape();
                             // puppeteer.captureImage();
                         }}
                     >
@@ -403,7 +405,9 @@ class Drawing extends Component {
                     <button
                         type="button"
                         className="saveCloseBtn"
-                        onClick={() => handleToggle()}
+                        onClick={() => {
+                            handleToggle();
+                        }}
                     >
                         {`닫기`}
                     </button>
