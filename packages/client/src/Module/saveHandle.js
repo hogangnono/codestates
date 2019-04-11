@@ -33,6 +33,7 @@ const saveHandle = (
         processedData.title = oneShape.title; // Fixed. Go to App.js line 260 to see!
         processedData.description = oneShape.value; // Fixed
         processedData.css = JSON.stringify(figuresCss);
+        console.log('oneShape : ', oneShape);
         processedData.factor_id = oneShape.figure._factorId;
         dataSet.push(processedData);
     });

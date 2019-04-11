@@ -26,14 +26,19 @@ class Drawing extends Component {
     };
 
     state = {
-        shapes: ['line', 'arrow', 'square', 'circle', 'polygon'],
         selectedButton: null,
         loadedListener: null,
         isInShapeCreateMode: false,
         refresh: true,
         fillOrNotToggle1: false,
         fillOrNotToggle2: false,
-        showShapeBox: false
+        isSelectStatus: {
+            Line: false,
+            Arrow: false,
+            Rect: false,
+            Circle: false,
+            Polygon: false
+        }
     };
 
     color = undefined;
@@ -75,7 +80,7 @@ class Drawing extends Component {
         let position;
         const naver = window.naver;
         const { map, updateDrawingData, descriptionModalShow } = this.props;
-        const icons = ['line', 'arrow', 'square', 'circle', 'polygon'];
+        const icons = Object.values(constants.typeOfShape);
         const overlays = [Line, Arrow, Rect, Circle, Polygon]; // Change name of index to actual overlay name of import
         let Shape;
         let shapeIndex;
@@ -132,9 +137,6 @@ class Drawing extends Component {
                     shapeName === 'Rect'
                     || shapeName === 'Circle'
                     || shapeName === 'Line'
-                    // Shape.name === 'Rect'
-                    // || Shape.name === 'Circle'
-                    // || Shape.name === 'Line'
                 ) {
                     updateDrawingData({
                         figure,
@@ -147,9 +149,9 @@ class Drawing extends Component {
                     naver.maps.Event.removeListener(moveEvent);
                     naver.maps.Event.removeListener(leftClick);
                     this.setState({
-                        isInShapeCreateMode: false,
-                        showShapeBox: false
+                        isInShapeCreateMode: false
                     });
+                    this.selectButton();
                     descriptionModalShow();
                 } else {
                     figure.draw(lineData);
@@ -184,9 +186,9 @@ class Drawing extends Component {
                     });
                 }
                 this.setState({
-                    isInShapeCreateMode: false,
-                    showShapeBox: false
+                    isInShapeCreateMode: false
                 });
+                this.selectButton();
                 descriptionModalShow();
                 naver.maps.Event.removeListener(moveEvent);
                 naver.maps.Event.removeListener(leftClick);
@@ -202,17 +204,27 @@ class Drawing extends Component {
     };
 
     selectButton = selectedIcon => {
-        const { isInShapeCreateMode } = this.state;
+        const { isInShapeCreateMode, isSelectStatus } = this.state;
         const { descriptionModalHide } = this.props;
-        this.setState({ selectedButton: selectedIcon });
+        const resetStatus = { ...isSelectStatus };
+        for (const key in resetStatus) {
+            if (key === selectedIcon && resetStatus[key]) {
+                resetStatus[key] = false;
+            } else if (key === selectedIcon) {
+                resetStatus[key] = !resetStatus[key];
+            } else {
+                resetStatus[key] = false;
+            }
+        }
+        const newStatus = Object.assign({ ...isSelectStatus }, resetStatus);
         this.setState({
             selectedButton: selectedIcon,
             isInShapeCreateMode: !isInShapeCreateMode,
+            isSelectStatus: newStatus,
             fillOrNotToggle1: false,
             fillOrNotToggle2: false
         });
         this.createShapeTest(selectedIcon); // Enter parameter for different shape
-        this.showShape();
         descriptionModalHide();
     };
 
@@ -236,15 +248,8 @@ class Drawing extends Component {
         }
     };
 
-    showShape = () => {
-        const { showShapeBox } = this.state;
-        this.setState({
-            showShapeBox: !showShapeBox
-        });
-    };
-
     decideFactor = factorNum => {
-        this.factorId = factorNum;
+        this.factorId = factorNum + 1;
         this.color = constants.colorList[factorNum];
     };
 
@@ -253,17 +258,16 @@ class Drawing extends Component {
             map,
             handleToggle,
             drawingData,
-            // NearByFactorItems,
             updateDrawingData
         } = this.props;
         const {
             selectedButton,
-            shapes,
             isInShapeCreateMode,
+            isSelectStatus,
             fillOrNotToggle1,
-            fillOrNotToggle2,
-            showShapeBox
+            fillOrNotToggle2
         } = this.state;
+        const shapeStatus = Object.values(isSelectStatus).some(el => el === true);
         const doNotShowTips = JSON.parse(
             sessionStorage.getItem('doNotShowTipsForDrawing')
         );
@@ -312,7 +316,7 @@ class Drawing extends Component {
         }
         return (
             <div id="drawingComponentContainer">
-                {shapes.map(shape => {
+                {Object.values(constants.typeOfShape).map(shape => {
                     return (
                         <Button
                             map={map}
@@ -327,9 +331,9 @@ class Drawing extends Component {
                         />
                     );
                 })}
-                {isInShapeCreateMode ? (
+                {shapeStatus ? (
                     <div
-                        className={'selectOption ' + (showShapeBox ? '' : 'c')}
+                        className={'selectOption ' + (shapeStatus ? '' : 'invisible')}
                     >
                         <div className="fillOrNot">
                             <div
@@ -400,7 +404,9 @@ class Drawing extends Component {
                     <button
                         type="button"
                         className="saveCloseBtn"
-                        onClick={() => handleToggle()}
+                        onClick={() => {
+                            handleToggle();
+                        }}
                     >
                         {`닫기`}
                     </button>
