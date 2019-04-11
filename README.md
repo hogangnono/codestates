@@ -83,6 +83,6 @@ Ejected [create-react-app](https://github.com/facebook/create-react-app) and bro
 > 화면 좌측 상단에 유저가 보는 화면(Viewport)의 중심점이 변경될 경우 주변의 부동산호재 정보를 계속해서 서버로부터 불러와 화면에 보여줍니다.<br />
 
 ### `그리기`
-<img src="./packages/client/src/Components/imgs/drawingList.gif" alt="drawingList.gif" /><br />
+<img src="./packages/client/src/Components/imgs/drawingLists.gif" alt="drawingList.gif" /><br />
 > - 점, 사각형, 원 : 마우스 왼쪽 클릭으로 시작 -> 마우스 왼쪽 클릭으로 도형그리기 종료
 > - 화살표, 다각형: 마우스 왼쪽 클릭으로 시작 -> 마우스 오른쪽 클릭으로 도형그리기 종료
