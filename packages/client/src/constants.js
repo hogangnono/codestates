@@ -27,8 +27,8 @@ export const typeOfShape = {
     4: 'Polygon'
 };
 
-// export const API_HOST = 'https://hogangnono.jihune.com';
-export const API_HOST = 'http://localhost:3001';
+export const API_HOST = 'https://hogangnono.jihune.com';
+// export const API_HOST = 'http://localhost:3001';
 export const API_USER_PATH = API_HOST + '/user';
 export const API_USER_LOAD_PATH = API_HOST + '/user/load';
 export const API_USER_SAVE_PATH = API_HOST + '/user/save';
