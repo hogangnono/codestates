@@ -64,31 +64,25 @@ Ejected [create-react-app](https://github.com/facebook/create-react-app) and bro
 
 ### Client Interface
 
-#### `전체 화면`
-> 전체 화면의 모습입니다. `주변호재` `My` `필터` `그리기` 메뉴로 나뉘여 있습니다.<br />
+### `전체 화면`
 <img src="./packages/client/src/Components/imgs/fullScreen.png" alt="fullScreen.png" /><br />
+> 전체 화면의 모습입니다. `주변호재` `My` `필터` `그리기` 메뉴로 나뉘여 있습니다.<br />
 <br />
----
-#### `주변호재`
-> 화면 좌측 상단에 유저가 보는 화면(Viewport)의 중심점이 변경될 경우 주변의 부동산호재 정보를 계속해서 서버로부터 불러와 화면에 보여줍니다.<br />
+
+### `주변호재`
 <img src="./packages/client/src/Components/imgs/searchingNearbyList.gif" alt="searchingNearbyList.gif" /><br />
-<br />
----
-#### `My`
-> 화면 우측 상단에 있는 `My` 버튼을 누르면 이름을 입력하여 로그인을 할 수 있고, 로그인 후에는 내가 그린 도형(부동산 호재)의 리스트를 볼 수 있습니다.<br />
+> 화면 좌측 상단에 유저가 보는 화면(Viewport)의 중심점이 변경될 경우 주변의 부동산호재 정보를 계속해서 서버로부터 불러와 화면에 보여줍니다.<br />
+
+### `My`
 <img src="./packages/client/src/Components/imgs/my.png" alt="my.png" /><br />
 <img src="./packages/client/src/Components/imgs/myDrawingList.png" alt="myDrawingList.png" /><br />
-<br />
----
-#### `필터`
+> 화면 우측 상단에 있는 `My` 버튼을 누르면 이름을 입력하여 로그인을 할 수 있고, 로그인 후에는 내가 그린 도형(부동산 호재)의 리스트를 볼 수 있습니다.<br />
+
+### `필터`
+<img src="./packages/client/src/Components/imgs/filter.png" alt="filter.png" /><br />
 > 화면 좌측 상단에 유저가 보는 화면(Viewport)의 중심점이 변경될 경우 주변의 부동산호재 정보를 계속해서 서버로부터 불러와 화면에 보여줍니다.<br />
-<img src="./packages/client/src/Components/imgs/my.png" alt="my.png" /><br />
-<br />
----
-#### `그리기`
-> 화면 좌측 상단에서 그리기 버튼을 클릭할 경우 도형을 그릴 수 있습니다. 원하는 도형의 종류와 Fill / outline 와 부동산 호재 종류를 선택하고 지도 위에 그림을 그릴 수 있습니다. <br />
-- 점, 사각형, 원 : 마우스 왼쪽 클릭으로 시작 -> 마우스 왼쪽 클릭으로 도형그리기 종료
-- 화살표, 다각형: 마우스 왼쪽 클릭으로 시작 -> 마우스 오른쪽 클릭으로 도형그리기 종료
-<img src="./packages/client/src/Components/imgs/drawingLists.gif" alt="drawingList.gif" /><br />
-<br />
----
+
+### `그리기`
+<img src="./packages/client/src/Components/imgs/drawingList.gif" alt="drawingList.gif" /><br />
+> - 점, 사각형, 원 : 마우스 왼쪽 클릭으로 시작 -> 마우스 왼쪽 클릭으로 도형그리기 종료
+> - 화살표, 다각형: 마우스 왼쪽 클릭으로 시작 -> 마우스 오른쪽 클릭으로 도형그리기 종료
