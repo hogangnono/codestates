@@ -1,0 +1,40 @@
+@toolboxColor: #fff;
+
+#toolbox {
+  position: absolute;
+  background: @toolboxColor;
+  z-index: 1;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  @media (max-width: 768px) {
+    top: 20px;
+    right: 0px;
+    width: 80%;
+    height: 100%;
+  }
+  @media (min-width: 767px) {
+    top: 80px;
+    right: 60px;
+    width: 240px;
+    height: 600px;
+  }
+
+  #tabMenu {
+    font-size: 15px;
+    font-weight: bold;
+
+    .eachTabMenu {
+      width: 100%;
+      background-color: #4d55b2;
+      color: #fff;
+      text-align: center;
+      border-radius: 10px 10px 0 0;
+      padding: 10px;
+      box-sizing: border-box;
+      float: left;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      font-family: Apple SD Gothic Neo, sans-serif;
+    }
+  }
+}

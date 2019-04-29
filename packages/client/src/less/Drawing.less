@@ -1,0 +1,384 @@
+@mainColor: #4d55b2;
+@white: white;
+@colors: Crimson, DarkOrange, SeaGreen, Navy, Peru, HotPink, SlateGray, red;
+
+body {
+  font-family: Apple SD Gothic Neo, sans-serif;
+  color: #333;
+}
+#drawingComponentContainer {
+  position: absolute;
+  width: 100%;
+  height: 520px;
+  bottom: 0;
+  .drawingList {
+    font-size: 12px;
+    margin: 5px 20px;
+  }
+  .drawingPointer {
+    width: 20px;
+    height: auto;
+  }
+  .drawingToolBox {
+    width: 100%;
+    height: 40px;
+  }
+  .drawingTools {
+    float: left;
+    list-style: none;
+    background-color: @white;
+    width: 16%;
+    height: 20px;
+    padding: 10px 0;
+    margin: 0 2%;
+    text-align: center;
+    border-color: #c0c0c061;
+    border-radius: 3px;
+    color: @mainColor;
+    font-size: 18px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    transition-duration: 0.3s;
+    cursor: pointer;
+    .rotateIcon1 {
+      transform: rotate(90deg);
+    }
+    .rotateIcon2 {
+      transform: rotate(-45deg);
+    }
+    &:hover {
+      background-color: @mainColor;
+      color: @white;
+    }
+    &:focus {
+      outline: 0;
+    }
+  }
+  #myDrawingsContainer {
+    width: 100%;
+    height: 400px;
+    overflow: auto;
+    padding: 20px 0px 20px 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+    .drewShape {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 10px 10px;
+    }
+    .deleteDrawingDataIcon {
+      width: auto;
+      height: 25px;
+    }
+  }
+  #saveCloseBtns {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    box-sizing: border-box;
+  }
+  .saveCloseBtn {
+    position: absolute;
+    top: 0;
+    right: 0px;
+    text-align: center;
+    border-radius: 10px;
+    border: none;
+    padding: 10px 0;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: @white;
+    font-size: 15px;
+    color: #666;
+    font-weight: 400;
+    transition-duration: 0.2s;
+    @media (max-width: 768px) {
+      width: 40%;
+    }
+    @media (min-width: 767px) {
+      width: 98px;
+    }
+    &:hover {
+      background-color: @mainColor;
+      color: @white;
+    }
+    &:first-child {
+      left: 0px;
+    }
+    &:focus {
+      outline: 0;
+    }
+  }
+  .selected {
+    background-color: #4d55b2;
+    .selectedIcon {
+      color: @white;
+    }
+  }
+
+  .filterBtn {
+    position: relative;
+    width: auto;
+    height: 40px;
+    line-height: 42px;
+    font-size: 16px;
+    transition-duration: 0.1s;
+    margin: 15px 20%;
+    text-align: center;
+    cursor: pointer;
+    color: #555;
+    border-radius: 30px;
+    box-sizing: border-box;
+    letter-spacing: 1px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
+  }
+  .tipModalForDrawing {
+    position: absolute;
+    top: 530px;
+    width: 100%;
+    animation-name: floating;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    .arrowBoxForDrawing {
+      position: relative;
+      background: @mainColor;
+      height: 60px;
+      border-radius: 10px;
+      color: @white;
+      padding: 12px;
+      display: table-cell;
+      vertical-align: middle;
+      p {
+        margin: 2px;
+        font-weight: 300;
+      }
+      .doNotShowTipsForDrawing {
+        float: right;
+        text-align: center;
+        padding: 3px;
+        margin: 5px 0px;
+        font-weight: bold;
+        width: 100px;
+        border-radius: 10px;
+        background-color: @white;
+        color: @mainColor;
+      }
+      @keyframes floating {
+        from {
+          transform: translate(0, 0px);
+        }
+        80% {
+          transform: translate(0, 10px);
+        }
+        to {
+          transform: translate(0, -0px);
+        }
+      }
+    }
+    .arrowBoxForDrawing:after,
+    .arrowBoxForDrawing:before {
+      bottom: 80%;
+      left: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .arrowBoxForDrawing:after {
+      border-color: rgba(136, 183, 213, 0);
+      border-bottom-color: @mainColor;
+      border-width: 30px;
+      margin-left: -30px;
+    }
+    .arrowBoxForDrawing:before {
+      border-color: rgba(194, 225, 245, 0);
+      border-width: 36px;
+      margin-left: -36px;
+    }
+  }
+}
+.selectOption {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  display: inline-block;
+  width: 100%;
+  height: 65%;
+  overflow: hidden;
+  background-color: @white;
+  transition-duration: 0.2s;
+  .fillOrNot {
+    display: flex;
+    width: 80%;
+    height: 40px;
+    margin: 30px 10%;
+    .lineOrFillBox {
+      width: 45%;
+      height: 40px;
+      text-align: center;
+      line-height: 40px;
+      font-size: 16px;
+      transition-duration: 0.3s;
+      border-radius: 25px;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+      color: #999;
+      cursor: pointer;
+      &:nth-child(2n-1) {
+        margin-right: 10%;
+      }
+      &:nth-child(2n-1):hover {
+        background-color: @mainColor;
+        color: @white;
+      }
+      &:focus {
+        outline: 0;
+      }
+      &:last-child:hover {
+        border: 1px solid @mainColor;
+        color: @mainColor;
+      }
+    }
+  }
+  .factorContainerBox {
+    width: 95%;
+    height: 100%;
+    margin: 0 2.5%;
+    margin-top: 20px;
+    .factorBox {
+      width: 46.25%;
+      height: 40px;
+      box-sizing: border-box;
+      line-height: 40px;
+      font-size: 13px;
+      float: left;
+      margin: 10px 0;
+      border-radius: 25px;
+      transition-duration: 0.3s;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+      color: #777;
+      &:nth-child(2n-1) {
+        margin-right: 7%;
+      }
+      &:hover {
+        background-color: @mainColor;
+        color: @white;
+      }
+      &:focus {
+        outline: 0;
+      }
+    }
+  }
+}
+.factorContain {
+  position: relative;
+}
+.factorColorBox {
+  position: absolute;
+  top: 17px;
+  left: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 5px;
+  z-index: 100;
+  background-color: red;
+}
+.factorText {
+  padding-left: 20px;
+}
+
+.factor(@i: length(@colors)) when (@i > 0) {
+  .factor(@i - 1);
+  @color: extract(@colors, @i);
+  .factorBox:nth-child(@{i}) .factorColorBox {
+    background-color: @color;
+  }
+}
+
+.factor();
+
+.a {
+  background-color: @mainColor;
+  color: @white;
+}
+.b {
+  border: 1px solid @mainColor;
+  color: @mainColor;
+}
+.invisible {
+  height: 0;
+}
+
+@circle-width: 70px;
+
+// You can play with these for a little variation
+@shadow-depth: @circle-width * 0.25;
+@shadow-depth-hover-ratio: 1.5;
+@shadow-blur: @shadow-depth * 0;
+@shadow-spread: @shadow-depth * 0;
+
+@y-offset: @shadow-depth * 0.5;
+@x-offset: @y-offset * 1.7320508076; // √3
+@y-offset-hover: @y-offset * @shadow-depth-hover-ratio;
+@x-offset-hover: @x-offset * @shadow-depth-hover-ratio;
+
+@red: rgba(255, 0, 0, 0.45);
+@orange: rgba(253, 127, 11, 0.54);
+@yellow: rgba(235, 255, 0, 0.54);
+@green: rgba(22, 243, 3, 0.55);
+@blue: rgba(0, 133, 255, 0.53);
+@purple: rgba(190, 11, 224, 0.55);
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.legend {
+  position: absolute;
+  bottom: 50px;
+  right: 15px;
+  z-index: 100;
+  width: @circle-width;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  background-color: white;
+  box-shadow: inset @x-offset (-@y-offset) @shadow-blur @shadow-spread @red,
+    inset (-@x-offset) (-@y-offset) @shadow-blur @shadow-spread @yellow,
+    inset 0 @shadow-depth @shadow-blur @shadow-spread @blue,
+    inset (-@x-offset) @y-offset @shadow-blur @shadow-spread @green,
+    inset @x-offset @y-offset @shadow-blur @shadow-spread @purple,
+    inset 0 (-@shadow-depth) @shadow-blur @shadow-spread @orange;
+  animation: spin 120s linear infinite;
+  &:focus {
+    outline: 0;
+  }
+
+  &:hover {
+    box-shadow: inset @x-offset-hover (-@y-offset-hover) @shadow-blur
+        @shadow-spread @red,
+      inset (-@x-offset-hover) (-@y-offset-hover) @shadow-blur @shadow-spread
+        @yellow,
+      inset 0 (@shadow-depth * @shadow-depth-hover-ratio) @shadow-blur
+        @shadow-spread @blue,
+      inset (-@x-offset-hover) @y-offset-hover @shadow-blur @shadow-spread
+        @green,
+      inset @x-offset-hover @y-offset-hover @shadow-blur @shadow-spread @purple,
+      inset 0 (-@shadow-depth * @shadow-depth-hover-ratio) @shadow-blur
+        @shadow-spread @orange;
+  }
+
+  &:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+}
